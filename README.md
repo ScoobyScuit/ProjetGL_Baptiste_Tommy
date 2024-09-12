@@ -1,7 +1,7 @@
-## Résumé du sujet
+# Résumé du sujet
 Le projet consiste à concevoir et développer un outil de gestion de projet basé sur le web, destiné aux petites et moyennes équipes. Cet outil permettra de planifier, suivre et gérer des projets à travers des fonctionnalités telles que :
 
-1) Gestion des utilisateurs (inscription, connexion, rôles)
+- [ ] Gestion des utilisateurs (inscription, connexion, rôles)
 2) Tableau de bord avec suivi des projets et des tâches.
 3) Gestion de projets et de tâches (création, suivi, dépendances).
 4) Collaboration d'équipe (messagerie interne).
@@ -10,14 +10,16 @@ Le projet consiste à concevoir et développer un outil de gestion de projet bas
 7) Conception réactive pour divers appareils.
 8) Déploiement et DevOps avec un pipeline CI/CD et conteneurisation.
 
-## Le projet comporte plusieurs phases : collecte des exigences, conception système, développement, tests, déploiement et documentation.
+**Le projet comporte plusieurs phases : collecte des exigences, conception système, développement, tests, déploiement et documentation.**
 
-## Plan de Développement
+# Plan de Développement
 1. Collecte des Exigences
-Identifier les besoins des utilisateurs finaux (administrateur, chef de projet, membre d'équipe).
+
+*Identifier les besoins des utilisateurs finaux (administrateur, chef de projet, membre d'équipe).
 Rédiger le cahier des charges (SRS) comprenant les exigences fonctionnelles (comme la gestion des tâches) et non fonctionnelles (sécurité, performance).
 
 2. Conception du Système
+
 Architecture : Définir une architecture client-serveur. Utilisation potentielle d'un framework (React, Angular pour le frontend, Node.js, Django pour le backend).
 Base de données : Schéma relationnel pour gérer les utilisateurs, projets, tâches, et temps.
 API : Conception des endpoints pour la gestion des utilisateurs, projets et tâches (CRUD).
