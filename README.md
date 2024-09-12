@@ -164,7 +164,7 @@ Valider cette conception avec les parties prenantes ou les autres membres de l�
 **Objectif :** Configurer l'environnement de développement pour commencer à coder.
 
 **Tâches :**
-* Installer les outils nécessaires (ex. : Node.js pour le backend, React pour le frontend, Docker si nécessaire).
+* Installer les outils nécessaires (ex. : Node.js pour le backend, HTML/CSS pour le frontend, Docker si nécessaire).
 * Configurer un dépôt Git pour le contrôle de version (par ex. sur GitHub).
 * Mettre en place un framework pour les tests unitaires dès le début (ex. : Jest pour JavaScript).
 * Configurer une base de données locale (par ex. PostgreSQL ou MySQL).
