@@ -21,7 +21,7 @@ Le projet consiste à concevoir et développer un outil de gestion de projet bas
 **Identification des parties prenantes :**
 
 * Administrateurs : Gèrent l’ensemble des projets et des utilisateurs.
-* Chefs de projet : Supervisent les projets, attribuent des * tâches et suivent leur progression.
+* Chefs de projet : Supervisent les projets, attribuent des tâches et suivent leur progression.
 * Membres d’équipe : Travaillent sur les tâches qui leur sont assignées, enregistrent leur temps et communiquent avec les autres membres.
 
 **Rédaction des cas d'utilisation :**
