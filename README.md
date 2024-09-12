@@ -135,3 +135,100 @@ Le projet consiste à concevoir et développer un outil de gestion de projet bas
 ### 6. Documentation et Présentation
 * Documentation complète de l’architecture, conception, API, et code.
 * Présentation des fonctionnalités principales avec démonstration de l’interface utilisateur et des processus backend.
+
+# Déroulement du projet
+## 1. Étape 1 : Planification & Collecte des Exigences
+
+**Objectif :** Clarifier les besoins, identifier les parties prenantes, rédiger un document de spécification des exigences (SRS).
+
+**Tâches :**
+* Identifier les fonctionnalités principales : gestion des utilisateurs, gestion des projets, suivi des tâches, collaboration, notifications.
+* Formaliser les cas d’utilisation (ex. : un utilisateur peut créer un projet, un chef de projet peut assigner des tâches).
+* Documenter les exigences fonctionnelles (ce que le système doit faire) et non fonctionnelles (performance, sécurité, réactivité).
+* Rédiger le document de spécification des exigences logicielles (SRS).
+
+## 2. Étape 2 : Conception du Système
+
+**Objectif :** Définir une architecture claire et modéliser le système avant d'entrer dans la phase de développement.
+
+**Tâches :**
+* Conception de l'architecture : Choisir une architecture client-serveur avec une API RESTful pour l’interaction entre le frontend et le backend.
+* Schéma de base de données : Définir les tables (utilisateurs, projets, tâches, etc.) et leurs relations.
+* Conception de l'API : Définir les endpoints pour la gestion des utilisateurs, projets, tâches, etc.
+* UI/UX : Réaliser des maquettes des principales pages (tableau de bord, gestion des tâches).
+* Modélisation UML : Créer des diagrammes de cas d’utilisation, de classes, et de séquences.
+Valider cette conception avec les parties prenantes ou les autres membres de l’équipe.
+
+## 3. Étape 3 : Mise en Place de l'Environnement de Développement
+
+**Objectif :** Configurer l'environnement de développement pour commencer à coder.
+
+**Tâches :**
+* Installer les outils nécessaires (ex. : Node.js pour le backend, React pour le frontend, Docker si nécessaire).
+* Configurer un dépôt Git pour le contrôle de version (par ex. sur GitHub).
+* Mettre en place un framework pour les tests unitaires dès le début (ex. : Jest pour JavaScript).
+* Configurer une base de données locale (par ex. PostgreSQL ou MySQL).
+
+## 4. Étape 4 : Développement Backend (API et Base de Données)
+
+**Objectif :** Implémenter le cœur de l’application avec la gestion des utilisateurs, des projets et des tâches.
+
+**Tâches :**
+* Implémenter l'authentification et l'autorisation (ex. : JWT pour la gestion des sessions).
+* Créer les endpoints API pour gérer les utilisateurs, projets, tâches (CRUD).
+* Mettre en place les modèles de données (utilisateurs, projets, tâches, etc.) dans la base de données.
+* Tester chaque fonctionnalité (tests unitaires pour les endpoints).
+* Valider les tests d’intégration.
+
+## 5. Étape 5 : Développement Frontend (UI/UX et Interaction API)
+
+**Objectif :** Créer l’interface utilisateur et intégrer le frontend avec le backend via l'API.
+
+**Tâches :**
+* Développer les principales pages (connexion, tableau de bord, gestion des tâches, suivi du temps).
+* Intégrer l’API pour interagir avec le backend (ex. : récupération de projets, ajout de tâches).
+* Assurer la conception réactive pour mobile et bureau (en utilisant des frameworks comme Bootstrap ou Material UI).
+* Mettre en place un système de notifications (ex. alertes de délais ou tâches à venir).
+
+## 6. Étape 6 : Collaboration d'Équipe (Messagerie et Commentaires)
+
+**Objectif :** Implémenter les fonctionnalités de collaboration pour que les membres d’équipe puissent échanger des messages.
+
+**Tâches :**
+* Développer un système de commentaires sur les tâches.
+* Permettre aux utilisateurs d'envoyer et recevoir des messages en temps réel ou différé.
+
+## 7. Étape 7 : Suivi du Temps et Génération de Rapports
+
+**Objectif :** Ajouter les fonctionnalités de suivi du temps pour enregistrer le temps passé sur chaque tâche.
+
+**Tâches :**
+* Permettre aux membres de l’équipe d’enregistrer leur temps sur les tâches.
+* Générer des rapports de temps, avec des répartitions par tâche et projet.
+
+## 8. Étape 8 : Tests et Validation
+
+**Objectif :** S’assurer que l’application fonctionne correctement et répondre aux exigences qualité.
+
+**Tâches :**
+* Tests unitaires : Vérifier les fonctionnalités de chaque composant individuellement (API, interfaces).
+* Tests d'intégration : Valider que toutes les parties du système fonctionnent ensemble.
+* Tests système : Effectuer des tests complets de bout en bout pour simuler des scénarios réels.
+* Tests utilisateurs : Obtenir des retours des utilisateurs finaux pour améliorer l'UX.
+
+## 9. Étape 9 : Déploiement et Mise en Production
+
+**Objectif :** Déployer l’application sur un environnement de production et la rendre disponible aux utilisateurs.
+
+**Tâches :**
+* Mettre en place un pipeline CI/CD pour automatiser les tests et le déploiement.
+* Conteneuriser l'application avec Docker et la déployer sur une plateforme cloud (par exemple AWS, Azure).
+* Monitorer les performances du système et résoudre les éventuels problèmes de performance.
+
+## 10. Étape 10 : Documentation et Présentation
+
+**Objectif :** Finaliser la documentation du projet et préparer la présentation pour la soutenance.
+
+**Tâches :**
+* Rédiger la documentation technique sur l’architecture, l’API, la base de données, les tests, etc.
+* Préparer une présentation en expliquant les principales fonctionnalités, l’architecture et les défis rencontrés.
