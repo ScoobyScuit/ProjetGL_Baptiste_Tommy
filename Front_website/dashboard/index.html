@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quantité en Barre</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+    <body>
+        <div class="dashboard"></div>
+            <nav class="navbar">
+                <div class="gestion-button-navbar">
+                    <button class="nav-btn dashboard-btn"><i class="fa-solid fa-house"></i>Dashboard</button>
+                    <button class="nav-btn project-btn"><i class="fa-regular fa-folder-closed"></i>Projet</button>
+                    <button class="nav-btn calendar-btn"><i class="fa-regular fa-calendar"></i>Calendriers</button>
+
+                </div>
+                <div class="settings">
+                    <button class="nav-btn settings-btn"><i class="fa-solid fa-gear"></i></button>
+                    <button class="nav-btn profil-btn"></button>
+                </div>
+            </nav>
+            <div class="barre-container">
+                <div class="barre" id="barre"></div>
+            </div>
+
+            <input type="number" id="quantiteInput" placeholder="Entrer la quantité (%)" min="0" max="100">
+            <button onclick="updateBar()">Mettre à jour la barre</button>
+
+            <script src="script.js"></script>
+            <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
+        </div>
+    </body>
+</html>
