@@ -3,31 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quantité en Barre</title>
+    <title>Gestion de Projet</title>
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="indicator.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
     <body>
-        <div class="dashboard"></div>
+        <div class="dashboard">
             <nav class="navbar">
                 <div class="gestion-button-navbar">
                     <button class="nav-btn dashboard-btn"><i class="fa-solid fa-house"></i>Dashboard</button>
                     <button class="nav-btn project-btn"><i class="fa-regular fa-folder-closed"></i>Projet</button>
                     <button class="nav-btn calendar-btn"><i class="fa-regular fa-calendar"></i>Calendriers</button>
-
                 </div>
                 <div class="settings">
-                    <button class="nav-btn settings-btn"><i class="fa-solid fa-gear"></i></button>
-                    <button class="nav-btn profil-btn"></button>
+                    <button class="settings-btn"><i class="fa-solid fa-gear"></i></button>
+                    <button class="profil-btn"><i class="fa-solid fa-user"></i></button>
                 </div>
             </nav>
-            <div class="barre-container">
-                <div class="barre" id="barre"></div>
+            <div class="main-dashboard">
+                <div class="all-progress">
+                    <div class="indicator-progress">
+                        <div class="title-indicator-progress">
+                            <h2>Progress Projet</h2>
+                        </div> 
+                        <div class="progress-container">
+                            <svg width="100%" height="100%" viewBox="0 0 400 220">
+                                <path class="progress-background" d="M80 190 A120 120 0 0 1 320 190" />
+                                <path class="progress-bar" d="M80 190 A120 120 0 0 1 320 190" id="progressBar" />
+                                <circle class="start-point" cx="80" cy="190" r="4%" id="startPoint" />
+                                <text class="progress-text" x="200" y="190" text-anchor="middle" id="progressText">0%</text>
+                            </svg>
+                        </div>
+                        
+                    </div>
+                </div>
+                <div class="calendar-progress">
+
+                </div>
             </div>
-
-            <input type="number" id="quantiteInput" placeholder="Entrer la quantité (%)" min="0" max="100">
-            <button onclick="updateBar()">Mettre à jour la barre</button>
-
             <script src="script.js"></script>
             <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
         </div>

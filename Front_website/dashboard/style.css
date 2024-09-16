@@ -3,17 +3,27 @@
 *,::before,::after{
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
-
+/*-------- general --------*/
 body{
     font-family: "Geologica", sans-serif;
-    padding: 10px;
+    width: 100%;
     background-color: #dedede;
 }
 .dashboard{
-    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 20px;
+    margin: 20px;
+    padding: 17px 10px;
+    border-radius: 30px;
     height: fit-content;
+    background-color: #ffffff ;
 }
+/*-------- navbar --------*/
 .navbar{
     width: 97%;
     height: fit-content;
@@ -29,20 +39,18 @@ body{
     flex-direction: row;
     gap: 8px;
 }
-
+ 
 .nav-btn{
     font-family: "Geologica", sans-serif;
     font-weight: 300;
     display: flex;
     align-items: center;
-    padding: 10px;
+    padding: 10px 15px;
     border-radius: 20px;
     gap: 10px;
     justify-content: center;
     color: white;
-
     transition: 0.5s ease-in;
-
 }
 .dashboard-btn{
     background-color: black;
@@ -54,35 +62,63 @@ body{
     transition: 0.3s ease-in;
     cursor: pointer;
 }
-.project-btn, .calendar-btn, .settings-btn{
+.project-btn, .calendar-btn {
     color: black;
     border: none;
 }
-.project-btn:hover, .calendar-btn:hover{
+.settings-btn, .profil-btn{
+    width: fit-content;
+    height: fit-content;
+    padding: 10px;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;  
+    transition: 0.3s ease-in;
+
+}
+.project-btn:hover, .calendar-btn:hover,.settings-btn:hover, .profil-btn:hover{
     background-color: #cfcdcd;
     transition: 0.3s ease-in;
     cursor: pointer;
 }
 
+/*-------- main dashboard --------*/
 
-/* Style pour le conteneur de la barre */
-.barre-container {
-    width: 70px;
-    height: 150px;
-    background-color: #f1f1f1;
-    position: relative;
-    border-radius: 50px;
-    margin: 20px;
-    overflow: hidden;
+.main-dashboard{
+    width: 97%;
+    display: flex;
+    padding: 15px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    background-color: aqua;
+    border-radius: 20px;
+}
+.all-progress{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    justify-content: center;
+    width: 30%;
+    border-radius: 20px;
+    background-color: #F0F2F7;
+}
+.indicator-progress{
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    justify-content: center;
+    border-radius: 20px;
+    background-color: #FDFDFD;
+    text-align: center;
 }
 
-/* Style pour la barre de quantité */
-.barre {
-    
-    width: 100%;
-    height: 100%;
-    background-color: green;
-    position: absolute;
-    bottom: 0;
-    transition: height 0.5s ease, background-color 0.5s ease;
+.calendar-progress{
+    width: 70%;
+    background-color:rgb(13, 93, 164);
 }
