@@ -4,8 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestion de Projet</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="indicator.css">
+    <link rel="stylesheet" href="./css/style.css">
+    <link rel="stylesheet" href="./css/indicator.css">
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
 </head>
     <body>
@@ -42,7 +42,7 @@
             </div>
             <!-- End Dashboard container -->
              
-            <script src="script.js"></script>
+            <script src="./js/script.js"></script>
             <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
         </div>
     </body>
