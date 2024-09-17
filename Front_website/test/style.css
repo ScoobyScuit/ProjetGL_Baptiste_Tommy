@@ -1,0 +1,40 @@
+/* Conteneur de l'indicateur en demi-cercle */
+.semi-circle-container {
+    position: relative;
+    width: 200px; /* Largeur du conteneur */
+    height: 100px; /* Hauteur du demi-cercle */
+    margin: 20px auto;
+    text-align: center;
+}
+
+/* Conteneur pour le fond du cercle */
+.circle-background {
+    width: 100%;
+    height: 100%;
+    border-radius: 100px 100px 0 0; /* Demi-cercle */
+    background-color: #ccc; /* Couleur du fond (track) */
+    position: relative;
+    overflow: hidden;
+}
+
+/* Cercle de progression */
+.progress-circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 100px 100px 0 0; /* Demi-cercle */
+    background-color: green; /* Couleur de la progression */
+    transform-origin: bottom center; /* Pivot en bas du demi-cercle */
+    transform: rotate(0deg); /* Par défaut, aucun progrès */
+    transition: transform 0.5s ease;
+}
+
+/* Affichage du pourcentage */
+.percentage {
+    position: absolute;
+    top: 40%;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 24px;
+    font-weight: bold;
+    color: black;
+}
