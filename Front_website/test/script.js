@@ -36,3 +36,31 @@ const progressBar = document.getElementById('progressBar');
         progressSlider.value = progress;
       }
     }, 50);
+
+    function toggleRoleOptions() {
+      const roleSelect = document.getElementById('roleSelect');
+      const roleOptions = document.getElementById('roleOptions');
+      const adminOptions = document.getElementById('adminOptions');
+      const projectManagerOptions = document.getElementById('projectManagerOptions');
+      const memberOptions = document.getElementById('memberOptions');
+
+      roleOptions.classList.remove('show');
+      adminOptions.style.display = 'none';
+      projectManagerOptions.style.display = 'none';
+      memberOptions.style.display = 'none';
+
+      if (roleSelect.value) {
+        roleOptions.classList.add('show');
+        switch (roleSelect.value) {
+          case 'admin':
+            adminOptions.style.display = 'block';
+            break;
+          case 'projectManager':
+            projectManagerOptions.style.display = 'block';
+            break;
+          case 'member':
+            memberOptions.style.display = 'block';
+            break;
+        }
+      }
+    }

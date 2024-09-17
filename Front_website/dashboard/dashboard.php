@@ -26,12 +26,12 @@
                             <h2>Progress Projet</h2>
                         </div> 
                         <div class="progress-container">
-                            <svg width="100%" height="100%" viewBox="0 0 400 220">
-                                <path class="progress-background" d="M80 190 A120 120 0 0 1 320 190" />
-                                <path class="progress-bar" d="M80 190 A120 120 0 0 1 320 190" id="progressBar" />
-                                <circle class="start-point" cx="80" cy="190" r="4%" id="startPoint" />
-                                <text class="progress-text" x="200" y="190" text-anchor="middle" id="progressText">0%</text>
-                            </svg>
+                            <svg width="100%" height="100%" viewBox="0 0 450 250">
+                                <path class="progress-background" d="M50 200 A150 150 0 0 1 400 200" />
+                                <path class="progress-bar" d="M50 200 A150 150 0 0 1 400 200" id="progressBar" />
+                                <circle class="start-point" cx="50" cy="200" r="7%" id="startPoint" />
+                                <text class="progress-text" x="225" y="200" text-anchor="middle" id="progressText">0%</text>
+                              </svg>                                  
                         </div>
                         
                     </div>

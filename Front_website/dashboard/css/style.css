@@ -95,6 +95,7 @@ body{
     justify-content: center;
     background-color: aqua;
     border-radius: 20px;
+    gap: 20px;
 }
 .all-progress{
     display: flex;
@@ -120,5 +121,6 @@ body{
 
 .calendar-progress{
     width: 70%;
+    height: 100px;
     background-color:rgb(13, 93, 164);
 }

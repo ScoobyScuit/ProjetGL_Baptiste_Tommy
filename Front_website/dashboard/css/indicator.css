@@ -15,19 +15,19 @@
     display: flex;
     width: 100%;
     height: fit-content;
-    padding: 0px 20px;
+    padding: 0px 15px 15px 15px ;
     align-items: center;
   }
   .progress-background {
     fill: none;
     stroke: #e0e0e0;
-    stroke-width: 38;
+    stroke-width: 51;
     stroke-linecap: round;
   }
   .progress-bar {
     fill: none;
-    stroke: #4CAF50;
-    stroke-width: 40;  /* Légèrement plus gros que le tracé de base */
+    stroke: #0171DF;
+    stroke-width: 53;  /* Légèrement plus gros que le tracé de base */
     stroke-linecap: round;
     transition: stroke-dashoffset 0.5s ease-out;
   }
@@ -37,7 +37,7 @@
     fill: #333;
   }
   .start-point {
-    fill: #4CAF50;
+    fill: #0171DF;
     transition: opacity 0.3s ease-out;
   }
   .controls {
