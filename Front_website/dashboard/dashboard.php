@@ -14,7 +14,7 @@
             <!-- Start Navbar -->
             <?php
                 // Inlcude le fichier php contenant la navbar pour ne pas la ré-écrire dans chaque fichier
-                include "../fichier_include_PHP/navbar.php";
+                include "../fichiers_include_PHP/navbar.php";
             ?>
             <!-- End Navbar -->
 
