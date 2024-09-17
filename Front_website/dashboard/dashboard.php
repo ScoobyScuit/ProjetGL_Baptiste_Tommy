@@ -12,17 +12,10 @@
         <div class="dashboard">
 
             <!-- Start Navbar -->
-            <nav class="navbar">
-                <div class="gestion-button-navbar">
-                    <button class="nav-btn dashboard-btn"><i class="fa-solid fa-house"></i>Dashboard</button>
-                    <button class="nav-btn project-btn"><i class="fa-regular fa-folder-closed"></i>Projet</button>
-                    <button class="nav-btn calendar-btn"><i class="fa-regular fa-calendar"></i>Calendriers</button>
-                </div>
-                <div class="settings">
-                    <button class="settings-btn"><i class="fa-solid fa-gear"></i></button>
-                    <button class="profil-btn"><i class="fa-solid fa-user"></i></button>
-                </div>
-            </nav>
+            <?php
+                // Inlcude le fichier php contenant la navbar pour ne pas la ré-écrire dans chaque fichier
+                include "../fichier_include_PHP/navbar.php";
+            ?>
             <!-- End Navbar -->
 
             <!-- Start Dashboard container -->
@@ -48,6 +41,7 @@
                 </div>
             </div>
             <!-- End Dashboard container -->
+             
             <script src="script.js"></script>
             <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
         </div>

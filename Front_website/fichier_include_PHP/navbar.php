@@ -1,0 +1,12 @@
+<!-- Fichier PHP contenant la navbar qui sera sur toutes les pages du site -->
+<nav class="navbar">
+    <div class="gestion-button-navbar">
+        <button class="nav-btn dashboard-btn"><i class="fa-solid fa-house"></i>Dashboard</button>
+        <button class="nav-btn project-btn"><i class="fa-regular fa-folder-closed"></i>Projet</button>
+        <button class="nav-btn calendar-btn"><i class="fa-regular fa-calendar"></i>Calendriers</button>
+    </div>
+    <div class="settings">
+        <button class="settings-btn"><i class="fa-solid fa-gear"></i></button>
+        <button class="profil-btn"><i class="fa-solid fa-user"></i></button>
+    </div>
+</nav>
