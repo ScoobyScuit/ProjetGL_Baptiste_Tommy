@@ -1,18 +1,55 @@
-// Variables globales
+/**
+ * @file progressWebSocket.js
+ * @brief Gestion de la connexion WebSocket et de la mise à jour d'une barre de progression via des messages reçus.
+ */
+
+/** 
+ * @var progressBar
+ * @brief Élément HTML représentant la barre de progression.
+ */
 const progressBar = document.getElementById('progressBar');
+
+/** 
+ * @var progressText
+ * @brief Élément HTML pour afficher le pourcentage de progression.
+ */
 const progressText = document.getElementById('progressText');
+
+/** 
+ * @var startPoint
+ * @brief Élément HTML utilisé pour gérer l'opacité de l'état initial de la barre de progression.
+ */
 const startPoint = document.getElementById('startPoint');
 
-// Connexion au serveur WebSocket
+/**
+ * @var ws
+ * @brief Instance de WebSocket pour gérer la connexion au serveur.
+ */
 let ws;
+
+/**
+ * @brief Connecte l'application au serveur WebSocket.
+ * 
+ * Cette fonction initialise une nouvelle connexion WebSocket, et gère les événements 
+ * `onopen`, `onmessage`, `onclose` et `onerror`. Elle tente de reconnecter automatiquement 
+ * en cas de fermeture de la connexion.
+ */
 function connectWebSocket() {
     ws = new WebSocket('ws://localhost:8080');
 
     ws.onopen = () => {
         console.log('WebSocket connecté.');
     };
+
+    /**
+     * @brief Gère les messages reçus via la WebSocket.
+     * 
+     * Si la donnée reçue est un `Blob`, elle est lue comme texte. Sinon, la donnée 
+     * est directement passée à la fonction `handleMessage`.
+     * 
+     * @param event L'événement `message` contenant la donnée reçue.
+     */
     ws.onmessage = (event) => {
-        // Vérifie si la donnée est un Blob
         if (event.data instanceof Blob) {
             const reader = new FileReader();
             reader.onload = () => {
@@ -25,17 +62,32 @@ function connectWebSocket() {
         }
     };
 
+    /**
+     * @brief Gère la fermeture de la connexion WebSocket et tente une reconnexion après 1 seconde.
+     */
     ws.onclose = () => {
         console.log('WebSocket fermé. Tentative de reconnexion...');
         setTimeout(connectWebSocket, 1000); // Retente la connexion après 1 seconde
     };
 
+    /**
+     * @brief Gère les erreurs de la connexion WebSocket.
+     * 
+     * @param error L'erreur générée par la WebSocket.
+     */
     ws.onerror = (error) => {
         console.error('Erreur WebSocket:', error);
     };
 }
 
-// Fonction de traitement du message reçu
+/**
+ * @brief Gère les messages reçus depuis la WebSocket.
+ * 
+ * Convertit le message reçu en nombre et met à jour la barre de progression. Si le message
+ * n'est pas un nombre valide, une erreur est affichée dans la console.
+ * 
+ * @param message Le message reçu du serveur WebSocket, attendu comme une chaîne de caractères.
+ */
 function handleMessage(message) {
     const value = parseInt(message, 10);
     if (isNaN(value)) {
@@ -49,11 +101,30 @@ function handleMessage(message) {
 // Connexion WebSocket initiale
 connectWebSocket();
 
-// Initialisation de la barre de progression
+/** 
+ * @var totalLength
+ * @brief Longueur totale de la barre de progression en SVG.
+ */
 const totalLength = progressBar.getTotalLength();
+
+/**
+ * @brief Initialise la barre de progression.
+ * 
+ * Configure les propriétés `strokeDasharray` et `strokeDashoffset` de la barre
+ * de progression pour permettre un rendu progressif.
+ */
 progressBar.style.strokeDasharray = totalLength;
 progressBar.style.strokeDashoffset = totalLength;
 
+/**
+ * @brief Met à jour l'affichage de la barre de progression.
+ * 
+ * Cette fonction ajuste la longueur visible de la barre de progression en fonction de la 
+ * valeur reçue, et met à jour l'affichage du pourcentage. Elle ajuste également l'opacité 
+ * de l'élément de départ.
+ * 
+ * @param value Le pourcentage de progression à afficher (de 0 à 100).
+ */
 function updateProgress(value) {
     const progress = value / 100;
     const dashoffset = totalLength * (1 - progress);
@@ -66,9 +137,14 @@ function updateProgress(value) {
     console.log(`Valeur mise à jour dans l'indicateur: ${value}`);
 }
 
-// Simulation d'envoi de valeurs pour test
-// Remplace ce bloc par des envois de valeur réels depuis une autre partie de ton application si nécessaire
-/*const testValues = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
+/*
+ * @brief Simulation d'envoi de valeurs pour test.
+ * 
+ * Ce bloc est commenté car il est utilisé uniquement pour simuler l'envoi de valeurs
+ * de test au serveur WebSocket toutes les 2 secondes.
+ */
+/*
+const testValues = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
 let index = 0;
 const testInterval = setInterval(() => {
     if (index < testValues.length) {
@@ -79,5 +155,5 @@ const testInterval = setInterval(() => {
     } else {
         clearInterval(testInterval);
     }
-}, 2000);*/
-// Envoi toutes les 2 secondes
+}, 2000);
+*/
