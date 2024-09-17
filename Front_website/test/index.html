@@ -28,6 +28,14 @@
           <input type="range" id="progressSlider" min="0" max="100" value="0">
         </div>
       </div>
+      <div class="role-selector"></div>
+        <label for="roleSelect">Sélectionner un rôle</label>
+        <select id="roleSelect" name="roleSelect" onchange="toggleRoleOptions()">
+          <option value="admin">Administrateur</option>
+          <option value="projectManager">Chef de projet</option>
+          <option value="member">Membre</option>
+        </select>
+      </div>
     <script src="script.js"></script>
 </body>
 </html>
