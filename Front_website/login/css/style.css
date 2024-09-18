@@ -8,8 +8,8 @@
 }
 
 body{
-    background-color: #c9d6ff;
-    background: linear-gradient(to right, #e2e2e2, #c9d6ff);
+    background-color: #c9ffd5;
+    background: radial-gradient(circle, rgba(189,0,241,1) 12%, rgba(128,63,214,1) 76%, rgba(63,94,251,1) 100%);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -47,7 +47,7 @@ body{
 }
 
 .container button{
-    background-color: #512da8;
+    background-color: #0171DF;
     color: #fff;
     font-size: 12px;
     padding: 10px 45px;
@@ -148,9 +148,9 @@ body{
 }
 
 .toggle{
-    background-color: #512da8;
+    background-color: #0171DF;
     height: 100%;
-    background: linear-gradient(to right, #5c6bc0, #512da8);
+    background: linear-gradient(90deg, rgba(194,0,183,1) 0%, rgba(162,0,194,1) 45%, rgba(22,39,221,1) 100%);
     color: #fff;
     position: relative;
     left: -100%;
@@ -245,5 +245,4 @@ body{
     align-items: center; /* Centre horizontalement l'input dans ce conteneur */
     justify-content: center;
 }
-
 

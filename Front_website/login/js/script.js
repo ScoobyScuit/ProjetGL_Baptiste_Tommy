@@ -23,10 +23,9 @@ function toggleRoleOptions() {
     if (roleSelect.value) {
       roleOptions.classList.add('show');
       switch (roleSelect.value) {
-        case 'admin':
+        case 'Administrateur':
           adminOptions.style.display = 'block';
           break;
       }
     }
   }
-
