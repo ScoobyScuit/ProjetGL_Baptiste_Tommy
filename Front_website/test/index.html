@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Indicateur en demi-cercle</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Indicateur de Progression en Demi-Cercle</h1>
+        <div class="progress-container">
+          <svg width="400" height="220" viewBox="0 0 400 220">
+            <path class="progress-background"
+                  d="M30 190 A170 170 0 0 1 370 190"
+            />
+            <path class="progress-bar"
+                  d="M30 190 A170 170 0 0 1 370 190"
+                  id="progressBar"
+            />
+            <circle class="start-point" cx="30" cy="190" r="16" id="startPoint" />
+            <text class="progress-text" x="200" y="205" text-anchor="middle" id="progressText">
+              0%
+            </text>
+          </svg>
+        </div>
+        <div class="controls">
+          <input type="range" id="progressSlider" min="0" max="100" value="0">
+        </div>
+      </div>
+      <div class="role-selector"></div>
+        <label for="roleSelect">Sélectionner un rôle</label>
+        <select id="roleSelect" name="roleSelect" onchange="toggleRoleOptions()">
+          <option value="admin">Administrateur</option>
+          <option value="projectManager">Chef de projet</option>
+          <option value="member">Membre</option>
+        </select>
+      </div>
+    <script src="script.js"></script>
+</body>
+</html>
