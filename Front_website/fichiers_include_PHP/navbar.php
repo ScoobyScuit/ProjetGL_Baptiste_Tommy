@@ -7,6 +7,9 @@
     </div>
     <div class="settings">
         <button class="settings-btn"><i class="fa-solid fa-gear"></i></button>
-        <button class="profil-btn"><i class="fa-solid fa-user"></i></button>
+        <button class="profil-btn" onclick="location.href = '../fichiers_include_PHP/profil/profil.php';">
+            <i class="fa-solid fa-user"></i>
+        </button>
+
     </div>
 </nav>

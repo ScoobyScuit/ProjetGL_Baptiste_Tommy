@@ -10,8 +10,6 @@
     <p>Page de login</p>
 
     <?php
-        session_start();
-
         // -------------------- Connexion à la base de données
         $serveur = "localhost";
         $login = "root";
@@ -62,9 +60,13 @@
             $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($user) {
+                session_start();
+
                 // Stocker les informations de l'utilisateur dans la session
                 $_SESSION['user_id'] = $user['IdUser'];
-                $_SESSION['username'] = $user['PrenomUser'];
+                $_SESSION['name'] = $user['NomUser'];
+                $_SESSION['surname'] = $user['PrenomUser'];
+                $_SESSION['email'] = $user['EmailUser'];
                 $_SESSION['role'] = $user['RoleUser'];
 
             // Renvoi un pop-up à l'utilisateur et redirige sur la page de dashboard.php
