@@ -46,13 +46,14 @@
         $nom = checkEntry($_POST['name']);
         $prenom = checkEntry($_POST['surname']);
         $email = checkEntry($_POST['email']);
-        $mdp = $_POST['password'];
+        $mdp = checkEntry($_POST['password']);
         $adminCode = checkEntry($_POST['adminCode']);
         $role = $_POST['roleSelect'];
         $codeAdmin = '010903';
+        $hashed_mdp = hash('sha256',$mdp);  // Haschage du mdp avec sha-256
         
         // Vérification des champs obligatoires
-        if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($mdp) && !empty($role)) {
+        if (!empty($nom) && !empty($prenom) && !empty($email) && !empty($hashed_mdp) && !empty($role)) {
             // Vérification du rôle et du code admin (si nécessaire)
             if ($role == "Administrateur" && $adminCode !== $codeAdmin) {
                 echo "Le code d'administration est incorrect.";
@@ -75,7 +76,7 @@
                 $stmt = $connexion->prepare("INSERT INTO login (EmailLogin, mdpLogin, IdUser) 
                                             VALUES (:email, :password, :IdUser)");
                 $stmt->bindParam(':email', $email);
-                $stmt->bindParam(':password', $mdp);
+                $stmt->bindParam(':password', $hashed_mdp);
                 $stmt->bindParam(':IdUser', $lastInsertId);
                 
                 if ($stmt->execute()) {
