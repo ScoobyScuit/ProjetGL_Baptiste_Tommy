@@ -46,7 +46,7 @@
         $nom = checkEntry($_POST['name']);
         $prenom = checkEntry($_POST['surname']);
         $email = checkEntry($_POST['email']);
-        $mdp = $_POST['password'];
+        $mdp = checkEntry($_POST['password']);
         $adminCode = checkEntry($_POST['adminCode']);
         $role = $_POST['roleSelect'];
         $codeAdmin = '010903';
