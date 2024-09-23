@@ -43,6 +43,8 @@
         // Récupération des données du formulaire
         $email = checkEntry($_POST['email']);
         $mdp = checkEntry($_POST['password']);
+        $hashed_mdp = hash('sha256',$mdp);  // Haschage du mdp avec sha-256
+
 
         // Recherche de l'utilisateur dans la table 'login'
         $stmt = $connexion->prepare("SELECT * FROM login WHERE EmailLogin = :email");
@@ -50,8 +52,11 @@
         $stmt->execute();
         $loginData = $stmt->fetch(PDO::FETCH_ASSOC);     
 
-        // Vérification du mot de passe (comparaison simple sans hachage)
-        if ($loginData && $mdp === $loginData['mdpLogin']) {
+        $test = strlen($hashed_mdp);
+        echo 'hashed_mdp.lenght : ' .$test;
+
+        // Vérification du mot de passe 
+        if ($loginData && $hashed_mdp === $loginData['mdpLogin']) {
 
             // Si le mot de passe est correct, on récupère les informations de l'utilisateur depuis la table 'user'
             $stmt = $connexion->prepare("SELECT * FROM user WHERE IdUser = :IdUser");
