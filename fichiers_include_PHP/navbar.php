@@ -8,7 +8,7 @@
     </div>
     <div class="settings">
         <button class="settings-btn"><i class="fa-solid fa-gear"></i></button>
-        <button class="profil-btn" onclick="location.href = '../fichiers_include_PHP/profil/profil.php';">
+        <button class="profil-btn" onclick="location.href = '../fichiers_include_PHP/profil/profil.html';">
             <i class="fa-solid fa-user"></i>
         </button>
 

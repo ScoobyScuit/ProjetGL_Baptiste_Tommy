@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Profil Utilisateur</title>
+    <link rel="stylesheet" href="./css/style.css" />
+    <script src="../../js_class/user.js"></script>
+  </head>
+  <body>
+    <div class="profile-container">
+      <h1>Profil Utilisateur</h1>
+
+      <div id="profile-info" class="profile-info">
+        <!-- Les informations de l'utilisateur seront affichées ici -->
+      </div>
+
+      <button
+        class="logout-btn"
+        onclick="window.location.href = '../../logout/logout.php';"
+      >
+        Déconnexion
+      </button>
+    </div>
+
+    <script>
+      (async () => {
+        if (typeof User === "undefined") {
+          console.error("La classe User n'est pas définie.");
+          return;
+        }
+
+        const currentUser = await User.fetchUserData();
+        if (currentUser) {
+          // Afficher les informations utilisateur dans le div
+          const profileInfoDiv = document.getElementById("profile-info");
+          profileInfoDiv.innerHTML = `
+            <div><strong>Nom :</strong> ${currentUser.nom}</div>
+            <div><strong>Prénom :</strong> ${currentUser.prenom}</div>
+            <div><strong>Email :</strong> ${currentUser.email}</div>
+            <div><strong>Rôle :</strong> ${currentUser.role}</div>
+          `;
+        } else {
+          console.log("Aucun utilisateur connecté.");
+        }
+      })();
+    </script>
+  </body>
+</html>

@@ -3,6 +3,7 @@
     <head>
         <title>Login.php</title>
         <meta charset="utf-8"/>
+        <script src="../../js_class/user.js"></script>
     </head>
 </html>
 
@@ -74,11 +75,11 @@
                 $_SESSION['email'] = $user['EmailUser'];
                 $_SESSION['role'] = $user['RoleUser'];
 
-            // Renvoi un pop-up à l'utilisateur et redirige sur la page de dashboard.php
-            echo "<script>
-                    alert('Utilisateur connecté avec succès !');
-                    window.location.href = '../dashboard/dashboard.php';
-                  </script>";
+                // Renvoi un pop-up à l'utilisateur et redirige sur la page de dashboard.php
+                echo "<script>
+                        alert('Utilisateur connecté avec succès !');
+                        window.location.href = '../dashboard/dashboard.php';
+                    </script>";
 
             } else {
                 echo "Erreur lors de la récupération des informations utilisateur.";
