@@ -1,4 +1,5 @@
-<!-- Fichier PHP contenant la navbar qui sera sur toutes les pages du site -->
+<!-- Fichier PHP contenant la navbar qui sera sur toutes les pages du site 
+    inclue dans dashboard.php-->
 <nav class="navbar">
     <div class="gestion-button-navbar">
         <button class="nav-btn dashboard-btn"><i class="fa-solid fa-house"></i>Dashboard</button>
