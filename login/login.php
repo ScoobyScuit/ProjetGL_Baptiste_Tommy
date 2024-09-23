@@ -78,7 +78,7 @@
                 // Renvoi un pop-up à l'utilisateur et redirige sur la page de dashboard.php
                 echo "<script>
                         alert('Utilisateur connecté avec succès !');
-                        window.location.href = '../dashboard/dashboard.php';
+                        window.location.href = '../dashboard/dashboard.html';
                     </script>";
 
             } else {

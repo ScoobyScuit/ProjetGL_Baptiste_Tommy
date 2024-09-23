@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Fichier pour récupérer toutes les données liées à 
+ * Fichier pour récupérer tous les projets liés à 
  *    l'utilisateur actuellement connecté 
  */
 
@@ -18,16 +18,16 @@ if (isset($_SESSION['user_id'])) {
         $connexion = new PDO("mysql:host=$serveur;dbname=$dbname", $login, $pw);
         $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Récupérer les informations de l'utilisateur
-        $stmt = $connexion->prepare("SELECT * FROM user WHERE IdUser = :IdUser");
+        // Récupérer les projets où l'utilisateur est chef de projet
+        $stmt = $connexion->prepare("SELECT * FROM project WHERE idChef = :IdUser");
         $stmt->bindParam(':IdUser', $_SESSION['user_id']);
         $stmt->execute();
-        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);  // Récupérer tous les projets
 
-        if ($user) {
-            echo json_encode($user);  // Retourner les données utilisateur au format JSON
+        if ($projects) {
+            echo json_encode($projects);  // Retourner les projets au format JSON
         } else {
-            echo json_encode(['error' => 'Utilisateur non trouvé.']);
+            echo json_encode([]);  // Retourner un tableau vide si aucun projet n'est trouvé
         }
     } catch (PDOException $e) {
         echo json_encode(['error' => 'Erreur de connexion : ' . $e->getMessage()]);

@@ -1,4 +1,21 @@
+/**
+ * @class User
+ * @brief Classe représentant un utilisateur du système.
+ * 
+ * Cette classe gère les données d'un utilisateur, notamment son ID, nom, prénom, email, mot de passe et rôle.
+ */
 class User {
+    
+    /**
+     * @brief Constructeur de la classe User.
+     * 
+     * @param id Identifiant unique de l'utilisateur.
+     * @param nom Nom de l'utilisateur.
+     * @param prenom Prénom de l'utilisateur.
+     * @param email Adresse email de l'utilisateur.
+     * @param password Mot de passe de l'utilisateur.
+     * @param role Rôle de l'utilisateur (Admin, Chef, Membre, etc.).
+     */
     constructor(id, nom, prenom, email, password, role) {
         this.id = id;
         this.nom = nom;
@@ -8,6 +25,12 @@ class User {
         this.role = role;
     }
     
+    /**
+     * @brief Récupère les données utilisateur depuis le serveur.
+     * 
+     * Cette fonction envoie une requête pour obtenir les informations de l'utilisateur via une API PHP.
+     * @return {Promise<User|null>} Renvoie une instance de la classe User avec les données récupérées ou null en cas d'erreur.
+     */
     static async fetchUserData() {
         try {
             const response = await fetch('../../fichiers_include_PHP/getUserData.php');
@@ -25,10 +48,20 @@ class User {
         }
     }
 
+    /**
+     * @brief Gère les informations du profil utilisateur.
+     * 
+     * Méthode à implémenter pour traiter et gérer les informations du profil utilisateur.
+     */
     handleProfil() {
         // TODO
     }
 
+    /**
+     * @brief Affiche les informations de l'utilisateur dans la console.
+     * 
+     * Cette méthode affiche les informations de base de l'utilisateur : ID, nom, prénom, email et rôle.
+     */
     displayInfo() {
         console.log(`Id: ${this.id}, Nom: ${this.nom}, Prénom: ${this.prenom}, Email: ${this.email}, Rôle: ${this.role}`);
     }
