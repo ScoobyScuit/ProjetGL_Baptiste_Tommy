@@ -20,7 +20,7 @@
         try {
             $connexion = new PDO("mysql:host=$serveur;dbname=$dbname", $login, $pw);
             $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            echo "Connexion à la base de données : <b>" .$dbname. "</b> réussie<br>";
+        echo "Connexion à la base de données : <b>" .$dbname. "</b> réussie<br>";
         } catch (PDOException $e) {
             die("Erreur de connexion : " . $e->getMessage());
         }
@@ -54,7 +54,6 @@
         $loginData = $stmt->fetch(PDO::FETCH_ASSOC);     
 
         $test = strlen($hashed_mdp);
-        echo 'hashed_mdp.lenght : ' .$test;
 
         // Vérification du mot de passe 
         if ($loginData && $hashed_mdp === $loginData['mdpLogin']) {
@@ -77,7 +76,6 @@
 
                 // Renvoi un pop-up à l'utilisateur et redirige sur la page de dashboard.php
                 echo "<script>
-                        alert('Utilisateur connecté avec succès !');
                         window.location.href = '../dashboard/dashboard.html';
                     </script>";
 

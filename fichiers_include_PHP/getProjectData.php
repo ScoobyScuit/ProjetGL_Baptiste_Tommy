@@ -18,8 +18,12 @@ if (isset($_SESSION['user_id'])) {
         $connexion = new PDO("mysql:host=$serveur;dbname=$dbname", $login, $pw);
         $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Récupérer les projets où l'utilisateur est chef de projet
-        $stmt = $connexion->prepare("SELECT * FROM project WHERE idChef = :IdUser");
+        // Récupérer les projets liés à l'utilisateur
+        $stmt = $connexion->prepare("
+            SELECT DISTINCT p.*
+            FROM project p
+            LEFT JOIN task t ON t.IdProject = p.IdProject
+            WHERE p.IdChef = :IdUser OR t.IdUser = :IdUser;");
         $stmt->bindParam(':IdUser', $_SESSION['user_id']);
         $stmt->execute();
         $projects = $stmt->fetchAll(PDO::FETCH_ASSOC);  // Récupérer tous les projets
