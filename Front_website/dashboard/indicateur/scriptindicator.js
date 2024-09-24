@@ -1,6 +1,6 @@
 // Variables globales
 const progressBar = document.getElementById('progressBar');
-const progressText = document.getElementById('progressText');
+const progressText = document.getElementById('progressPercentage');
 const startPoint = document.getElementById('startPoint');
 
 // Connexion au serveur WebSocket

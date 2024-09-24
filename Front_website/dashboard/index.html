@@ -1,24 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion de Projet</title>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="indicator.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
-</head>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gestion de Projet</title>
+        <link rel="stylesheet" href="style.css">
+        <link rel="stylesheet" href="./indicateur/indicator.css">
+        <link rel="stylesheet" href="./calendar/stylecalendar.css">
+        <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11/dist/interact.min.js"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+    </head>
     <body>
         <div class="dashboard">
             <nav class="navbar">
                 <div class="gestion-button-navbar">
-                    <button class="nav-btn dashboard-btn"><i class="fa-solid fa-house"></i>Dashboard</button>
-                    <button class="nav-btn project-btn"><i class="fa-regular fa-folder-closed"></i>Projet</button>
-                    <button class="nav-btn calendar-btn"><i class="fa-regular fa-calendar"></i>Calendriers</button>
+                    <button class="nav-btn dashboard-btn">
+                        <i class="fa-solid fa-house"></i>Dashboard </button>
+                    <button class="nav-btn project-btn">
+                        <i class="fa-regular fa-folder-closed"></i>Projet </button>
+                    <button class="nav-btn calendar-btn">
+                        <i class="fa-regular fa-calendar"></i>Calendriers </button>
                 </div>
                 <div class="settings">
-                    <button class="settings-btn"><i class="fa-solid fa-gear"></i></button>
-                    <button class="profil-btn"><i class="fa-solid fa-user"></i></button>
+                    <button class="settings-btn">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                    <button class="profil-btn">
+                        <i class="fa-solid fa-user"></i>
+                    </button>
                 </div>
             </nav>
             <div class="main-dashboard">
@@ -26,24 +36,69 @@
                     <div class="indicator-progress">
                         <div class="title-indicator-progress">
                             <h2>Progress Projet</h2>
-                        </div> 
-                        <div class="progress-container">
-                            <svg width="100%" height="100%" viewBox="0 0 450 250">
-                                <path class="progress-background" d="M50 200 A150 150 0 0 1 400 200" />
-                                <path class="progress-bar" d="M50 200 A150 150 0 0 1 400 200" id="progressBar" />
-                                <circle class="start-point" cx="50" cy="200" r="7%" id="startPoint" />
-                                <text class="progress-text" x="225" y="200" text-anchor="middle" id="progressText">0%</text>
-                              </svg>                                  
                         </div>
-                        
+                        <div class="progress-container">
+                          <svg width="100%" height="100%" viewBox="0 0 450 250">
+                            <path class="progress-background" d="M50 200 A150 150 0 0 1 400 200" />
+                            <path class="progress-bar" d="M50 200 A150 150 0 0 1 400 200" id="progressBar" />
+                            <circle class="start-point" cx="50" cy="200" r="7%" id="startPoint" />
+                            <text class="progress-text" x="225" y="180" text-anchor="middle" id="progressText">
+                                <tspan id="progressPercentage">0%</tspan>
+                                <tspan class="titleprogresse" x="225" dy="30">Progression</tspan>
+                            </text>
+                        </svg>                        
+                        </div>
                     </div>
                 </div>
                 <div class="calendar-progress">
-
+                    <div class="tab-container">
+                        <button class="tab-button active" data-tab="timeline">
+                            <i class="fa-solid fa-timeline"></i>Timeline </button>
+                        <button class="tab-button" data-tab="calendar">
+                            <i class="fa-solid fa-calendar-week"></i>Calendrier</button>
+                        <button class="tab-button" id="openAddTaskModal" onclick="openAddTaskModal()">
+                          <i class="fa-solid fa-plus"></i>Ajouter une tâche</button>
+                    </div>
+                    <div class="container-timeline">
+                        <div id="timeline-tab" class="timeline-tab tab-content active">
+                            <div class="timeline">
+                                <div id="timeline-content" class="timeline-content"></div>
+                            </div>
+                        </div>
+                        <div id="calendar-tab" class="calendar-tab tab-content">
+                            <div id="calendar" class="calendar"></div>
+                        </div>
+                    </div>
+                    <!-- Bouton pour afficher le formulaire d'ajout de tâche -->
+                    <div id="addTaskModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close" onclick="closeAddTaskModal()">&times;</span>
+                            <h2>Ajouter une tâche</h2>
+                            <input type="text" id="newTaskName" placeholder="Nom de la tâche">
+                            <input type="date" id="newTaskDate">
+                            <select id="newTaskHour"></select>
+                            <input type="number" id="newTaskDuration" min="1" max="24" placeholder="Durée (heures)">
+                            <textarea id="newTaskDescription" placeholder="Description de la tâche"></textarea>
+                            <button onclick="addTask()">Ajouter</button>
+                        </div>
+                    </div>
+                    <div id="editTaskModal" class="modal">
+                        <div class="modal-content">
+                            <span class="close">&times;</span>
+                            <h2>Modifier la tâche</h2>
+                            <input type="hidden" id="editTaskId">
+                            <input type="text" id="editTaskName" placeholder="Nom de la tâche">
+                            <input type="date" id="editTaskDate">
+                            <select id="editTaskHour"></select>
+                            <input type="number" id="editTaskDuration" min="1" max="24" placeholder="Durée (heures)">
+                            <textarea id="editTaskDescription" placeholder="Description de la tâche"></textarea>
+                            <button onclick="updateTask()">Mettre à jour</button>
+                        </div>
+                    </div>
                 </div>
+                <script src="./indicateur/scriptindicator.js"></script>
+                <script src="./calendar/scriptcalendar.js"></script>
+                <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
             </div>
-            <script src="script.js"></script>
-            <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
-        </div>
     </body>
 </html>

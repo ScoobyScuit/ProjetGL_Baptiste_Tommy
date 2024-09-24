@@ -1,6 +1,3 @@
-
-  
-  
   .progress-container {
     width: 100%;
     height: fit-content;
@@ -35,6 +32,7 @@
     font-size: 50px;
     font-weight: bold;
     fill: #333;
+    gap: 10px;
   }
   .start-point {
     fill: #0171DF;
@@ -46,3 +44,10 @@
   input[type="range"] {
     width: 100%;
   }
+.titleprogresse{
+  font-size: 25px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
