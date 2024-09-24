@@ -88,7 +88,7 @@ body{
 
 .main-dashboard{
     width: 97%;
-    height: 80vh;
+    height: fit-content;
     display: flex;
     flex-direction: row;
     border-radius: 20px;
@@ -114,12 +114,13 @@ body{
     background-color: #FDFDFD;
     text-align: center;
 }
-
 .calendar-progress{
-    display: block;
+    display: flex;
+    flex-direction: column;
     width: 70%;
-    height: 100%;
-    padding: 20px;
+    height: 90vh;
+    padding: 10px;
     background-color:#F0F2F7;
     border-radius: 20px;
-}
+  }
+

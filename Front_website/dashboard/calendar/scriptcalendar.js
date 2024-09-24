@@ -28,9 +28,9 @@ const timelineContent = document.getElementById('timeline-content');
 
       calendarElement.innerHTML = `
         <div class="calendar-header">
-          <button onclick="changeMonth(-1)" class="precedent">Précédent</button>
+          <button onclick="changeMonth(-1)" class="precedent"><i class="fa-solid fa-angles-left"></i>Précédent</button>
           <h2>${selectedDate.format('MMMM YYYY')}</h2>
-          <button onclick="changeMonth(1)"class="suivant">Suivant</button>
+          <button onclick="changeMonth(1)"class="suivant">Suivant<i class="fa-solid fa-angles-right"></i></button>
         </div>
         <div class="calendar-grid">
           ${Array.from({length: daysInMonth}, (_, i) => {
