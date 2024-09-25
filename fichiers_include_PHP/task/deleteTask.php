@@ -12,7 +12,7 @@ if (isset($_GET['id'])) {
         $connexion = new PDO("mysql:host=$serveur;dbname=$dbname", $login, $pw);
         $connexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $stmt = $connexion->prepare("DELETE FROM tasks WHERE id = :id"); // Assurez-vous que c'est le bon nom de table et de colonne
+        $stmt = $connexion->prepare("DELETE FROM task WHERE idTask = :id"); // Assurez-vous que c'est le bon nom de table et de colonne
         $stmt->bindParam(':id', $taskId);
         $stmt->execute();
 
