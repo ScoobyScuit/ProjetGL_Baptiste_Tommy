@@ -80,4 +80,4 @@ const testInterval = setInterval(() => {
         clearInterval(testInterval);
     }
 }, 2000);*/
-// Envoi toutes les 2 secondes
+// Envoi toutes les 2 secondes  

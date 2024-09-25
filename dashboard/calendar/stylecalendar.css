@@ -1,3 +1,4 @@
+
 .tab-container {
   display: flex;
   width: 100%;
@@ -7,7 +8,7 @@
   position: relative;
 }
 
-.tab-button, .precedent, .suivant {
+.tab-button, .tab-button-add {
     font-family: "Geologica", sans-serif;
     font-weight: 300;
     display: flex;
@@ -23,27 +24,38 @@
 }
 .precedent, .suivant{
   font-family: "Geologica", sans-serif;
-  width: 20%;
+  width: fit-content;
+  padding: 15px;
   font-weight: 300;
   display: flex;
   align-items: center;
+  justify-content: center;
   border-radius: 30px;
   border: none;
-  gap: 10px;
+  gap: 12px;
   justify-content: center;
   background-color: #e0e0e0;
   color: #0171DF;
   transition: 0.5s ease-in;
+  cursor: pointer;
 }
-.tab-button:hover{
+.tab-button:hover, .tab-button-add{
   background-color: #0171DF;
   color: white;
   transition: 0.5s ease-in;
-
+}
+.fa-plus{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: #0171DF;
+  border-radius: 60%;
+  padding: 15px;
+  transition: 0.5s ease-in;
 }
 .fa-timeline, 
-.fa-calendar-week, 
-.fa-plus{
+.fa-calendar-week{
   display: flex;
   align-items: center;
   justify-content: center;
@@ -77,17 +89,24 @@
 .tab-content {
   display: none;
   width: 100%;
-  height: 90%; /* Assurez que le contenu occupe tout l'espace */
+  height: 100%;
+  position: relative;
+   /* Assurez que le contenu occupe tout l'espace */
 }
 
 .tab-content.active {
   display: block;
 }
 
+.timeline::-webkit-scrollbar{
+  display: none;
+}
+
 .container-timeline {
   display: flex;
   flex-direction: column;
-  height: 96%;
+  border-radius: 20px;
+  height: 100%;
   overflow: hidden; /* Ajoutez ceci pour éviter le dépassement vertical */
 }
 .timeline {
@@ -100,23 +119,32 @@
   width: 100%; /* Assurez-vous que la timeline prend toute la largeur disponible */
   position: relative; /* Nécessaire pour le sticky */
 }
-
+.timeline-tab{
+  background-color: #fefefe;
+}
 .timeline-content {
   display: flex;
   flex-direction: column;
+  border-radius: 20px;
   width: 100%; /* Prendre 100% de la largeur de la box */
   flex-grow: 1; /* Grandir pour occuper tout l'espace disponible */
 }
 
-.timeline::-webkit-scrollbar {
-  display: none;
-}
-
-.timeline-tab{
-  padding: 10px;
-  background-color: #e0e0e0;
-  border-radius: 25px;
-}
+.calendar-tab{
+  background-color: #fefefe;
+  width: 100%;
+ }
+ .calendar{
+  display: flex;
+  align-items: center;
+  justify-content:center ;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: #fefefe;
+  padding: 15px;
+  border-radius: 20px;
+ }
 
 .day-row {
   display: flex;
@@ -273,21 +301,13 @@
   font-size: 12px;
   white-space: nowrap;
 }
-.calendar-tab{
- width: 100%;
-}
-.calendar{
-  height: 100%;
-  background-color: #fefefe;
-  padding: 15px;
-  border-radius: 20px;
-}
 
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
   gap: 7px;
-  height: 93%;
+  height: 100%;
+  width: 100%;
 }
 
 .calendar-day {
@@ -296,14 +316,14 @@
   align-items: center;
   justify-content: center;
   padding: 10px;
-  background-color: #0171DF;
+  background-color: #e0e0e0;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
 }
 
 .calendar-day:hover {
-  background-color: #e0e0e0;
+  background-color: #0171DF;
 }
 
 .calendar-day.active {
@@ -313,8 +333,9 @@
 
 .calendar-header {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: row;
+  width: 100%;
+justify-content: space-between;  align-items: center;
   margin-bottom: 10px;
 }
 .modal {
