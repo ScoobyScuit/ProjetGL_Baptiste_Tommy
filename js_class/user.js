@@ -4,7 +4,7 @@
  * 
  * Cette classe gère les données d'un utilisateur, notamment son ID, nom, prénom, email, mot de passe et rôle.
  */
-class User {
+export class User {
     
     /**
      * @brief Constructeur de la classe User.

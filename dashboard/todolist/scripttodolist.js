@@ -1,4 +1,5 @@
-document.addEventListener('DOMContentLoaded', () => {
+import {Task} from "../../js_class/task";
+document.addEventListener('DOMContentLoaded', async () => {
     const taskInput = document.getElementById('task-input');
     const addTaskBtn = document.getElementById('add-task');
     const taskList = document.getElementById('task-list');
@@ -6,6 +7,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let tasks = JSON.parse(localStorage.getItem('tasks')) || [];
     let currentFilter = 'all';
+
+    // Fetch tasks from the server
+    const serverTasks = await Task.fetchTaskData();
+
+    if (serverTasks && serverTasks.length > 0) {
+        // Add server tasks to the local task list
+        serverTasks.forEach(serverTask => {
+            tasks.push({
+                text: serverTask.titre,
+                completed: serverTask.statut === 'completed',
+                id: serverTask.id
+            });
+        });
+        saveTasks(); // Save to local storage
+    }
 
     function renderTasks() {
         taskList.innerHTML = '';
@@ -46,7 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     </div>
                 `;
 
-                // Ajout de l'événement sur la checkbox avec l'animation
+                // Checkbox with progress animation
                 const checkbox = li.querySelector(`#checkbox-12-${index}`);
                 checkbox.addEventListener('change', (e) => toggleTask(index, e.target.checked));
 
@@ -73,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     function toggleTask(index, checked) {
         tasks[index].completed = checked;
         if (checked) {
-            startProgress(index); // Commencer la barre de progression si la tâche est cochée
+            startProgress(index); // Start progress if task is checked
         }
         renderTasks();
     }
@@ -81,19 +97,18 @@ document.addEventListener('DOMContentLoaded', () => {
     function startProgress(index) {
         const progressBar = document.querySelector(`#progress-${index}`);
         const progressFill = progressBar.querySelector('.progress');
-        progressBar.style.display = 'block'; // Assurez-vous que la barre de progression est visible
+        progressBar.style.display = 'block'; // Make sure progress bar is visible
         let width = 0;
 
-        // Définir un intervalle pour la progression
         const interval = setInterval(() => {
             if (width >= 100) {
-                clearInterval(interval); // Arrêter l'intervalle une fois la barre remplie
-                deleteTask(index); // Supprimer la tâche après 30 secondes
+                clearInterval(interval); // Stop once the progress is full
+                deleteTask(index); // Delete task after progress completes
             } else {
                 width++;
-                progressFill.style.width = width + '%'; // Augmenter la largeur de la barre
+                progressFill.style.width = width + '%'; // Increase width
             }
-        }, 300); // 300 ms entre chaque étape, ce qui donne 100 étapes = 30 secondes
+        }, 300); // 300ms per step, 100 steps = 30 seconds
     }
 
     function saveTasks() {
@@ -137,5 +152,5 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    renderTasks();
+    renderTasks(); // Initial rendering of tasks
 });

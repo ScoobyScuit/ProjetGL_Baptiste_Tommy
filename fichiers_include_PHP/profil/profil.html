@@ -6,10 +6,9 @@
         <title>Profil Utilisateur</title>
         <!-- profil style -->
         <link rel="stylesheet" href="./css/profil.css"/>
-        <script src="../../js_class/user.js"></script>
         <!-- navbar style -->
         <link rel="stylesheet" href="../../dashboard/css/board.css" />
-        <link rel="stylesheet" href="../../dashboard/css/indicator.css" />
+        <link rel="stylesheet" href="../../dashboard/indicateur/indicator.css" />
         <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
     </head>
 
@@ -41,39 +40,28 @@
             <div id="profile-info" class="profile-info"></div>
             <button class="logout-btn" onclick="window.location.href = '../../logout/logout.php';"> Déconnexion </button>
         </div>
-        <script>
+
+        
+        <script type="module">
+            import { User } from '../../js_class/user.js';
             (async () => {
-                if (typeof User === "undefined") {
-                    console.error("La classe User n'est pas définie.");
-                    return;
-                }
                 const currentUser = await User.fetchUserData();
                 if (currentUser) {
                     // Afficher les informations utilisateur dans le div
                     const profileInfoDiv = document.getElementById("profile-info");
                     profileInfoDiv.innerHTML = `
-            
-			<div>
-				<strong>Nom :</strong> ${currentUser.nom}
-			</div>
-			<div>
-				<strong>Prénom :</strong> ${currentUser.prenom}
-			</div>
-			<div>
-				<strong>Email :</strong> ${currentUser.email}
-			</div>
-            <div>
-				<strong>ID :</strong> ${currentUser.id}
-			</div>
-			<div>
-				<strong>Rôle :</strong> ${currentUser.role}
-			</div>
-          `;
+                        <div><strong>Nom :</strong> ${currentUser.nom}</div>
+                        <div><strong>Prénom :</strong> ${currentUser.prenom}</div>
+                        <div><strong>Email :</strong> ${currentUser.email}</div>
+                        <div><strong>ID :</strong> ${currentUser.id}</div>
+                        <div><strong>Rôle :</strong> ${currentUser.role}</div>
+                    `;
                 } else {
                     console.log("Aucun utilisateur connecté.");
                 }
             })();
         </script>
+        
         <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
     </body>
 </html>
