@@ -1,93 +1,111 @@
 <!DOCTYPE html>
 <html lang="fr">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Profil Utilisateur</title>
-    <!-- projet style -->
-    <link rel="stylesheet" href="./css/projet.css" />
-    <script src="../../js_class/project.js"></script>
-    <!-- navbar style -->
-    <link rel="stylesheet" href="../../dashboard/css/board.css" />
-    <link rel="stylesheet" href="../../dashboard/css/indicator.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <div class="profile-container">
-      <!-- Start Navbar -->
-      <nav class="navbar">
-        <div class="gestion-button-navbar">
-          <button
-            class="nav-btn dashboard-btn"
-            onclick="location.href = '../../dashboard/dashboard.html';"
-          >
-            <i class="fa-solid fa-house"></i>Dashboard
-          </button>
-          <button
-            class="nav-btn project-btn"
-            onclick="location.href = './projet.html';"
-          >
-            <i class="fa-regular fa-folder-closed"></i>Projet
-          </button>
-          <button class="nav-btn calendar-btn">
-            <i class="fa-regular fa-calendar"></i>Calendriers
-          </button>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Profil Utilisateur</title>
+        <!-- projet style -->
+        <link rel="stylesheet" href="./css/projet.css" />
+        <script src="../../js_class/project.js"></script>
+        <!-- navbar style -->
+        <link rel="stylesheet" href="../../dashboard/css/board.css" />
+        <link rel="stylesheet" href="../../dashboard/indicateur/indicator.css" />
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet" />
+    </head>
+    <body>
+        <div class="profile-container">
+            <!-- Start Navbar -->
+            <nav class="navbar">
+                <div class="gestion-button-navbar">
+                    <button class="nav-btn dashboard-btn" onclick="location.href = '../../dashboard/dashboard.html';">
+                        <i class="fa-solid fa-house"></i>Dashboard </button>
+                    <button class="nav-btn project-btn" onclick="location.href = './projet.html';">
+                        <i class="fa-regular fa-folder-closed"></i>Projet </button>
+                    <button class="nav-btn calendar-btn">
+                        <i class="fa-regular fa-calendar"></i>Calendriers </button>
+                </div>
+                <div class="settings">
+                    <button class="settings-btn">
+                        <i class="fa-solid fa-gear"></i>
+                    </button>
+                    <button class="profil-btn" onclick="location.href = '../profil/profil.html';">
+                        <i class="fa-solid fa-user"></i>
+                    </button>
+                </div>
+            </nav>
+            <!-- End Navbar -->
+            <h1>Projets utilisateur</h1>
+            <div id="projects-list" class="projects-list">
+                <!-- Les projets seront insérés ici -->
+            </div>
         </div>
-        <div class="settings">
-          <button class="settings-btn">
-            <i class="fa-solid fa-gear"></i>
-          </button>
-          <button
-            class="profil-btn"
-            onclick="location.href = '../profil/profil.html';"
-          >
-            <i class="fa-solid fa-user"></i>
-          </button>
-        </div>
-      </nav>
-      <!-- End Navbar -->
-      <h1>Projets utilisateur</h1>
-      <div id="projects-list" class="projects-list">
-        <!-- Les projets seront insérés ici -->
-      </div>
-    </div>
-    <!-- Script pour afficher les projets liés à l'utilisateur connecté -->
-    <script>
-      (async () => {
-        const projectsListDiv = document.getElementById("projects-list");
-        const projects = await Project.fetchProjectData();
-        if (projects && projects.length > 0) {
-          projects.forEach((project) => {
-            // Créer une ligne pour chaque projet
+        <!-- Script pour afficher les projets liés à l'utilisateur connecté et permettre leur sélection -->
+        <script>
+(async () => {
+    const projectsListDiv = document.getElementById("projects-list");
+
+    // Fetch project data
+    const projects = await Project.fetchProjectData();
+
+    // Récupérer l'ID du projet sélectionné depuis localStorage
+    const selectedProjectId = localStorage.getItem("selectedProjectId");
+
+    if (projects && projects.length > 0) {
+        projects.forEach((project) => {
+            // Créer une div pour chaque projet
             const projectDiv = document.createElement("div");
             projectDiv.className = "project-item";
+            
+            // Ajouter le contenu HTML du projet
             projectDiv.innerHTML = `
-              
-			<strong>Nom du projet:</strong> ${project.nom}
-			<br>
-				<strong>Description:</strong> ${project.description}
-				<br>
-					<strong>Date de début:</strong> ${project.dateDebut}
-					<br>
-						<strong>Date de fin:</strong> ${project.dateFin}
-						<br>
-							<strong>Chef de projet (ID):</strong> ${project.idChef}
-							<br>
+                <strong>Nom du projet:</strong> ${project.nom}
+                <br>
+                <strong>Description:</strong> ${project.description}
+                <br>
+                <strong>Date de début:</strong> ${project.dateDebut}
+                <br>
+                <strong>Date de fin:</strong> ${project.dateFin}
+                <br>
+                <strong>Chef de projet (ID):</strong> ${project.idChef}
+                <br>
+                <!-- Bouton de sélection de projet -->
+                <button class="select-project-btn" data-project-id="${project.id}">Sélectionner ce projet</button>
             `;
+
             // Ajouter le projet à la liste
             projectsListDiv.appendChild(projectDiv);
-          });
-        } else {
-          projectsListDiv.innerHTML = "Aucun projet trouvé.";
-        }
-      })();
-    </script>
-    <script
-      src="https://kit.fontawesome.com/cd0d448035.js"
-      crossorigin="anonymous"
-    ></script>
-  </body>
+
+            // Ajouter la classe 'selected' si ce projet est celui sélectionné (comparé avec localStorage)
+            if (project.id === parseInt(selectedProjectId)) {
+                projectDiv.classList.add("selected");
+                project.isSelected = 1;  // Marquer l'objet comme sélectionné
+                console.log(`Projet restauré: ID ${project.id}`);
+            }
+
+            // Ajouter un écouteur d'événement pour sélectionner un projet
+            projectDiv.addEventListener("click", () => {
+                // Supprimer la classe 'selected' de tous les éléments de projet
+                const allProjectItems = document.querySelectorAll(".project-item");
+                allProjectItems.forEach((item) => item.classList.remove("selected"));
+
+                // Ajouter la classe 'selected' à l'élément cliqué
+                projectDiv.classList.add("selected");
+
+                // Mettre à jour la valeur de isSelected du projet
+                projects.forEach((p) => p.isSelected = null);  // Réinitialiser isSelected pour tous les projets
+                project.isSelected = 1;  // Marquer le projet actuel comme sélectionné
+
+                // Enregistrer l'ID du projet sélectionné dans localStorage
+                localStorage.setItem("selectedProjectId", project.id);
+                console.log(`Projet sélectionné ID: ${project.id} | isSelected: ${project.isSelected}`);
+            });
+        });
+    } else {
+        projectsListDiv.innerHTML = "Aucun projet trouvé.";
+    }
+})();
+
+        </script>
+        <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
+    </body>
 </html>

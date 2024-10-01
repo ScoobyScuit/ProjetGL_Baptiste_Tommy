@@ -6,8 +6,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     const taskList = document.getElementById('task-list');
     const filterOptions = document.getElementById('filter-options');
 
+
+    // Récupérer l'ID du projet sélectionné depuis le localStorage
+    const selectedProjectId = localStorage.getItem("selectedProjectId");
+    console.log("selectedProjectId : " + selectedProjectId);
     // Charger les tâches depuis la base de données
-    let tasks = await Task.fetchTaskData();
+    let tasks = await Task.fetchTasksByProjectId(parseInt(selectedProjectId));
 
     let currentFilter = 'all';
 

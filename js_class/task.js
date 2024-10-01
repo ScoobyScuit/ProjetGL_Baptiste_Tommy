@@ -67,6 +67,60 @@ export class Task {
         }
     }
     
+    /**
+         * @brief Récupère les tâches liées à un projet spécifique.
+         * 
+         * Cette méthode envoie une requête au serveur pour obtenir les tâches associées à un projet via une API PHP et retourne un tableau d'instances de la classe Task.
+         * @param {number} projectId L'ID du projet pour lequel les tâches doivent être récupérées.
+         * @return {Promise<Task[]>} Renvoie un tableau d'objets Task avec les données récupérées, ou un tableau vide en cas d'erreur.
+         */
+    static async fetchTasksByProjectId(projectId) {
+        try {
+            const response = await fetch(`../../fichiers_include_PHP/task/getTaskByProject.php?projectId=${projectId}`);
+
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP : ${response.status}`);
+            }
+
+            const data = await response.json();
+
+            if (data.error) {
+                throw new Error(data.error);
+            }
+
+            if (!Array.isArray(data)) {
+                throw new Error("Données tâches incorrectes.");
+            }
+
+            // Transformer les données reçues en instances de la classe Task
+            const tasks = data.map(taskData => {
+                // Vérifier que toutes les données nécessaires sont présentes
+                if (!taskData.TitreTask || !taskData.DescriptionTask || !taskData.StatutTask || 
+                    !taskData.PrioriteTask || !taskData.DateEchTask || !taskData.IdProject || 
+                    !taskData.IdUser) {
+                    console.error("Données de tâche incomplètes :", taskData);
+                    throw new Error('Données de tâche incomplètes.');
+                }
+
+                // Créer une nouvelle instance de Task avec l'ID (IdTask) en tant que paramètre optionnel
+                return new Task(
+                    taskData.TitreTask,
+                    taskData.DescriptionTask,
+                    taskData.StatutTask,
+                    taskData.PrioriteTask,
+                    taskData.DateEchTask,
+                    taskData.IdProject,
+                    taskData.IdUser,
+                    taskData.IdTask // Passer l'ID optionnel ici
+                );
+            });
+
+            return tasks;
+        } catch (error) {
+            console.error("Erreur lors de la récupération des données des tâches :", error);
+            return [];
+        }
+    }
     
     /**
      * @brief Supprime une tâche du serveur.
