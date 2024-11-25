@@ -1,12 +1,8 @@
 import { Task } from "/js_class/task.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
-    const taskInput = document.getElementById('task-input');
-    const addTaskBtn = document.getElementById('add-task');
     const taskList = document.getElementById('task-list');
-    const filterOptions = document.getElementById('filter-options');
-
-    
+    const filterOptions = document.getElementById('filter-options'); 
     
     // Récupérer l'ID du projet sélectionné depuis le localStorage
     const selectedProjectId = localStorage.getItem("selectedProjectId");
@@ -18,11 +14,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     Task.displayTasks(tasks);
 
     let currentFilter = 'all';
-
-    // Fonction pour vérifier si une tâche existe déjà dans la liste
-    function taskExists(newTask) {
-        return tasks.some(task => task.id === newTask.id);
-    }
 
     // Fonction pour rendre les tâches visibles dans la liste
     function renderTasks() {
@@ -38,6 +29,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                     <span class="task-text ${task.statut === 'Terminée' ? 'Terminée' : ''}">${task.titre}</span>
                     <div class="task-actions">
                         <button class="edit-btn" data-index="${index}">Modifier</button>
+                        <button class="completed-btn" data-index="${index}">Terminer</button>
                         <button class="delete-btn" data-index="${index}"><i class="fa-regular fa-trash-can"></i></button>
                     </div>
                 `;
@@ -72,10 +64,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         if (success) {
             tasks.push(newTask);   // Ajouter localement la nouvelle tâche
             renderTasks();         // Actualiser la liste des tâches
-            closeAddTaskModal();   // Fermer la modal après l'ajout
-            
-
-            
+            closeAddTaskModal();   // Fermer la modal après l'ajout   
         } else {
             alert('Erreur lors de l\'ajout de la tâche');
         }
