@@ -191,4 +191,30 @@ export class Task {
     changeStatut(idUser, newStatut) {
         // TODO
     }
+
+    /**
+     * @brief Affiche toutes les tâches stockées dans la console.
+     * 
+     * Cette méthode suppose qu'un tableau de tâches est passé en paramètre.
+     * @param {Task[]} tasks Tableau des tâches à afficher.
+     */
+    static displayTasks(tasks) {
+        if (!Array.isArray(tasks) || tasks.length === 0) {
+            console.log("Aucune tâche à afficher.");
+            return;
+        }
+
+        console.log("Liste des tâches :");
+        tasks.forEach((task, index) => {
+            console.log(`Tâche ${index + 1} :`);
+            console.log(`- ID : ${task.id || "Non défini"}`);
+            console.log(`- Titre : ${task.titre}`);
+            console.log(`- Description : ${task.description}`);
+            console.log(`- Statut : ${task.statut}`);
+            console.log(`- Priorité : ${task.priorite}`);
+            console.log(`- Date d'échéance : ${task.dateEcheance}`);
+            console.log(`- Projet ID : ${task.idProjet}`);
+            console.log(`- Utilisateur ID : ${task.idUser}`);
+        });
+    }
 }
