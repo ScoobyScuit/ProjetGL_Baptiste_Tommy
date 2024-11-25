@@ -4,12 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Gestion de Projet</title>
-    <link rel="stylesheet" href="./css/board.css">
-    <link rel="stylesheet" href="./indicateur/indicator.css" />
-    <link rel="stylesheet" href="./calendar/stylecalendar.css" />
-    <link rel="stylesheet" href="./todolist/checkbox.css">
-    <link rel="stylesheet" href="./todolist/styletodolist.css">
-    <link rel="stylesheet" href="./todolist/addTask.css">
+    <link rel="stylesheet" href="/dashboard/css/board.css">
+    <link rel="stylesheet" href="/dashboard/indicateur/indicator.css" />
+    <link rel="stylesheet" href="/dashboard/calendar/stylecalendar.css" />
+    <link rel="stylesheet" href="/dashboard/todolist/checkbox.css">
+    <link rel="stylesheet" href="/dashboard/todolist/styletodolist.css">
+    <link rel="stylesheet" href="/dashboard/todolist/addTask.css">
     <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11/dist/interact.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
@@ -25,7 +25,7 @@
           </button>
           <button
             class="nav-btn project-btn"
-            onclick="location.href = '../fichiers_include_PHP/projet/projet.html';"
+            onclick="location.href = '/fichiers_include_PHP/projet/projet.html';"
           >
             <i class="fa-regular fa-folder-closed"></i>Projet
           </button>
@@ -39,7 +39,7 @@
           </button>
           <button
             class="profil-btn"
-            onclick="location.href = '../fichiers_include_PHP/profil/profil.html';"
+            onclick="location.href = '/fichiers_include_PHP/profil/profil.html';"
           >
             <i class="fa-solid fa-user"></i>
           </button>
@@ -90,7 +90,6 @@
           <div class="todolist">
             <div class="container-todolist">
               <h1>Ma Liste de Tâches avec Validation</h1>
-              <button id="add-task">Ajouter une nouvelle tâche</button>
               <!-- Formulaire d'ajout de tâche -->
               <div id="addTaskModal" class="modal" style="display:none;">
                 <div class="modal-content">
@@ -148,19 +147,22 @@
         <div class="calendar-progress">
           <div class="tab-container">
             <button class="tab-button active" data-tab="timeline">
-              <i class="fa-solid fa-timeline"></i>Timeline
+              <div class="buttondesign">
+                <i class="fa-solid fa-timeline"></i>Timeline
+              </div>
             </button>
             <button class="tab-button" data-tab="calendar">
-              <i class="fa-solid fa-calendar-week"></i>Calendrier
+              <div class="buttondesign">
+                <i class="fa-solid fa-calendar-week"></i>Calendrier
+              </div>
             </button>
-            <button
-              class="tab-button"
-              id="openAddTaskModal"
-              onclick="openAddTaskModal()"
-            >
-              <i class="fa-solid fa-plus"></i>Ajouter une tâche
+            <button class="tab-button" id="openAddTaskModal" onclick="openAddTaskModal()">
+              <div class="buttondesign">
+                <i class="fa-solid fa-plus"></i>Ajouter une tâche
+              </div>
             </button>
           </div>
+      
           <div class="container-timeline">
             <div id="timeline-tab" class="timeline-tab tab-content active">
               <div class="timeline">
@@ -171,6 +173,24 @@
               <div id="calendar" class="calendar"></div>
             </div>
           </div>
+      
+          <!-- Modal pour ajouter une tâche -->
+             
+          <!-- Modal pour éditer une tâche -->
+          <div id="editTaskModal" class="modal">
+            <div class="modal-content">
+              <span class="close">&times;</span>
+              <h2>Modifier la tâche</h2>
+              <input type="hidden" id="editTaskId" />
+              <input type="text" id="editTaskName" placeholder="Nom de la tâche" />
+              <input type="date" id="editTaskDate" />
+              <select id="editTaskHour"></select>
+              <input type="number" id="editTaskDuration" min="1" max="24" placeholder="Durée (heures)" />
+              <textarea id="editTaskDescription" placeholder="Description de la tâche"></textarea>
+              <button onclick="updateTask()">Mettre à jour</button>
+            </div>
+          </div>
+        </div>
           <!-- Bouton pour afficher le formulaire d'ajout de tâche -->
           <div id="addTaskModal" class="modal">
             <div class="modal-content">
@@ -229,9 +249,9 @@
       </div>
       <!-- End Dashboard container -->
 
-      <script type="module" src="./calendar/scriptcalendar.js"></script>
-      <script type="module" src="./indicateur/scriptindicator.js"></script>
-      <script type="module" src="./todolist/scripttodolist.js"></script>
+      <script type="module" src="/dashboard/todolist/scripttodolist.js"></script>
+      <script src="/dashboard/indicateur/scriptindicator.js"></script>
+      <script src="/dashboard/calendar/scriptcalendar.js"></script>
       
       <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
     </div>

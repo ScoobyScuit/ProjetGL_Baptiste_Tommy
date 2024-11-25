@@ -2,7 +2,26 @@ const timelineContent = document.getElementById('timeline-content');
     const calendarElement = document.getElementById('calendar');
     let tasks = [];
     let selectedDate = moment();
+    document.addEventListener('DOMContentLoaded', () => {
+      const tabs = document.querySelectorAll('.tab-button');
+      
+      function switchTab(e) {
+        const tab = e.target;
+        const tabId = tab.dataset.tab;
 
+        // Update active classes
+        document.querySelector('.tab-button.active').classList.remove('active');
+        document.querySelector('.tab-content.active').classList.remove('active');
+
+        tab.classList.add('active');
+        document.querySelector(`#${tabId}-tab`).classList.add('active');
+      }
+
+      // Event listeners for tab buttons
+      tabs.forEach(tab => {
+        tab.addEventListener('click', switchTab);
+      });
+    });
     function isOverlapping(task1, task2) {
       return task1.date === task2.date &&
              task1.hour < (task2.hour + task2.duration) &&
@@ -25,18 +44,23 @@ const timelineContent = document.getElementById('timeline-content');
       const startOfMonth = moment(selectedDate).startOf('month');
       const endOfMonth = moment(selectedDate).endOf('month');
       const daysInMonth = endOfMonth.diff(startOfMonth, 'days') + 1;
-
+    
+      const currentDate = moment(); // Récupère la date actuelle
+    
       calendarElement.innerHTML = `
         <div class="calendar-header">
-          <button onclick="changeMonth(-1)" class="precedent"><i class="fa-solid fa-angles-left"></i>Précédent</button>
+          <button onclick="changeMonth(-1)" class="precedent"><i class="fa-solid fa-angles-left"></i> Précédent</button>
           <h2>${selectedDate.format('MMMM YYYY')}</h2>
-          <button onclick="changeMonth(1)"class="suivant">Suivant<i class="fa-solid fa-angles-right"></i></button>
+          <button onclick="changeMonth(1)" class="suivant">Suivant <i class="fa-solid fa-angles-right"></i></button>
         </div>
         <div class="calendar-grid">
-          ${Array.from({length: daysInMonth}, (_, i) => {
+          ${Array.from({ length: daysInMonth }, (_, i) => {
             const day = moment(startOfMonth).add(i, 'days');
-            return `<div class="calendar-day${day.isSame(selectedDate, 'day') ? ' active' : ''}" 
-                         data-date="${day.format('YYYY-MM-DD')}"
+            const isActive = day.isSame(currentDate, 'day'); // Compare jour et mois
+    
+            return `<div class="calendar-day${isActive ? ' active' : ''}" 
+                         data-date="${day.format('YYYY-MM-DD')}" 
+                         data-month="${day.month()}" 
                          onclick="selectDate('${day.format('YYYY-MM-DD')}')">
                       ${day.format('D')}
                     </div>`;
@@ -44,6 +68,7 @@ const timelineContent = document.getElementById('timeline-content');
         </div>
       `;
     }
+    
 
     function createTimeline() {
       timelineContent.innerHTML = '';
@@ -295,43 +320,48 @@ const timelineContent = document.getElementById('timeline-content');
     }
 
     function updateCurrentTimeIndicator() {
-      const now = moment();
-      if (selectedDate.isSame(now, 'day')) {
-        const currentHour = now.hour();
-        const currentMinute = now.minute();
-
-        let indicator = document.querySelector('.current-time-indicator');
-        if (!indicator) {
-          indicator = document.createElement('div');
-          indicator.className = 'current-time-indicator';
-          timelineContent.appendChild(indicator);
-        }
-
-        let timeLabel = document.querySelector('.current-time-label');
-        if (!timeLabel) {
-          timeLabel = document.createElement('div');
-          timeLabel.className = 'current-time-label';
-          indicator.appendChild(timeLabel);
-        }
-
-        const hoursContainer = document.querySelector('.hours');
-        if (hoursContainer) {
-          const hourWidth = 150;
-          const left = (currentHour + currentMinute / 60) * hourWidth;
-
-          indicator.style.left = `${left}px`;
-          timeLabel.textContent = now.format('HH:mm');
-          indicator.style.display = 'block';
-        }
-      } else {
-        const indicator = document.querySelector('.current-time-indicator');
-        if (indicator) {
-          indicator.style.display = 'none';
-        }
+      const now = new Date();
+      const currentHour = now.getHours();
+      const currentMinute = now.getMinutes();
+      
+      // Récupération des éléments nécessaires
+      const hoursContainer = document.querySelector('.hours');
+      const indicator = document.querySelector('.current-time-indicator') || document.createElement('div');
+      const timeLabel = document.querySelector('.current-time-label') || document.createElement('div');
+      
+      if (!hoursContainer) return;
+    
+      // Créer l'indicateur s'il n'existe pas encore
+      if (!indicator.parentNode) {
+        indicator.className = 'current-time-indicator';
+        hoursContainer.appendChild(indicator);
       }
-
-      setTimeout(updateCurrentTimeIndicator, 60000);
+    
+      if (!timeLabel.parentNode) {
+        timeLabel.className = 'current-time-label';
+        indicator.appendChild(timeLabel);
+      }
+    
+      timeLabel.textContent = `${String(currentHour).padStart(2, '0')}:${String(currentMinute).padStart(2, '0')}`;
+    
+      // Calcul dynamique
+      const hourWidth = hoursContainer.querySelector('.hour').offsetWidth; // Largeur d'une heure
+      const totalMinutesInDay = currentHour * 60 + currentMinute;
+      const totalDayWidth = hourWidth * 24; // Largeur totale pour 24h
+    
+      const leftPosition = (totalMinutesInDay / (24 * 60)) * totalDayWidth + 110;
+    
+      indicator.style.left = `${leftPosition}px`;
+    
+      setTimeout(updateCurrentTimeIndicator, 60000); // Mise à jour chaque minute
     }
+    
+    // Appeler la fonction au chargement
+    updateCurrentTimeIndicator();
+    
+    
+    
+    
 
     createCalendar();
     createTimeline();

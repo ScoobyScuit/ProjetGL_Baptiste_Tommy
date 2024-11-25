@@ -8,9 +8,9 @@ session_start();  // Démarrer la session pour accéder aux variables de session
 
 // Vérifier si l'utilisateur est connecté
 if (isset($_SESSION['user_id'])) {
-    $serveur = "localhost";
-    $login = "root";
-    $pw = "";
+    $serveur = "db";
+    $login = "user";
+    $pw = "userpass";
     $dbname = "gestion_projet";
 
     try {

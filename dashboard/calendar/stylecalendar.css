@@ -1,50 +1,91 @@
+:root {
+  /* Variables Globales */
+  --primary: #4a90e2;
+  --background: #f5f7fa;
+  --tab-height: 3rem;
+  --border-radius: 30px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
 
+/* --------------------------- Tab container and buttons --------------------------- */
 .tab-container {
   display: flex;
+  justify-content: center;
   width: 100%;
   height: fit-content;
   gap: 10px;
-  padding-bottom: 10px;
   position: relative;
 }
+.buttondesign{
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
-.tab-button, .tab-button-add {
-    font-family: "Geologica", sans-serif;
-    font-weight: 300;
-    display: flex;
-    align-items: center;
-    border-radius: 30px;
-    border: none;
-    padding: 5px 15px 5px 5px;
-    gap: 10px;
-    justify-content: center;
-    background-color: #e0e0e0;
-    color: #0171DF;
-    transition: 0.5s ease-in;
 }
-.precedent, .suivant{
+.tab-button, .tab-button-add {
+  /* Style des boutons de tabulation */
   font-family: "Geologica", sans-serif;
-  width: fit-content;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  border-radius: 30px 30px 0 0;
+  border: none;
+  padding: 10px 15px;
+  gap: 10px;
+  justify-content: center;
+  background-color: #e0e0e0;
+  color: #0171DF;
+  transition: 0.5s ease-in;
+}
+
+.tab-button:not(:hover), .tab-button-add {
+  background-color: #0171DF;
+  color: white;
+  transition: 0.5s ease-in;
+}
+
+.tab-button.active, .tab-button.active:hover {
+  /* Styles de l'élément actif */
+  background-color: white;
+  color: black;
+}
+
+.tab-button.active .fa-timeline,
+.tab-button.active .fa-calendar-week,
+.tab-button.active .fa-plus {
+  background-color: #45a049;
+  color: white;
+}
+
+/* --------------------------- Buttons (previous, next, and icons) --------------------------- */
+.calendar-header{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.precedent, .suivant {
+  font-family: "Geologica", sans-serif;
+  width: 10rem;
   padding: 15px;
   font-weight: 300;
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: center;
   border-radius: 30px;
   border: none;
   gap: 12px;
-  justify-content: center;
   background-color: #e0e0e0;
   color: #0171DF;
   transition: 0.5s ease-in;
   cursor: pointer;
 }
-.tab-button:hover, .tab-button-add{
-  background-color: #0171DF;
-  color: white;
-  transition: 0.5s ease-in;
-}
-.fa-plus{
+
+.fa-plus, .fa-timeline, .fa-calendar-week {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -54,51 +95,32 @@
   padding: 15px;
   transition: 0.5s ease-in;
 }
-.fa-timeline, 
-.fa-calendar-week{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: #0171DF;
-  color: white;
-  border-radius: 60%;
-  padding: 15px;
-  transition: 0.5s ease-in;
 
-}
-.tab-button:hover .fa-timeline, 
+.tab-button:hover .fa-timeline,
 .tab-button:hover .fa-calendar-week,
-.tab-button:hover .fa-plus{
+.tab-button:hover .fa-plus {
   background-color: white;
   color: #0171DF;
   transition: 0.5s ease-in;
-
 }
 
-.tab-button.active {
-  background-color: green;
-  color: white;
-}
-.tab-button.active .fa-timeline,
-.tab-button.active .fa-calendar-week,
-.tab-button.active .fa-plus{
-  background-color: #45a049;
-  color: white;
-}
-
+/* --------------------------- Tab content --------------------------- */
 .tab-content {
   display: none;
   width: 100%;
   height: 100%;
   position: relative;
-   /* Assurez que le contenu occupe tout l'espace */
+  transform: translateY(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tab-content.active {
   display: block;
+  transform: translateY(0);
 }
 
-.timeline::-webkit-scrollbar{
+/* --------------------------- Scrollbar and Timeline --------------------------- */
+.timeline::-webkit-scrollbar {
   display: none;
 }
 
@@ -107,44 +129,57 @@
   flex-direction: column;
   border-radius: 20px;
   height: 100%;
-  overflow: hidden; /* Ajoutez ceci pour éviter le dépassement vertical */
+  background: white;
+  box-shadow: var(--shadow);
+  overflow: hidden;
 }
+
 .timeline {
   display: flex;
-  overflow-x: auto; /* Assurez-vous que le défilement horizontal est activé */
-  overflow-y: hidden; /* Pas de défilement vertical pour garder la hauteur stable */
+  overflow-x: auto;
+  overflow-y: hidden;
   background-color: white;
   border-radius: 20px;
-  height: 100% ; /* Garder la timeline à 100% de la hauteur du parent */
-  width: 100%; /* Assurez-vous que la timeline prend toute la largeur disponible */
-  position: relative; /* Nécessaire pour le sticky */
+  height: 100%;
+  width: 100%;
+  position: relative;
 }
-.timeline-tab{
+
+.timeline-tab {
   background-color: #fefefe;
 }
+
 .timeline-content {
   display: flex;
   flex-direction: column;
   border-radius: 20px;
-  width: 100%; /* Prendre 100% de la largeur de la box */
-  flex-grow: 1; /* Grandir pour occuper tout l'espace disponible */
+  width: 100%;
+  flex-grow: 1;
 }
 
-.calendar-tab{
+/* --------------------------- Calendar Styles --------------------------- */
+.calendar-progress {
+  width: 70%;
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
+}
+
+.calendar-tab {
   background-color: #fefefe;
   width: 100%;
- }
- .calendar{
+}
+
+.calendar {
   display: flex;
   align-items: center;
-  justify-content:center ;
+  justify-content: center;
   flex-direction: column;
   height: 100%;
   width: 100%;
   background-color: #fefefe;
   padding: 15px;
   border-radius: 20px;
- }
+}
 
 .day-row {
   display: flex;
@@ -163,14 +198,13 @@
   color: white;
   position: sticky;
   left: 0;
-  top: 0; /* Si nécessaire pour le défilement vertical aussi */
+  top: 0;
   z-index: 10;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: 2px 0 5px rgba(0,0,0,0.1); /* L'ombre pour un effet visuel */
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
-
 
 .hours {
   display: flex;
@@ -203,8 +237,6 @@
   cursor: move;
   transition: background-color 0.3s;
   user-select: none;
-  -webkit-user-select: none;
-  touch-action: none;
   position: absolute;
   min-height: 50px;
   top: auto;
@@ -278,6 +310,7 @@
   z-index: 20;
 }
 
+/* --------------------------- Current Time Indicator --------------------------- */
 .current-time-indicator {
   position: absolute;
   top: 0;
@@ -286,13 +319,11 @@
   background-color: red;
   z-index: 15;
   pointer-events: none;
-  left: 50%; /* Ajustez selon la position correcte de l'heure actuelle */
 }
 
 .current-time-label {
   position: absolute;
   top: -20px;
-  left: 50%;
   transform: translateX(-50%);
   background-color: red;
   color: white;
@@ -302,6 +333,7 @@
   white-space: nowrap;
 }
 
+/* --------------------------- Calendar Grid --------------------------- */
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -331,13 +363,7 @@
   color: white;
 }
 
-.calendar-header {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-justify-content: space-between;  align-items: center;
-  margin-bottom: 10px;
-}
+/* --------------------------- Modal Styles --------------------------- */
 .modal {
   display: none;
   position: fixed;
@@ -346,8 +372,9 @@ justify-content: space-between;  align-items: center;
   top: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.4);
+  background-color: rgba(0, 0, 0, 0.4);
 }
+
 .modal-content {
   background-color: #fefefe;
   margin: 15% auto;
@@ -355,17 +382,46 @@ justify-content: space-between;  align-items: center;
   border: 1px solid #888;
   width: 80%;
   max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
+
 .close {
   color: #aaa;
   float: right;
   font-size: 28px;
   font-weight: bold;
-  cursor: pointer;
 }
+
 .close:hover,
 .close:focus {
   color: black;
   text-decoration: none;
   cursor: pointer;
+}
+
+.modal .task-form input,
+.modal .task-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* --------------------------- Additional Styles --------------------------- */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.success-message {
+  color: green;
+  font-size: 12px;
+  margin-top: 5px;
 }

@@ -1,4 +1,4 @@
-import { Task } from "../../js_class/task";
+import { Task } from "/js_class/task.js";
 
 document.addEventListener('DOMContentLoaded', async () => {
     const taskInput = document.getElementById('task-input');
@@ -40,15 +40,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 taskList.appendChild(li);
             }
         });
-    }
-    
-
-    // TODO
-    // Fait apparaitre le formulaire d'ajout de tache
-    document.getElementById('add-task').addEventListener('click', () => {
-        document.getElementById('addTaskModal').style.display = 'block';
-      });
-      
+    }      
 
     // Gérer l'ajout de tâche
     document.getElementById('task-form').addEventListener('submit', async (e) => {

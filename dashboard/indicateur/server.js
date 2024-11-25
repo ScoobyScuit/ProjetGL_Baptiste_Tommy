@@ -1,5 +1,6 @@
 const WebSocket = require('ws');
 const http = require('http');
+const serverPort = 3333;
 
 // Création du serveur HTTP
 const server = http.createServer();
@@ -26,7 +27,8 @@ wss.on('connection', (ws) => {
     });
 });
 
-// Démarrage du serveur HTTP
-server.listen(8080, () => {
-    console.log('Serveur WebSocket en écoute sur le port 8080');
-});
+// Démarrage du serveur HTTP 
+// TODO: Remettre 
+// server.listen(serverPort, () => {
+//     console.log('Serveur WebSocket en écoute sur le port : ' + serverPort);
+// });

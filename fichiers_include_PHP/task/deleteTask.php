@@ -3,9 +3,9 @@ session_start();
 
 if (isset($_GET['id'])) {
     $taskId = $_GET['id'];
-    $serveur = "localhost";
-    $login = "root";
-    $pw = "";
+    $serveur = "db";
+    $login = "user";
+    $pw = "userpass";
     $dbname = "gestion_projet";
 
     try {

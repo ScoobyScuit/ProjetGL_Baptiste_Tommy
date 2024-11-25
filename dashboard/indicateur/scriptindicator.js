@@ -2,11 +2,12 @@
 const progressBar = document.getElementById('progressBar');
 const progressText = document.getElementById('progressPercentage');
 const startPoint = document.getElementById('startPoint');
+const serverPort = 3333;
 
 // Connexion au serveur WebSocket
 let ws;
 function connectWebSocket() {
-    ws = new WebSocket('ws://localhost:8080');
+    ws = new WebSocket('ws://localhost:' + serverPort); // TODO: Pb ici : connexion impossible
 
     ws.onopen = () => {
         console.log('WebSocket connecté.');
@@ -47,7 +48,7 @@ function handleMessage(message) {
 }
 
 // Connexion WebSocket initiale
-connectWebSocket();
+// TODO: connectWebSocket();
 
 // Initialisation de la barre de progression
 const totalLength = progressBar.getTotalLength();
@@ -65,19 +66,3 @@ function updateProgress(value) {
     // Affichage de la valeur dans la console
     console.log(`Valeur mise à jour dans l'indicateur: ${value}`);
 }
-
-// Simulation d'envoi de valeurs pour test
-// Remplace ce bloc par des envois de valeur réels depuis une autre partie de ton application si nécessaire
-/*const testValues = [10, 20, 30, 40, 50, 60, 70, 80, 90, 100];
-let index = 0;
-const testInterval = setInterval(() => {
-    if (index < testValues.length) {
-        const value = testValues[index];
-        console.log(`Envoi de la valeur de test: ${value}`);
-        ws.send(value.toString());  // Envoie la valeur au serveur WebSocket
-        index++;
-    } else {
-        clearInterval(testInterval);
-    }
-}, 2000);*/
-// Envoi toutes les 2 secondes  

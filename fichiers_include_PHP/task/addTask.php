@@ -3,9 +3,9 @@ session_start();
 header('Content-Type: application/json');
 
 // Connexion à la base de données
-$serveur = "localhost";
-$login = "root";
-$pw = "";
+$serveur = "db";
+$login = "user";
+$pw = "userpass";
 $dbname = "gestion_projet";
 
 try {

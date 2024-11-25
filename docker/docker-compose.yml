@@ -1,0 +1,45 @@
+services:
+  php:
+    build:
+      context: ..  # Remonte d'un dossier pour atteindre la racine du projet
+      dockerfile: docker/Dockerfile  # Utilise le Dockerfile dans le dossier 'docker'
+    volumes:
+      - ../dashboard:/var/www/html/dashboard
+      - ../fichiers_include_PHP:/var/www/html/fichiers_include_PHP
+      - ../js_class:/var/www/html/js_class
+      - ../login:/var/www/html/login
+      - ../logout:/var/www/html/logout
+      - ../test:/var/www/html/test
+    ports:
+      - "1234:80"  # Accès à l'application via le port 1234
+    depends_on:
+      - db
+    environment:
+      MYSQL_HOST: db  # Indique que le service de base de données est 'db'
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: gestion_projet
+      MYSQL_USER: user
+      MYSQL_PASSWORD: userpass
+    ports:
+      - "3306:3306"  # Port d'accès à la base de données
+    volumes:
+      - db_data:/var/lib/mysql  # Volume persistant pour la base de données
+      - ../gestion_projet.sql:/docker-entrypoint-initdb.d/init.sql  # Importation de la base de données
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    restart: always
+    ports:
+      - "9090:80"  # Accès à phpMyAdmin via le port 9090
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: rootpass
+
+volumes:
+  db_data:  # Définir un volume persistant pour MySQL
