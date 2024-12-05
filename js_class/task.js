@@ -188,6 +188,38 @@ export class Task {
         }
     }
 
+    async updateTask(updatedTaskData) {
+        try {
+          const response = await fetch(`/fichiers_include_PHP/task/updateTask.php`, {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              id: this.id, // Utiliser l'ID de la tâche existante
+              ...updatedTaskData,
+            }),
+          });
+      
+          if (!response.ok) {
+            throw new Error(`Erreur HTTP : ${response.status}`);
+          }
+      
+          const result = await response.json();
+          if (result.success) {
+            return true; // Mise à jour réussie
+          } else {
+            console.error("Erreur dans la réponse du serveur :", result.error);
+            return false;
+          }
+        } catch (error) {
+          console.error("Erreur lors de la mise à jour de la tâche :", error);
+          return false;
+        }
+      }
+      
+      
+
     assignTask(idUser) {
         // TODO
     }

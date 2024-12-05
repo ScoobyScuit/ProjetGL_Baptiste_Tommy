@@ -2,6 +2,9 @@ import { Task } from "/js_class/task.js";
 import { User } from "/js_class/user.js";
 
 let currentUser = null;
+let isEditing = false; // Variable pour suivre l'état du formulaire (ajout ou modification)
+let editingTask = null; // Stocke la tâche actuellement modifiée
+
 
 document.addEventListener("DOMContentLoaded", async () => {
   const taskList = document.getElementById("task-list");
@@ -147,10 +150,27 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     }
 
-  
+    // Attacher un gestionnaire de clic pour le bouton "edit"
+    const editBtn = li.querySelector(".edit-btn");
+    if (editBtn) {
+      editBtn.addEventListener("click", (e) => {
+        e.stopPropagation(); // Empêcher le clic sur le <li>
+
+        console.log("Bouton cliqué. Tâche en cours d'édition :", task);
+
+        // Ouvrir le formulaire de modification et pré-remplir les champs avec les données existantes
+        openEditTaskModal(task);
+      });
+    }
+
     return li;
   }
 
+
+  /**
+   * Ouvre le formulaire pour créer une tache
+   * @param {currentUser} currentUser le user connecté
+   */
   function createTaskFormModal(currentUser) {
     const modal = document.getElementById("addTaskModal");
     modal.innerHTML = `
@@ -192,8 +212,51 @@ document.addEventListener("DOMContentLoaded", async () => {
         </div>
     `;
 }
+
+  /**
+   * Ouvre le formulaire pour éditer une tâche existante.
+   * @param {Task} task La tâche à modifier.
+   */
+  function openEditTaskModal(task) {
+    const modal = document.getElementById("addTaskModal");
+    modal.style.display = "block";
+  
+    // Pré-remplir le formulaire avec les données existantes
+    document.getElementById("TitreTask").value = task.titre;
+    document.getElementById("DescriptionTask").value = task.description;
+    document.getElementById("StatutTask").value = task.statut;
+    document.getElementById("PrioriteTask").value = task.priorite;
+    document.getElementById("DateEchTask").value = task.dateEcheance;
+    document.getElementById("IdProjet").value = task.idProjet;
+    document.getElementById("IdUser").value = task.idUser;
+  
+    // Modifier le texte du bouton pour refléter une modification
+    const submitButton = document.querySelector("#task-form button[type='submit']");
+    submitButton.textContent = "Modifier la tâche";
+  
+    // Activer le mode édition
+    isEditing = true;
+    editingTask = task; // Associe la tâche modifiée
+  }
   
 
+  /*
+  * Ferme le modal de formulaire d'ajout/modification de tâche.
+  */
+  function closeAddTaskModal() {
+    const modal = document.getElementById("addTaskModal");
+    modal.style.display = "none";
+  
+    // Réinitialiser le formulaire et le texte du bouton
+    document.getElementById("task-form").reset();
+    const submitButton = document.querySelector("#task-form button[type='submit']");
+    submitButton.textContent = "Ajouter la tâche";
+  
+    // Réinitialiser le mode édition
+    isEditing = false;
+    editingTask = null;
+  }
+  
   // Fonction pour rendre les tâches visibles dans la liste
   function renderTasks() {
     taskList.innerHTML = ""; // Réinitialiser la liste des tâches
@@ -207,12 +270,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         taskList.appendChild(li); // Ajouter à la liste
       }
     });
+    // Supprime les doublons par ID (si ID est unique pour chaque tâche)
+    tasks = Array.from(new Set(tasks.map(task => task.id)))
+    .map(id => tasks.find(task => task.id === id));
+
   }
 
   // Gérer l'ajout de tâche
   document.getElementById("task-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-
+  
     // Collecte des valeurs du formulaire
     const titre = document.getElementById("TitreTask").value;
     const description = document.getElementById("DescriptionTask").value;
@@ -221,23 +288,40 @@ document.addEventListener("DOMContentLoaded", async () => {
     const dateEch = document.getElementById("DateEchTask").value;
     const idProjet = document.getElementById("IdProjet").value;
     const idUser = document.getElementById("IdUser").value;
-
-    console.log({
+  
+    if (isEditing && editingTask) {
+      // Mode édition
+      const updatedTaskData = {
         titre,
         description,
         statut,
         priorite,
-        dateEch,
+        dateEcheance: dateEch,
         idProjet,
         idUser,
-    });
-
-    function closeAddTaskModal() {
-        document.getElementById("addTaskModal").style.display = "none";
-    }
-
-    // Crée une nouvelle instance de Task
-    const newTask = new Task(
+      };
+  
+      try {
+        const success = await editingTask.updateTask(updatedTaskData);
+  
+        if (success) {
+          console.log("Tâche mise à jour avec succès :", updatedTaskData);
+          Object.assign(editingTask, updatedTaskData); // Mettre à jour localement la tâche
+          renderTasks(); // Actualiser la liste des tâches
+          closeAddTaskModal(); // Fermer la modal
+        } else {
+          console.error("Échec de la mise à jour de la tâche.");
+        }
+      } catch (error) {
+        console.error("Erreur lors de la mise à jour de la tâche :", error);
+      }
+  
+      // Réinitialiser le mode édition
+      isEditing = false;
+      editingTask = null;
+    } else {
+      // Mode ajout
+      const newTask = new Task(
         titre,
         description,
         statut,
@@ -245,45 +329,26 @@ document.addEventListener("DOMContentLoaded", async () => {
         dateEch,
         idProjet,
         idUser
-    );
-
-    // Appel à la méthode addTask et récupération du résultat
-    const success = await newTask.addTask(); // Appeler la méthode d'ajout
-
-    if (success) {
-        // Utilisez la réponse de l'appel addTask pour obtenir l'ID
-        const result = await fetch('/fichiers_include_PHP/task/addTask.php', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                TitreTask: titre,
-                DescriptionTask: description,
-                StatutTask: statut,
-                PrioriteTask: priorite,
-                DateEchTask: dateEch,
-                IdProjet: idProjet,
-                IdUser: idUser
-            })
-        }).then((res) => res.json());
-
-        // Assigner l'ID retourné
-        newTask.id = result.idTask;
-
+      );
+  
+      const success = await newTask.addTask();
+  
+      if (success) {
         // Ajouter la tâche à la liste
         tasks.push(newTask);
         console.log("Tâche ajoutée avec succès :", newTask);
-
+  
         // Actualiser la liste des tâches
         renderTasks();
-
+  
         // Fermer la modal
         closeAddTaskModal();
-    } else {
+      } else {
         alert("Erreur lors de l'ajout de la tâche");
+      }
     }
-});
+  });
+  
 
 
   // Gérer le filtrage des tâches
