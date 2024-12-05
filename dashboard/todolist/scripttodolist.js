@@ -97,7 +97,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     li.addEventListener("click", () => showTaskInfo(task, li));
   
     // Attacher un gestionnaire de clic pour le bouton "delete"
-    // TODO supprimer mettre dans task.js avec status terminé
     const deleteBtn = li.querySelector(".delete-btn");
     if (deleteBtn) {
       deleteBtn.addEventListener("click", async (e) => {
@@ -121,6 +120,33 @@ document.addEventListener("DOMContentLoaded", async () => {
         }
       });
     }
+
+    // Attacher un gestionnaire de clic pour le bouton "completed"
+    const completedBtn = li.querySelector(".completed-btn");
+    if (completedBtn) {
+      completedBtn.addEventListener("click", async (e) => {
+        e.stopPropagation(); // Empêcher le clic sur le <li>
+
+        console.log("Bouton cliqué. Tâche en cours de modification :", task);
+
+        try {
+          // Mettre à jour le statut de la tâche en "Terminée"
+          const success = await task.updateStatus("Terminée");
+          console.log("Résultat de task.updateStatus():", success);
+
+          if (success) {
+            task.statut = "Terminée"; // Mettre à jour localement l'état de la tâche
+            renderTasks(); // Actualiser la liste des tâches
+            console.log("Statut de la tâche mis à jour en 'Terminée'.");
+          } else {
+            console.error("Échec de la mise à jour du statut de la tâche.");
+          }
+        } catch (error) {
+          console.error("Erreur lors du clic sur le bouton 'Terminée' :", error);
+        }
+      });
+    }
+
   
     return li;
   }

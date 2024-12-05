@@ -192,9 +192,52 @@ export class Task {
         // TODO
     }
 
-    changeStatut(idUser, newStatut) {
-        // TODO
+    async updateStatus(newStatus) {
+        try {
+            console.log(`Mise à jour du statut de la tâche ${this.id} vers '${newStatus}'.`);
+    
+            // Envoyer la requête POST
+            const response = await fetch(`/fichiers_include_PHP/task/updateTaskStatus.php`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify({
+                    id: this.id,
+                    statut: newStatus,
+                }),
+            });
+    
+            // Vérifier le statut HTTP
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP : ${response.status}`);
+            }
+    
+            // Lire la réponse brute pour debug
+            const rawResponse = await response.text();
+            console.log("Réponse brute du serveur :", rawResponse);
+    
+            // Tenter de parser la réponse JSON
+            try {
+                const result = JSON.parse(rawResponse);
+                console.log("Réponse parsée :", result);
+    
+                if (result.success) {
+                    return true; // Mise à jour réussie
+                } else {
+                    console.error("Erreur dans la réponse du serveur :", result.error);
+                    return false;
+                }
+            } catch (parseError) {
+                console.error("Erreur de parsing JSON :", parseError, "Réponse brute :", rawResponse);
+                return false;
+            }
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour du statut :", error);
+            return false;
+        }
     }
+    
 
     /**
      * @brief Affiche toutes les tâches stockées dans la console.
