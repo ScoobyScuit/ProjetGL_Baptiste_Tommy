@@ -304,20 +304,21 @@ const timelineContent = document.getElementById('timeline-content');
       });
     }
 
-    function populateHourSelect() {
-      const selects = [
-        document.getElementById('newTaskHour'),
-        document.getElementById('editTaskHour')
-      ];
-      selects.forEach(select => {
-        for (let i = 0; i < 24; i++) {
-          const option = document.createElement('option');
-          option.value = i;
-          option.textContent = `${i.toString().padStart(2, '0')}:00`;
-          select.appendChild(option);
-        }
-      });
-    }
+    // TODO :
+    // function populateHourSelect() {
+    //   const selects = [
+    //     document.getElementById('newTaskHour'),
+    //     document.getElementById('editTaskHour')
+    //   ];
+    //   selects.forEach(select => {
+    //     for (let i = 0; i < 24; i++) {
+    //       const option = document.createElement('option');
+    //       option.value = i;
+    //       option.textContent = `${i.toString().padStart(2, '0')}:00`;
+    //       select.appendChild(option);
+    //     }
+    //   });
+    // }
 
     function updateCurrentTimeIndicator() {
       const now = new Date();
@@ -358,15 +359,11 @@ const timelineContent = document.getElementById('timeline-content');
     
     // Appeler la fonction au chargement
     updateCurrentTimeIndicator();
-    
-    
-    
-    
 
     createCalendar();
     createTimeline();
-    populateHourSelect();
-    document.getElementById('newTaskDate').value = selectedDate.format('YYYY-MM-DD');
+    // TODO : populateHourSelect();
+    // document.getElementById('newTaskDate').value = selectedDate.format('YYYY-MM-DD');
     
     document.querySelector('.close').addEventListener('click', () => {
       document.getElementById('editTaskModal').style.display = 'none';

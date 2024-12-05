@@ -33,7 +33,7 @@ export class User {
      */
     static async fetchUserData() {
         try {
-            const response = await fetch('../../fichiers_include_PHP/getUserData.php');
+            const response = await fetch('/fichiers_include_PHP/getUserData.php');
             if (!response.ok) {
                 throw new Error('Erreur lors de la récupération des données utilisateur.');
             }

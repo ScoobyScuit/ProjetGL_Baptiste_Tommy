@@ -59,7 +59,7 @@ if ($loginData && $hashed_mdp === $loginData['mdpLogin']) {
         $_SESSION['role'] = $user['RoleUser'];
 
         // Redirection vers le tableau de bord
-        header("Location: /dashboard/dashboard.html");
+        header("Location: /dashboard/dashboard.php");
         exit;
     } else {
         $error = "Erreur lors de la récupération des informations utilisateur.";

@@ -152,8 +152,55 @@ CREATE TABLE IF NOT EXISTS `user` (
 INSERT INTO `user` (`IdUser`, `NomUser`, `PrenomUser`, `EmailUser`, `RoleUser`) VALUES
 (30, 'CHOUANGMALA', 'Tommy', 'tmy@gmail.com', 'Chef de projet'),
 (31, 'MINET', 'Baptiste', 'bminet08@gmail.com', 'Membre');
-COMMIT;
 
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `permissions `
+--
+
+CREATE TABLE IF NOT EXISTS permissions (
+    IdPermission INT NOT NULL AUTO_INCREMENT,
+    NamePermission VARCHAR(100) NOT NULL,
+    PRIMARY KEY (IdPermission)
+);
+
+--
+-- Déchargement des données de la table `permissions`
+--
+
+INSERT INTO permissions (NamePermission) VALUES
+('Gérer utilisateurs'),
+('Créer projets'),
+('Voir indicateurs'),
+('Assigner tâches'),
+('Commenter tâches');
+
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `role_permissions `
+--
+
+CREATE TABLE IF NOT EXISTS role_permissions (
+    Role ENUM('Administrateur', 'Chef de projet', 'Membre') NOT NULL,
+    PermissionId INT NOT NULL,
+    FOREIGN KEY (PermissionId) REFERENCES permissions(IdPermission),
+    PRIMARY KEY (Role, PermissionId)
+);
+
+--
+-- Déchargement des données de la table `role_permissions`
+--
+
+INSERT INTO role_permissions (Role, PermissionId) VALUES
+('Administrateur', 1), -- Gérer utilisateurs
+('Chef de projet', 2), -- Créer projets
+('Membre', 5);         -- Commenter tâches
+
+
+COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

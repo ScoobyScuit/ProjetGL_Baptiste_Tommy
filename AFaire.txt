@@ -1,4 +1,4 @@
-1. Survole/click des taches : aficher les données
+1. Survole/click des taches : aficher les données + finir filtre
 2. .actif sur le menu du haut
 3. Afficher taches sur calendar
 4. Ajouter comments sur une tache

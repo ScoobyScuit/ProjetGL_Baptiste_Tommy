@@ -18,12 +18,10 @@
             <!-- Start Navbar -->            
             <nav class="navbar">
                 <div class="gestion-button-navbar">
-                    <button class="nav-btn dashboard-btn" onclick="location.href = '/dashboard/dashboard.html';">
+                    <button class="nav-btn dashboard-btn" onclick="location.href = '/dashboard/dashboard.php';">
                         <i class="fa-solid fa-house"></i>Dashboard </button>
                     <button class="nav-btn project-btn" onclick="location.href = '/fichiers_include_PHP/projet/projet.html';">
                         <i class="fa-regular fa-folder-closed"></i>Projet </button>
-                    <button class="nav-btn calendar-btn">
-                        <i class="fa-regular fa-calendar"></i>Calendriers </button>
                 </div>
                 <div class="settings">
                     <button class="settings-btn">
@@ -37,10 +35,13 @@
             <!-- End Navbar -->
 
             <h1>Profil Utilisateur</h1>
-            <div id="profile-info" class="profile-info"></div>
+            <div class="detailProfil-container">
+                <div id="profile-info" class="profile-info">
+                    
+                </div>
+            </div>
             <button class="logout-btn" onclick="window.location.href = '/logout/logout.php';"> Déconnexion </button>
         </div>
-
         
         <script type="module">
             import { User } from '/js_class/user.js';
@@ -50,11 +51,11 @@
                     // Afficher les informations utilisateur dans le div
                     const profileInfoDiv = document.getElementById("profile-info");
                     profileInfoDiv.innerHTML = `
-                        <div><strong>Nom :</strong> ${currentUser.nom}</div>
-                        <div><strong>Prénom :</strong> ${currentUser.prenom}</div>
-                        <div><strong>Email :</strong> ${currentUser.email}</div>
-                        <div><strong>ID :</strong> ${currentUser.id}</div>
-                        <div><strong>Rôle :</strong> ${currentUser.role}</div>
+                        <div class="profile-line"><strong>Nom :</strong> <span>${currentUser.nom}</span></div>
+                        <div class="profile-line"><strong>Prénom :</strong><span>${currentUser.prenom}</span></div>
+                        <div class="profile-line"><strong>Email :</strong><span>${currentUser.email}</span></div>
+                        <div class="profile-line"><strong>ID :</strong><span>${currentUser.id}</span></div>
+                        <div class="profile-line"><strong>Rôle :</strong><span>${currentUser.role}</span></div>
                     `;
                 } else {
                     console.log("Aucun utilisateur connecté.");
