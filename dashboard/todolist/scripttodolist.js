@@ -43,7 +43,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (selectedTask === task) {
       selectedTask = null; // Réinitialiser la sélection
       taskInfoDiv.innerHTML =
-        "Survolez ou cliquez sur une tâche pour afficher ses informations ici.";
+        "Cliquez sur une tâche pour afficher ses informations ici.";
       liElement.classList.remove("selected-task"); // Optionnel : Enlever un style visuel
     } else {
       // Sinon, sélectionner cette tâche
@@ -166,7 +166,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return li;
   }
 
-
   /**
    * Ouvre le formulaire pour créer une tache
    * @param {currentUser} currentUser le user connecté
@@ -239,7 +238,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     editingTask = task; // Associe la tâche modifiée
   }
   
-
   /*
   * Ferme le modal de formulaire d'ajout/modification de tâche.
   */
@@ -260,6 +258,9 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Fonction pour rendre les tâches visibles dans la liste
   function renderTasks() {
     taskList.innerHTML = ""; // Réinitialiser la liste des tâches
+    // Supprime les doublons par ID (si ID est unique pour chaque tâche)
+    tasks = Array.from(new Set(tasks.map(task => task.id)))
+    .map(id => tasks.find(task => task.id === id));
     tasks.forEach((task, index) => {
       if (
         currentFilter === "all" ||
@@ -270,10 +271,6 @@ document.addEventListener("DOMContentLoaded", async () => {
         taskList.appendChild(li); // Ajouter à la liste
       }
     });
-    // Supprime les doublons par ID (si ID est unique pour chaque tâche)
-    tasks = Array.from(new Set(tasks.map(task => task.id)))
-    .map(id => tasks.find(task => task.id === id));
-
   }
 
   // Gérer l'ajout de tâche
@@ -348,8 +345,6 @@ document.addEventListener("DOMContentLoaded", async () => {
       }
     }
   });
-  
-
 
   // Gérer le filtrage des tâches
   filterOptions.addEventListener("click", (e) => {
