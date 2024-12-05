@@ -21,7 +21,7 @@ export class Task {
      */
     static async fetchTaskData() {
         try {
-            const response = await fetch('../../fichiers_include_PHP/task/getTaskData.php');
+            const response = await fetch('/fichiers_include_PHP/task/getTaskData.php');
     
             if (!response.ok) {
                 throw new Error(`Erreur HTTP : ${response.status}`);
@@ -76,51 +76,35 @@ export class Task {
          */
     static async fetchTasksByProjectId(projectId) {
         try {
-            const response = await fetch(`../../fichiers_include_PHP/task/getTaskByProject.php?projectId=${projectId}`);
-
+            const response = await fetch(`/fichiers_include_PHP/task/getTaskByProject.php?projectId=${projectId}`);
+            
             if (!response.ok) {
                 throw new Error(`Erreur HTTP : ${response.status}`);
             }
-
+    
             const data = await response.json();
-
+            console.log("Tâches reçues du backend :", data);
+    
             if (data.error) {
                 throw new Error(data.error);
             }
-
-            if (!Array.isArray(data)) {
-                throw new Error("Données tâches incorrectes.");
-            }
-
-            // Transformer les données reçues en instances de la classe Task
-            const tasks = data.map(taskData => {
-                // Vérifier que toutes les données nécessaires sont présentes
-                if (!taskData.TitreTask || !taskData.DescriptionTask || !taskData.StatutTask || 
-                    !taskData.PrioriteTask || !taskData.DateEchTask || !taskData.IdProject || 
-                    !taskData.IdUser) {
-                    console.error("Données de tâche incomplètes :", taskData);
-                    throw new Error('Données de tâche incomplètes.');
-                }
-
-                // Créer une nouvelle instance de Task avec l'ID (IdTask) en tant que paramètre optionnel
-                return new Task(
-                    taskData.TitreTask,
-                    taskData.DescriptionTask,
-                    taskData.StatutTask,
-                    taskData.PrioriteTask,
-                    taskData.DateEchTask,
-                    taskData.IdProject,
-                    taskData.IdUser,
-                    taskData.IdTask // Passer l'ID optionnel ici
-                );
-            });
-
-            return tasks;
+    
+            return data.map(taskData => new Task(
+                taskData.TitreTask,
+                taskData.DescriptionTask,
+                taskData.StatutTask,
+                taskData.PrioriteTask,
+                taskData.DateEchTask,
+                taskData.IdProject,
+                taskData.IdUser,
+                taskData.IdTask // Assigner l'ID ici
+            ));
         } catch (error) {
-            console.error("Erreur lors de la récupération des données des tâches :", error);
+            console.error("Erreur lors de la récupération des tâches :", error);
             return [];
         }
     }
+    
     
     /**
      * @brief Supprime une tâche du serveur.
@@ -130,29 +114,34 @@ export class Task {
      */
     async deleteTask() {
         try {
-            const response = await fetch(`../../fichiers_include_PHP/task/deleteTask.php?id=${this.id}`, {
-                method: 'DELETE'
-            });
-
+            console.log("Envoi de la requête DELETE pour la tâche :", this.id);
+            const response = await fetch(`/fichiers_include_PHP/task/deleteTask.php?id=${this.id}`, {
+                method: 'DELETE',
+            });            
+    
             if (!response.ok) {
                 throw new Error(`Erreur HTTP : ${response.status}`);
             }
-
-            const result = await response.json();
+    
+            // Lire une seule fois le corps de la réponse
+            const rawData = await response.text(); // Lire la réponse brute
+            console.log("Données reçues (brutes) :", rawData);
+    
+            const result = JSON.parse(rawData); // Analyser le JSON
             if (result.error) {
                 throw new Error(result.error);
             }
-
+    
             return true;  // Suppression réussie
         } catch (error) {
             console.error("Erreur lors de la suppression de la tâche :", error);
             return false;
         }
     }
-
+    
     async addTask() {
         try {
-            const response = await fetch('../../fichiers_include_PHP/task/addTask.php', {
+            const response = await fetch('/fichiers_include_PHP/task/addTask.php', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
@@ -176,6 +165,21 @@ export class Task {
             if (result.error) {
                 throw new Error(result.error);
             }
+
+            console.log("Données envoyées :", {
+                Id : this.id,
+                TitreTask: this.titre,
+                DescriptionTask: this.description,
+                StatutTask: this.statut,
+                PrioriteTask: this.priorite,
+                DateEchTask: this.dateEcheance,
+                IdProjet: this.idProjet,
+                IdUser: this.idUser
+            });
+
+            console.log("Réponse reçue :", result);
+
+            
 
             return true;  // Ajout réussi
         } catch (error) {

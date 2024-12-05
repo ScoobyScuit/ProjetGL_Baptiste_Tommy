@@ -70,45 +70,9 @@ session_start();
         <div class="todolist">
           <div class="container-todolist">
             <h1>Ma Liste de Tâches avec Validation</h1>
-            <!-- Formulaire d'ajout de tâche -->
-            <div id="addTaskModal" class="modal" style="display:none;">
-              <div class="modal-content">
-                <span class="close" onclick="closeAddTaskModal()">&times;</span>
-                <h2>Ajouter une nouvelle tâche</h2>
-                <form id="task-form">
-                  <label for="TitreTask">Titre de la tâche</label>
-                  <input type="text" id="TitreTask" name="TitreTask" required>
-
-                  <label for="DescriptionTask">Description</label>
-                  <textarea id="DescriptionTask" name="DescriptionTask" required></textarea>
-
-                  <label for="StatutTask">Statut</label>
-                  <select id="StatutTask" name="StatutTask" required>
-                    <option value="En attente">En attente</option>
-                    <option value="En cours">En cours</option>
-                    <option value="Terminée">Terminée</option>
-                  </select>
-
-                  <label for="PrioriteTask">Priorité</label>
-                  <select id="PrioriteTask" name="PrioriteTask" required>
-                    <option value="3">Faible</option>
-                    <option value="2">Moyenne</option>
-                    <option value="1">Haute</option>
-                  </select>
-
-                  <label for="DateEchTask">Date d'échéance</label>
-                  <input type="date" id="DateEchTask" name="DateEchTask" required>
-
-                  <label for="IdProjet">Id du projet associé</label>
-                  <input type="number" id="IdProjet" name="IdProjet" required>
-
-                  <label for="IdUser">Id de l'utilisateur assigné</label>
-                  <input type="number" id="IdUser" name="IdUser" required>
-
-                  <button type="submit">Ajouter la tâche</button>
-                </form>
-              </div>
-            </div>
+            <!-- Formulaire d'ajout de tâche 
+             Il s'ajoute dans le scripttodolist.js -->
+            <div id="addTaskModal" class="modal" style="display:none;"></div>
             <!-- End Formulaire d'ajout de tâche -->
             <div id="filter-options">
               <button class="filter-btn active" data-filter="all">Toutes</button>
@@ -116,6 +80,9 @@ session_start();
               <button class="filter-btn" data-filter="completed">Terminées</button>
             </div>
             <ul id="task-list"></ul>
+            <div id="task-info" class="task-info">
+               Cliquez sur une tâche pour afficher ses informations ici.
+            </div>
           </div>
         </div>
 
@@ -157,19 +124,6 @@ session_start();
       <!-- End calendar -->
     </div>
     <!-- End Dashboard container -->
-
-
-
-    <!-- Sauvegarde le role 
-    <script>
-      // Exposez le rôle de l'utilisateur depuis PHP
-      // TODO
-      const window.userRole = "<?php echo isset($_SESSION['role']) ? $_SESSION['role'] : ''; ?>";
-      console.log("Role dans dashboard.php : \n" + userRole);
-    </script>
--->
-
-
 
     <!-- Inclusion des scripts -->
     <script type="module" src="/dashboard/todolist/scripttodolist.js"></script>
