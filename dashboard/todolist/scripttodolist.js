@@ -112,22 +112,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Injecter les informations de la tâche dans le modal
     modalContent.innerHTML = `
-    <h3>Détails de la tâche</h3>
-    <div id="contentDetail">
-      <p><strong>Titre :</strong> ${task.titre}</p>
-      <p><strong>Description :</strong> ${task.description}</p>
-      <p><strong>Statut :</strong> ${task.statut}</p>
-      <p><strong>Priorité :</strong> ${task.priorite}</p>
-      <p><strong>Date d'échéance :</strong> ${task.dateEcheance}</p>
-      <p><strong>ID Projet :</strong> ${task.idProjet}</p>
-      <p><strong>ID Utilisateur :</strong> ${task.idUser}</p><br>
+    <div class="scrollable-content">
+      <h3>Détails de la tâche</h3>
+      <div id="contentDetail"  >
+        <p><strong>Titre :</strong> ${task.titre}</p>
+        <p><strong>Description :</strong> ${task.description}</p>
+        <p><strong>Statut :</strong> ${task.statut}</p>
+        <p><strong>Priorité :</strong> ${task.priorite}</p>
+        <p><strong>Date d'échéance :</strong> ${task.dateEcheance}</p>
+        <p><strong>ID Projet :</strong> ${task.idProjet}</p>
+        <p><strong>ID Utilisateur :</strong> ${task.idUser}</p><br>
+      </div>
+      <h3>Commentaires</h3>
+      <div id="contentComments">
+        <ul id="comments-list-modal"></ul>
+      </div>
+      <textarea id="new-comment" placeholder="Ajoutez un commentaire..."></textarea>
+      <button id="add-comment-button">Ajouter</button>
     </div>
-    <h3>Commentaires</h3>
-    <div id="contentComments">
-      <ul id="comments-list-modal"></ul>
-    </div>
-    <textarea id="new-comment" placeholder="Ajoutez un commentaire..."></textarea>
-    <button id="add-comment-button">Ajouter</button>
   `;
 
     // Définir l'ID de la tâche dans un attribut dataset
