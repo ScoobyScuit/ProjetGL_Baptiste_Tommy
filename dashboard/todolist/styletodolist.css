@@ -1,0 +1,152 @@
+.container-todolist {
+    background-color: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    padding: 2rem;
+    width: 100%;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+h1 {
+    color: #333;
+    text-align: center;
+    font-size: 20px;
+    margin-bottom: 1rem;
+    font-family: "Geologica", sans-serif;
+    font-weight: bold;
+}
+
+#filter-options {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 1rem;
+    gap: 10px;
+}
+
+.filter-btn {
+    background-color: #e0e0e0;
+    color: #0171DF;
+    border: none;
+    padding: 0.5rem 1rem;
+    cursor: pointer;
+    border-radius: 30px;
+    font-family: "Geologica", sans-serif;
+    font-size: 1rem;
+    font-weight: 300;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.filter-btn:hover {
+    background-color: #0171DF;
+    color: white;
+}
+
+.filter-btn.active {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#task-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+li {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 30px;
+    padding: 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.5rem;
+    font-family: "Geologica", sans-serif;
+    transition: box-shadow 0.3s ease;
+}
+
+li:hover {
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+.task-text {
+    flex-grow: 1;
+    margin-right: 0.5rem;
+    font-family: "Geologica", sans-serif;
+    font-size: 1rem;
+}
+
+.task-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.completed {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+.delete-btn, .edit-btn {
+    color: white;
+    border: none;
+    padding: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.delete-btn {
+    background-color: #f44336;
+}
+
+.delete-btn:hover {
+    background-color: #d32f2f;
+}
+
+.completed-btn {
+    color: white;
+    border: none;
+    padding: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 0.3s ease;
+}
+
+.completed-btn {
+    background-color: #47b309;
+}
+
+.completed-btn:hover {
+    background-color: #307e03;
+}
+.edit-btn {
+    background-color: #2196F3;
+}
+
+.edit-btn:hover {
+    background-color: #1976D2;
+}
+
+.progress-bar {
+    width: 100%;
+    background-color: #f3f3f3;
+    border-radius: 5px;
+    margin-top: 10px;
+    height: 10px;
+    overflow: hidden;
+}
+
+.progress {
+    height: 100%;
+    width: 0;
+    background-color: #4CAF50;
+    transition: width 0.3s ease;
+}

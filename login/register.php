@@ -27,9 +27,9 @@
 
         // -------------------- Connexion à la base de données
         // Informations de connexion à la base de données
-        $serveur = "localhost";
-        $login = "root";
-        $pw = "";
+        $serveur = "db";
+        $login = "user";
+        $pw = "userpass";
         $dbname = "gestion_projet";
 
         try {

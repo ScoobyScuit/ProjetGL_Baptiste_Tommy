@@ -1,0 +1,427 @@
+:root {
+  /* Variables Globales */
+  --primary: #4a90e2;
+  --background: #f5f7fa;
+  --tab-height: 3rem;
+  --border-radius: 30px;
+  --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+/* --------------------------- Tab container and buttons --------------------------- */
+.tab-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: fit-content;
+  gap: 10px;
+  position: relative;
+}
+.buttondesign{
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+}
+.tab-button, .tab-button-add {
+  /* Style des boutons de tabulation */
+  font-family: "Geologica", sans-serif;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  border-radius: 30px 30px 0 0;
+  border: none;
+  padding: 10px 15px;
+  gap: 10px;
+  justify-content: center;
+  background-color: #e0e0e0;
+  color: #0171DF;
+  transition: 0.5s ease-in;
+}
+
+.tab-button:not(:hover), .tab-button-add {
+  background-color: #0171DF;
+  color: white;
+  transition: 0.5s ease-in;
+}
+
+.tab-button.active, .tab-button.active:hover {
+  /* Styles de l'élément actif */
+  background-color: white;
+  color: black;
+}
+
+.tab-button.active .fa-timeline,
+.tab-button.active .fa-calendar-week,
+.tab-button.active .fa-plus {
+  background-color: #45a049;
+  color: white;
+}
+
+/* --------------------------- Buttons (previous, next, and icons) --------------------------- */
+.calendar-header{
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 10px;
+  padding: 10px;
+}
+
+.precedent, .suivant {
+  font-family: "Geologica", sans-serif;
+  width: 10rem;
+  padding: 15px;
+  font-weight: 300;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  border-radius: 30px;
+  border: none;
+  gap: 12px;
+  background-color: #e0e0e0;
+  color: #0171DF;
+  transition: 0.5s ease-in;
+  cursor: pointer;
+}
+
+.fa-plus, .fa-timeline, .fa-calendar-week {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: #0171DF;
+  border-radius: 60%;
+  padding: 15px;
+  transition: 0.5s ease-in;
+}
+
+.tab-button:hover .fa-timeline,
+.tab-button:hover .fa-calendar-week,
+.tab-button:hover .fa-plus {
+  background-color: white;
+  color: #0171DF;
+  transition: 0.5s ease-in;
+}
+
+/* --------------------------- Tab content --------------------------- */
+.tab-content {
+  display: none;
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform: translateY(10px);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.tab-content.active {
+  display: block;
+  transform: translateY(0);
+}
+
+/* --------------------------- Scrollbar and Timeline --------------------------- */
+.timeline::-webkit-scrollbar {
+  display: none;
+}
+
+.container-timeline {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  height: 100%;
+  background: white;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.timeline {
+  display: flex;
+  overflow-x: auto;
+  overflow-y: hidden;
+  background-color: white;
+  border-radius: 20px;
+  height: 100%;
+  width: 100%;
+  position: relative;
+}
+
+.timeline-tab {
+  background-color: #fefefe;
+}
+
+.timeline-content {
+  display: flex;
+  flex-direction: column;
+  border-radius: 20px;
+  width: 100%;
+  flex-grow: 1;
+}
+
+/* --------------------------- Calendar Styles --------------------------- */
+.calendar-progress {
+  width: 70%;
+  overflow: hidden;
+  transition: height 0.3s ease-in-out;
+}
+
+.calendar-tab {
+  background-color: #fefefe;
+  width: 100%;
+}
+
+.calendar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  background-color: #fefefe;
+  padding: 15px;
+  border-radius: 20px;
+}
+
+.day-row {
+  display: flex;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
+  height: 100%;
+  min-width: 100%;
+}
+
+.day-header {
+  width: fit-content;
+  text-align: center;
+  font-weight: bold;
+  padding: 10px;
+  background-color: #0171DF;
+  color: white;
+  position: sticky;
+  left: 0;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+}
+
+.hours {
+  display: flex;
+  flex-grow: 1;
+  height: 100%;
+}
+
+.hour {
+  width: 200px;
+  min-width: 200px;
+  border-right: 1px solid #e0e0e0;
+  position: relative;
+}
+
+.hour-label {
+  position: absolute;
+  top: 5px;
+  left: 5px;
+  font-size: 12px;
+  color: #333;
+  font-weight: bold;
+}
+
+.task {
+  background-color: #4CAF50;
+  color: white;
+  padding: 5px;
+  margin: 2px;
+  border-radius: 3px;
+  cursor: move;
+  transition: background-color 0.3s;
+  user-select: none;
+  position: absolute;
+  min-height: 50px;
+  top: auto;
+  z-index: 5;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.task-title {
+  font-weight: bold;
+  margin-bottom: 2px;
+}
+
+.task-details {
+  font-size: 10px;
+  margin-bottom: 2px;
+}
+
+.task-description {
+  font-size: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.task.expanded .task-description {
+  -webkit-line-clamp: initial;
+}
+
+.task:hover {
+  background-color: #45a049;
+}
+
+.task.dragging {
+  opacity: 0.5;
+}
+
+.task .edit-button,
+.task .expand-button {
+  position: absolute;
+  top: 2px;
+  background-color: #ffffff;
+  color: #4CAF50;
+  border: none;
+  border-radius: 3px;
+  padding: 2px 5px;
+  font-size: 10px;
+  cursor: pointer;
+  display: none;
+}
+
+.task .edit-button {
+  right: 2px;
+}
+
+.task .expand-button {
+  right: 20px;
+}
+
+.task:hover .edit-button,
+.task:hover .expand-button {
+  display: block;
+}
+
+.task.expanded {
+  height: auto;
+  min-height: 100px;
+  z-index: 20;
+}
+
+/* --------------------------- Current Time Indicator --------------------------- */
+.current-time-indicator {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: red;
+  z-index: 15;
+  pointer-events: none;
+}
+
+.current-time-label {
+  position: absolute;
+  top: -20px;
+  transform: translateX(-50%);
+  background-color: red;
+  color: white;
+  padding: 2px 5px;
+  border-radius: 3px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* --------------------------- Calendar Grid --------------------------- */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 7px;
+  height: 100%;
+  width: 100%;
+}
+
+.calendar-day {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.calendar-day:hover {
+  background-color: #0171DF;
+}
+
+.calendar-day.active {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* --------------------------- Modal Styles --------------------------- */
+.modal {
+  display: none;
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 15% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.modal .task-form input,
+.modal .task-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+/* --------------------------- Additional Styles --------------------------- */
+.form-group {
+  margin-bottom: 15px;
+}
+
+.error-message {
+  color: red;
+  font-size: 12px;
+  margin-top: 5px;
+}
+
+.success-message {
+  color: green;
+  font-size: 12px;
+  margin-top: 5px;
+}

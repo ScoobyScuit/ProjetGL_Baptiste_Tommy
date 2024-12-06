@@ -29,11 +29,6 @@ h1 {
     font-size: 24px;
 }
 
-.profile-info {
-    margin-bottom: 20px;
-    font-size: 16px;
-    color: #555;
-}
 
 strong {
     color: #333;
@@ -58,3 +53,47 @@ strong {
 .logout-btn:active {
     transform: scale(0.95);
 }
+
+.detailProfil-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Centre horizontalement */
+    justify-content: center; /* Centre verticalement */
+    padding: 20px;
+    border-radius: 12px;
+    background-color: white;
+    width: fit-content; /* Ajuste automatiquement à la taille du contenu */
+    margin: 0 auto; /* Centre horizontalement dans la page */
+}
+
+
+.profile-info {
+    display: flex;
+    flex-direction: column; /* Permet de superposer les lignes */
+    align-items: flex-start; /* Aligne les lignes à gauche */
+    text-align: left; /* Aligne chaque ligne à gauche */
+    gap: 10px; /* Espacement vertical entre les lignes */
+    width: 100%; /* Prend toute la largeur disponible */
+    max-width: 400px; /* Largeur maximum pour centrer et limiter */
+    margin: 0 auto; /* Centre horizontalement dans le conteneur */
+}
+
+.profile-line {
+    display: flex; /* Utilise le mode flex pour aligner label et valeur */
+    justify-content: space-between; /* Espacement entre label et valeur */
+    width: 100%; /* Utilise toute la largeur de .profile-info */
+}
+
+.profile-line strong {
+    width: 120px; /* Largeur fixe pour les labels */
+    text-align: left; /* Alignement à gauche des labels */
+    font-weight: bold;
+    color: #333; /* Couleur des labels */
+}
+
+.profile-line span {
+    flex-grow: 1; /* Permet au texte de s'ajuster automatiquement */
+    text-align: left; /* Alignement à gauche pour la lisibilité */
+    color: #555; /* Couleur douce pour le texte des valeurs */
+}
+

@@ -15,14 +15,16 @@ class Project {
      * @param dateDebut Date de début du projet.
      * @param dateFin Date de fin du projet.
      * @param idChef Identifiant du chef de projet.
+     * @param isSelected Booleen qui dit si le projet est selectionné ou pas
      */
-    constructor(id, nom, description, dateDebut, dateFin, idChef) {
+    constructor(id, nom, description, dateDebut, dateFin, idChef, isSelected = null) {
         this.id = id;
         this.nom = nom;
         this.description = description;
         this.dateDebut = dateDebut;
         this.dateFin = dateFin;
         this.idChef = idChef;
+        this.isSelected = isSelected;
     }
 
     /**
