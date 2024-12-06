@@ -1,14 +1,20 @@
+/**
+ * @file script.js
+ * @brief Script principal pour la gestion des tâches et des commentaires dans un projet.
+ */
+
 import { Task } from "/js_class/task.js";
 import { User } from "/js_class/user.js";
+import { Comments } from "/js_class/comments.js";
 
 let currentUser = null;
 let isEditing = false; // Variable pour suivre l'état du formulaire (ajout ou modification)
 let editingTask = null; // Stocke la tâche actuellement modifiée
 
-
 document.addEventListener("DOMContentLoaded", async () => {
   const taskList = document.getElementById("task-list");
   const filterOptions = document.getElementById("filter-options");
+  const closeModalBtn = document.getElementById("close-modal-btn");
 
   // Récupérer les données utilisateur
   currentUser = await User.fetchUserData();
@@ -34,35 +40,142 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   let currentFilter = "all";
 
-  let selectedTask = null; // Variable pour suivre la tâche sélectionnée
+  /**
+   * @brief Gère l'ajout d'un commentaire à une tâche.
+   * @param taskId L'ID de la tâche à laquelle le commentaire doit être ajouté.
+   */
+  async function handleAddComment(taskId) {
+    const newCommentInput = document.getElementById("new-comment");
+    const commentContent = newCommentInput.value.trim();
 
-  function showTaskInfo(task, liElement) {
-    const taskInfoDiv = document.getElementById("task-info");
+    if (!commentContent) {
+      alert("Le commentaire ne peut pas être vide.");
+      return;
+    }
 
-    // Si la tâche cliquée est déjà sélectionnée, la désélectionner
-    if (selectedTask === task) {
-      selectedTask = null; // Réinitialiser la sélection
-      taskInfoDiv.innerHTML =
-        "Cliquez sur une tâche pour afficher ses informations ici.";
-      liElement.classList.remove("selected-task"); // Optionnel : Enlever un style visuel
-    } else {
-      // Sinon, sélectionner cette tâche
-      selectedTask = task; // Mettre à jour la tâche sélectionnée
-      taskInfoDiv.innerHTML = `
-                <h3>Détails de la tâche</h3>
-                <p><strong>Titre :</strong> ${task.titre}</p>
-                <p><strong>Description :</strong> ${task.description}</p>
-                <p><strong>Statut :</strong> ${task.statut}</p>
-                <p><strong>Priorité :</strong> ${task.priorite}</p>
-                <p><strong>Date d'échéance :</strong> ${task.dateEch}</p>
-                <p><strong>ID Projet :</strong> ${task.idProjet}</p>
-                <p><strong>ID Utilisateur :</strong> ${task.idUser}</p>
-            `;
-      liElement.classList.add("selected-task"); // Optionnel : Ajouter un style visuel
+    try {
+      // Utilisez la méthode `addComment` pour ajouter le commentaire
+      const success = await Comments.addComment(
+        currentUser.id,
+        taskId,
+        commentContent
+      );
+
+      if (success) {
+        console.log("Commentaire ajouté avec succès.");
+
+        // Effacer le champ de saisie
+        newCommentInput.value = "";
+
+        // Rechargez les commentaires dans le modal
+        await displayTaskCommentsInModal(taskId);
+      } else {
+        console.error("Erreur lors de l'ajout du commentaire.");
+      }
+    } catch (error) {
+      console.error("Erreur lors de l'ajout du commentaire :", error);
     }
   }
 
-  // Modifier la fonction createTaskItem pour attacher le comportement
+  /**
+   * @brief Ajoute un gestionnaire d'événements pour le bouton "Ajouter un commentaire".
+   */
+  document.addEventListener("click", (e) => {
+    if (e.target && e.target.id === "add-comment-button") {
+      const modalContent = document.getElementById("task-info-modal-content");
+      const taskId = parseInt(modalContent.dataset.taskId);
+      console.log("Récupération de l'ID de la tâche :", taskId);
+
+      if (!isNaN(taskId)) {
+        handleAddComment(taskId);
+      } else {
+        console.error("Impossible de trouver l'ID de la tâche.");
+      }
+    }
+  });
+
+  /**
+   * @brief Affiche les informations d'une tâche dans un modal.
+   * @param task La tâche à afficher.
+   */
+  function showTaskInfo(task) {
+    const modal = document.getElementById("taskInfoModal");
+    const modalContent = document.getElementById("task-info-modal-content");
+
+    // Injecter les informations de la tâche dans le modal
+    modalContent.innerHTML = `
+    <h3>Détails de la tâche</h3>
+    <div id="contentDetail">
+      <p><strong>Titre :</strong> ${task.titre}</p>
+      <p><strong>Description :</strong> ${task.description}</p>
+      <p><strong>Statut :</strong> ${task.statut}</p>
+      <p><strong>Priorité :</strong> ${task.priorite}</p>
+      <p><strong>Date d'échéance :</strong> ${task.dateEcheance}</p>
+      <p><strong>ID Projet :</strong> ${task.idProjet}</p>
+      <p><strong>ID Utilisateur :</strong> ${task.idUser}</p><br>
+    </div>
+    <h3>Commentaires</h3>
+    <div id="contentComments">
+      <ul id="comments-list-modal"></ul>
+    </div>
+    <textarea id="new-comment" placeholder="Ajoutez un commentaire..."></textarea>
+    <button id="add-comment-button">Ajouter</button>
+  `;
+
+    // Définir l'ID de la tâche dans un attribut dataset
+    modalContent.dataset.taskId = task.id;
+
+    // Charger et afficher les commentaires
+    displayTaskCommentsInModal(task.id);
+
+    // Afficher le modal
+    modal.style.display = "block";
+  }
+
+  /**
+   * @brief Récupère le nom d'utilisateur à partir de son ID.
+   * @param userId L'ID de l'utilisateur.
+   * @return Le nom complet de l'utilisateur ou "Inconnu" s'il n'existe pas.
+   */
+  async function getUserNameById(userId) {
+    // Exemple d'une fonction pour récupérer le nom d'utilisateur
+    const user = await User.fetchUserById(userId); // Remplacez par votre propre méthode
+    console.log("User : " + Object.keys(user));
+    return user?.NomUser + " " + user?.PrenomUser || "Inconnu";
+  }
+
+  /**
+   * @brief Affiche les commentaires d'une tâche dans le modal.
+   * @param taskId L'ID de la tâche.
+   */
+  async function displayTaskCommentsInModal(taskId) {
+    const comments = await Comments.fetchCommentsByTaskId(taskId); // Récupère les commentaires
+    const commentsList = document.getElementById("comments-list-modal");
+
+    commentsList.innerHTML = ""; // Réinitialiser la liste des commentaires
+
+    for (const comment of comments) {
+      // Récupérer le nom d'utilisateur à partir de l'ID utilisateur
+      const userName = await getUserNameById(comment.idUser);
+
+      // Créer un élément de liste pour afficher le commentaire
+      const li = document.createElement("li");
+      li.innerHTML = `
+        <strong>Utilisateur ${comment.idUser || "Inconnu"} (${
+        userName || "Inconnu"
+      }) :</strong> 
+        ${comment.contenu || "Pas de contenu"}
+      `;
+      commentsList.appendChild(li);
+    }
+  }
+
+  /**
+   * @brief Crée un élément de liste représentant une tâche.
+   * @param task La tâche à afficher.
+   * @param index L'index de la tâche dans la liste.
+   * @return L'élément de liste créé.
+   */
   function createTaskItem(task, index) {
     const li = document.createElement("li");
     li.innerHTML = `
@@ -95,26 +208,28 @@ document.addEventListener("DOMContentLoaded", async () => {
               }
           </div>
       `;
-  
+
     // Attacher un gestionnaire pour afficher les infos de la tâche
     li.addEventListener("click", () => showTaskInfo(task, li));
-  
+
     // Attacher un gestionnaire de clic pour le bouton "delete"
     const deleteBtn = li.querySelector(".delete-btn");
     if (deleteBtn) {
       deleteBtn.addEventListener("click", async (e) => {
         e.stopPropagation(); // Empêcher le clic sur le <li>
-    
+
         console.log("Bouton cliqué. Tâche en cours de suppression :", task);
-    
+
         try {
           const success = await task.deleteTask();
           console.log("Résultat de task.deleteTask():", success);
-    
+
           if (success) {
             tasks.splice(index, 1);
             renderTasks();
-            console.log("Tâche supprimée avec succès. Liste des tâches mise à jour.");
+            console.log(
+              "Tâche supprimée avec succès. Liste des tâches mise à jour."
+            );
           } else {
             console.error("Échec de la suppression de la tâche.");
           }
@@ -145,7 +260,10 @@ document.addEventListener("DOMContentLoaded", async () => {
             console.error("Échec de la mise à jour du statut de la tâche.");
           }
         } catch (error) {
-          console.error("Erreur lors du clic sur le bouton 'Terminée' :", error);
+          console.error(
+            "Erreur lors du clic sur le bouton 'Terminée' :",
+            error
+          );
         }
       });
     }
@@ -167,8 +285,8 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /**
-   * Ouvre le formulaire pour créer une tache
-   * @param {currentUser} currentUser le user connecté
+   * @brief Ouvre le formulaire pour ajouter une nouvelle tâche.
+   * @param currentUser L'utilisateur actuellement connecté.
    */
   function createTaskFormModal(currentUser) {
     const modal = document.getElementById("addTaskModal");
@@ -201,16 +319,20 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <input type="date" id="DateEchTask" name="DateEchTask" required>
 
                 <label for="IdProjet">Id du projet associé</label>
-                <input type="number" id="IdProjet" name="IdProjet" value="${localStorage.getItem("selectedProjectId") || ""}" required>
+                <input type="number" id="IdProjet" name="IdProjet" value="${
+                  localStorage.getItem("selectedProjectId") || ""
+                }" required>
 
                 <label for="IdUser">Id de l'utilisateur assigné</label>
-                <input type="number" id="IdUser" name="IdUser" value="${currentUser.id}" readonly>
+                <input type="number" id="IdUser" name="IdUser" value="${
+                  currentUser.id
+                }" readonly>
 
                 <button type="submit">Ajouter la tâche</button>
             </form>
         </div>
     `;
-}
+  }
 
   /**
    * Ouvre le formulaire pour éditer une tâche existante.
@@ -219,7 +341,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   function openEditTaskModal(task) {
     const modal = document.getElementById("addTaskModal");
     modal.style.display = "block";
-  
+
     // Pré-remplir le formulaire avec les données existantes
     document.getElementById("TitreTask").value = task.titre;
     document.getElementById("DescriptionTask").value = task.description;
@@ -228,39 +350,44 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("DateEchTask").value = task.dateEcheance;
     document.getElementById("IdProjet").value = task.idProjet;
     document.getElementById("IdUser").value = task.idUser;
-  
+
     // Modifier le texte du bouton pour refléter une modification
-    const submitButton = document.querySelector("#task-form button[type='submit']");
+    const submitButton = document.querySelector(
+      "#task-form button[type='submit']"
+    );
     submitButton.textContent = "Modifier la tâche";
-  
+
     // Activer le mode édition
     isEditing = true;
     editingTask = task; // Associe la tâche modifiée
   }
-  
+
   /*
-  * Ferme le modal de formulaire d'ajout/modification de tâche.
-  */
+   * Ferme le modal de formulaire d'ajout/modification de tâche.
+   */
   function closeAddTaskModal() {
     const modal = document.getElementById("addTaskModal");
     modal.style.display = "none";
-  
+
     // Réinitialiser le formulaire et le texte du bouton
     document.getElementById("task-form").reset();
-    const submitButton = document.querySelector("#task-form button[type='submit']");
+    const submitButton = document.querySelector(
+      "#task-form button[type='submit']"
+    );
     submitButton.textContent = "Ajouter la tâche";
-  
+
     // Réinitialiser le mode édition
     isEditing = false;
     editingTask = null;
   }
-  
+
   // Fonction pour rendre les tâches visibles dans la liste
   function renderTasks() {
     taskList.innerHTML = ""; // Réinitialiser la liste des tâches
     // Supprime les doublons par ID (si ID est unique pour chaque tâche)
-    tasks = Array.from(new Set(tasks.map(task => task.id)))
-    .map(id => tasks.find(task => task.id === id));
+    tasks = Array.from(new Set(tasks.map((task) => task.id))).map((id) =>
+      tasks.find((task) => task.id === id)
+    );
     tasks.forEach((task, index) => {
       if (
         currentFilter === "all" ||
@@ -276,7 +403,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Gérer l'ajout de tâche
   document.getElementById("task-form").addEventListener("submit", async (e) => {
     e.preventDefault();
-  
+
     // Collecte des valeurs du formulaire
     const titre = document.getElementById("TitreTask").value;
     const description = document.getElementById("DescriptionTask").value;
@@ -285,7 +412,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const dateEch = document.getElementById("DateEchTask").value;
     const idProjet = document.getElementById("IdProjet").value;
     const idUser = document.getElementById("IdUser").value;
-  
+
     if (isEditing && editingTask) {
       // Mode édition
       const updatedTaskData = {
@@ -297,10 +424,10 @@ document.addEventListener("DOMContentLoaded", async () => {
         idProjet,
         idUser,
       };
-  
+
       try {
         const success = await editingTask.updateTask(updatedTaskData);
-  
+
         if (success) {
           console.log("Tâche mise à jour avec succès :", updatedTaskData);
           Object.assign(editingTask, updatedTaskData); // Mettre à jour localement la tâche
@@ -312,7 +439,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       } catch (error) {
         console.error("Erreur lors de la mise à jour de la tâche :", error);
       }
-  
+
       // Réinitialiser le mode édition
       isEditing = false;
       editingTask = null;
@@ -327,17 +454,17 @@ document.addEventListener("DOMContentLoaded", async () => {
         idProjet,
         idUser
       );
-  
+
       const success = await newTask.addTask();
-  
+
       if (success) {
         // Ajouter la tâche à la liste
         tasks.push(newTask);
         console.log("Tâche ajoutée avec succès :", newTask);
-  
+
         // Actualiser la liste des tâches
         renderTasks();
-  
+
         // Fermer la modal
         closeAddTaskModal();
       } else {
@@ -355,6 +482,24 @@ document.addEventListener("DOMContentLoaded", async () => {
         .forEach((btn) => btn.classList.remove("active"));
       e.target.classList.add("active");
       renderTasks();
+    }
+  });
+
+  // Ajouter l'événement pour la fermeture du modal avec la croix
+  if (closeModalBtn) {
+    closeModalBtn.addEventListener("click", () => {
+      console.log("Fermeture du modal via la croix.");
+      taskInfoModal.style.display = "none";
+    });
+  } else {
+    console.error("Bouton de fermeture introuvable.");
+  }
+
+  // Fermer le modal si on clique en dehors de celui-ci
+  window.addEventListener("click", (event) => {
+    if (event.target === taskInfoModal) {
+      console.log("Fermeture du modal via un clic en dehors.");
+      taskInfoModal.style.display = "none";
     }
   });
 

@@ -104,8 +104,7 @@ export class Task {
             return [];
         }
     }
-    
-    
+     
     /**
      * @brief Supprime une tâche du serveur.
      * 
@@ -217,8 +216,6 @@ export class Task {
           return false;
         }
       }
-      
-      
 
     assignTask(idUser) {
         // TODO

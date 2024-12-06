@@ -70,21 +70,37 @@ session_start();
         <div class="todolist">
           <div class="container-todolist">
             <h1>Ma Liste de Tâches avec Validation</h1>
-            <!-- Formulaire d'ajout de tâche 
-             Il s'ajoute dans le scripttodolist.js -->
+
+            <!-- Formulaire d'ajout de tâche -->
             <div id="addTaskModal" class="modal" style="display:none;"></div>
-            <!-- End Formulaire d'ajout de tâche -->
+
+            <!-- Options de filtrage -->
             <div id="filter-options">
               <button class="filter-btn active" data-filter="all">Toutes</button>
               <button class="filter-btn" data-filter="active">Actives</button>
               <button class="filter-btn" data-filter="completed">Terminées</button>
             </div>
+
+            <!-- Liste des tâches -->
             <ul id="task-list"></ul>
+
+            <!-- Informations sur une tâche -->
             <div id="task-info" class="task-info">
-               Cliquez sur une tâche pour afficher ses informations ici.
+              Cliquez sur une tâche pour afficher ses informations ici.
+            </div>
+
+            <!-- Modal pour afficher les détails d'une tâche -->
+            <div id="taskInfoModal" class="modal">
+              <div class="modal-content">
+                <span class="close" id="close-modal-btn">&times;</span>
+                <div id="task-info-modal-content">
+                  <!-- Les informations de la tâche seront injectées ici -->
+                </div>
+              </div>
             </div>
           </div>
         </div>
+
 
         <!-- End Todolist -->
       </div>
