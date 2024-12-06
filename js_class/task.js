@@ -76,6 +76,37 @@ export class Task {
          */
     static async fetchTasksByProjectId(projectId) {
         try {
+            const response = await fetch(`/fichiers_include_PHP/task/getTaskByProjectAndUser.php?projectId=${projectId}`);
+            
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP : ${response.status}`);
+            }
+    
+            const data = await response.json();
+            console.log("Tâches reçues du backend :", data);
+    
+            if (data.error) {
+                throw new Error(data.error);
+            }
+    
+            return data.map(taskData => new Task(
+                taskData.TitreTask,
+                taskData.DescriptionTask,
+                taskData.StatutTask,
+                taskData.PrioriteTask,
+                taskData.DateEchTask,
+                taskData.IdProject,
+                taskData.IdUser,
+                taskData.IdTask // Assigner l'ID ici
+            ));
+        } catch (error) {
+            console.error("Erreur lors de la récupération des tâches :", error);
+            return [];
+        }
+    }
+
+    static async fetchTasksByProjectIdWithoutUser(projectId) {
+        try {
             const response = await fetch(`/fichiers_include_PHP/task/getTaskByProject.php?projectId=${projectId}`);
             
             if (!response.ok) {

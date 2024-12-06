@@ -32,8 +32,16 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Récupérer l'ID du projet sélectionné depuis le localStorage
   const selectedProjectId = localStorage.getItem("selectedProjectId");
   console.log("selectedProjectId : " + selectedProjectId);
-  // Charger les tâches depuis la base de données
-  let tasks = await Task.fetchTasksByProjectId(parseInt(selectedProjectId));
+
+  // Vérifier si l'utilisateur est un administrateur ou un chef de projet
+  let tasks = [];
+  if (currentUser.role === "Administrateur" || currentUser.role === "Chef de projet") {
+    // Si l'utilisateur est admin ou chef de projet, récupérer toutes les tâches du projet
+    tasks = await Task.fetchTasksByProjectIdWithoutUser(parseInt(selectedProjectId));
+  } else {
+    // Sinon, récupérer uniquement les tâches assignées à l'utilisateur
+    tasks = await Task.fetchTasksByProjectId(parseInt(selectedProjectId));
+  }
 
   // Appel de la méthode pour afficher les tâches dans la console
   Task.displayTasks(tasks);
