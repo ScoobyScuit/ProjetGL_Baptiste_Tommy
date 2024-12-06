@@ -381,7 +381,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     editingTask = null;
   }
 
-  // Fonction pour rendre les tâches visibles dans la liste
+  /**
+   * Fonction pour rendre les tâches visibles dans la liste  
+   */ 
   function renderTasks() {
     taskList.innerHTML = ""; // Réinitialiser la liste des tâches
     // Supprime les doublons par ID (si ID est unique pour chaque tâche)
@@ -400,7 +402,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
-  // Gérer l'ajout de tâche
+  /**
+   * Gérer l'ajout de tâche
+   */
   document.getElementById("task-form").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -473,7 +477,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // Gérer le filtrage des tâches
+  /** 
+   * Gérer le filtrage des tâches
+   */
   filterOptions.addEventListener("click", (e) => {
     if (e.target.classList.contains("filter-btn")) {
       currentFilter = e.target.dataset.filter;
@@ -485,7 +491,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
   });
 
-  // Ajouter l'événement pour la fermeture du modal avec la croix
+  /**
+   * Ajouter l'événement pour la fermeture du modal avec la croix
+   */
   if (closeModalBtn) {
     closeModalBtn.addEventListener("click", () => {
       console.log("Fermeture du modal via la croix.");
@@ -495,7 +503,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     console.error("Bouton de fermeture introuvable.");
   }
 
-  // Fermer le modal si on clique en dehors de celui-ci
+  /**
+   * Fermer le modal si on clique en dehors de celui-ci
+   */
   window.addEventListener("click", (event) => {
     if (event.target === taskInfoModal) {
       console.log("Fermeture du modal via un clic en dehors.");
