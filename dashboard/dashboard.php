@@ -12,7 +12,8 @@ session_start();
   <title>Gestion de Projet</title>
   <link rel="stylesheet" href="/dashboard/css/board.css" />
   <link rel="stylesheet" href="/dashboard/indicateur/indicator.css" />
-  <link rel="stylesheet" href="/dashboard/calendar/stylecalendar.css" />
+  <link rel="stylesheet" href="/dashboard/calendar/css/stylecalendar.css"/>
+  <link rel="stylesheet" href="/dashboard/calendar/css/styletimeline.css"/>
   <link rel="stylesheet" href="/dashboard/todolist/checkbox.css" />
   <link rel="stylesheet" href="/dashboard/todolist/styletodolist.css" />
   <link rel="stylesheet" href="/dashboard/todolist/addTask.css" />
@@ -120,7 +121,7 @@ session_start();
             </div>
           </button>
           <!-- Bouton d'ajout de tâche -->
-          <button class="tab-button" id="openAddTaskModal" onclick="openAddTaskModal()">
+          <button class="add-task-btn" id="openAddTaskModal" onclick="openAddTaskModal()">
             <div class="buttondesign">
               <i class="fa-solid fa-plus"></i>Ajouter une tâche
             </div>
@@ -143,8 +144,8 @@ session_start();
 
     <!-- Inclusion des scripts -->
     <script type="module" src="/dashboard/todolist/scripttodolist.js"></script>
+    <script type="module" src="/dashboard/calendar/scriptcalendar.js"></script>
     <script src="/dashboard/indicateur/scriptindicator.js"></script>
-    <script src="/dashboard/calendar/scriptcalendar.js"></script>
     <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
   </div>
 </body>

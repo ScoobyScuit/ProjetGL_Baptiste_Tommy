@@ -1,0 +1,131 @@
+/* Style pour chaque tâche */
+.task-item {
+    background-color: #f9f9f9; /* Couleur de fond */
+    border: 1px solid #ddd; /* Bordure grise légère */
+    border-radius: 10px; /* Coins arrondis */
+    padding: 15px; /* Espacement interne */
+    margin-bottom: 1rem; /* Espacement entre les tâches */
+    display: flex;
+    flex-direction: column; /* Afficher le contenu en colonne */
+    justify-content: space-between;
+    transition: box-shadow 0.3s ease; /* Animation douce pour l'ombre */
+    font-family: "Geologica", sans-serif; /* Police */
+  }
+  
+  /* Effet au survol */
+  .task-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* Ombre douce au survol */
+    transform: translateY(-3px); /* Légère élévation */
+  }
+  
+  /* Style pour le titre de la tâche */
+  .task-item h4 {
+    margin: 0; /* Retirer les marges par défaut */
+    font-size: 1.2rem; /* Taille du titre */
+    color: #333; /* Couleur du texte */
+    font-weight: bold;
+  }
+  
+  /* Style pour les détails de la tâche */
+  .task-item p {
+    margin: 5px 0; /* Espacement entre les paragraphes */
+    font-size: 0.9rem; /* Taille du texte */
+    color: #666; /* Couleur plus douce pour les détails */
+  }
+  
+  /* Style pour les étiquettes de statut et priorité */
+  .task-item p strong {
+    color: #444; /* Couleur plus prononcée pour les étiquettes */
+    font-weight: 600;
+  }
+  
+  /* Effet spécifique pour les tâches prioritaires */
+  .task-item.priority-high {
+    border-left: 5px solid #e74c3c; /* Bordure rouge pour priorité élevée */
+  }
+  
+  .task-item.priority-medium {
+    border-left: 5px solid #f1c40f; /* Bordure jaune pour priorité moyenne */
+  }
+  
+  .task-item.priority-low {
+    border-left: 5px solid #2ecc71; /* Bordure verte pour priorité faible */
+  }
+  
+
+ /* ====== Scroll-bar ====== */
+.timeline-content {
+    max-height: 400px; /* Hauteur maximale pour le contenu défilable */
+    overflow-y: auto; /* Ajoute une barre de défilement verticale si nécessaire */
+    padding-right: 10px; /* Ajustement pour éviter la superposition de la barre */
+  }
+  
+  .timeline-content::-webkit-scrollbar {
+    width: 8px; /* Largeur de la barre de défilement */
+  }
+  
+  .timeline-content::-webkit-scrollbar-thumb {
+    background: #888; /* Couleur de la barre de défilement */
+    border-radius: 4px; /* Bord arrondi */
+  }
+  
+  .timeline-content::-webkit-scrollbar-thumb:hover {
+    background: #555; /* Couleur de la barre au survol */
+  }
+  
+  .timeline-content::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Couleur de la piste */
+  }
+  
+  /* Tâches de la timeline */
+  .task-list {
+    margin: 0;
+    padding: 0;
+  }
+  
+  .task-item {
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 10px;
+    margin-bottom: 10px;
+    transition: box-shadow 0.3s ease;
+  }
+  
+  .task-item:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-3px);
+  }
+
+
+  /* Styles des pastilles de priorité */
+  .priority-indicator {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 6px; /* Espacement entre la pastille et le texte */
+    vertical-align: middle; /* Alignement vertical avec le texte */
+  }
+  
+
+.priority-1 {
+  background-color: #e74c3c; /* Rouge pour priorité 1 */
+}
+
+.priority-2 {
+  background-color: #f39c12; /* Orange pour priorité 2 */
+}
+
+.priority-3 {
+  background-color: #f1c40f; /* Jaune pour priorité 3 */
+}
+
+.task-details h4 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin: 0 0 10px 0;
+}
+
+  

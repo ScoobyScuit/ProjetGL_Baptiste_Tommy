@@ -119,6 +119,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         <p><strong>Description :</strong> ${task.description}</p>
         <p><strong>Statut :</strong> ${task.statut}</p>
         <p><strong>Priorité :</strong> ${task.priorite}</p>
+        <p><strong>Date de création :</strong> ${task.dateDebut}</p>
         <p><strong>Date d'échéance :</strong> ${task.dateEcheance}</p>
         <p><strong>ID Projet :</strong> ${task.idProjet}</p>
         <p><strong>ID Utilisateur :</strong> ${task.idUser}</p><br>
@@ -325,6 +326,9 @@ document.addEventListener("DOMContentLoaded", async () => {
                     <option value="1">Haute</option>
                 </select>
 
+                <label for="DateDebTask">Date de création</label>
+                <input type="date" id="DateDebTask" name="DateDebTask" required>
+
                 <label for="DateEchTask">Date d'échéance</label>
                 <input type="date" id="DateEchTask" name="DateEchTask" required>
 
@@ -357,6 +361,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     document.getElementById("DescriptionTask").value = task.description;
     document.getElementById("StatutTask").value = task.statut;
     document.getElementById("PrioriteTask").value = task.priorite;
+    document.getElementById("DateDebTask").value = task.dateDebut;
     document.getElementById("DateEchTask").value = task.dateEcheance;
     document.getElementById("IdProjet").value = task.idProjet;
     document.getElementById("IdUser").value = task.idUser;
@@ -423,6 +428,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     const description = document.getElementById("DescriptionTask").value;
     const statut = document.getElementById("StatutTask").value;
     const priorite = document.getElementById("PrioriteTask").value;
+    const dateDeb = document.getElementById("DateDebTask").value;
     const dateEch = document.getElementById("DateEchTask").value;
     const idProjet = document.getElementById("IdProjet").value;
     const idUser = document.getElementById("IdUser").value;
@@ -434,6 +440,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         description,
         statut,
         priorite,
+        dateDebut: dateDeb,
         dateEcheance: dateEch,
         idProjet,
         idUser,
@@ -464,6 +471,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         description,
         statut,
         priorite,
+        dateDeb,
         dateEch,
         idProjet,
         idUser
