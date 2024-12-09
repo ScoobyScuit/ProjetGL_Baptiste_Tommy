@@ -13,10 +13,11 @@ session_start();
   <link rel="stylesheet" href="/dashboard/css/board.css" />
   <link rel="stylesheet" href="/dashboard/indicateur/indicator.css" />
   <link rel="stylesheet" href="/dashboard/calendar/css/stylecalendar.css"/>
+  <link rel="stylesheet" href="/dashboard/calendar/css/styledaycalendar.css"/>
   <link rel="stylesheet" href="/dashboard/calendar/css/styletimeline.css"/>
-  <link rel="stylesheet" href="/dashboard/todolist/checkbox.css" />
-  <link rel="stylesheet" href="/dashboard/todolist/styletodolist.css" />
-  <link rel="stylesheet" href="/dashboard/todolist/addTask.css" />
+  <link rel="stylesheet" href="/dashboard/todolist/css/checkbox.css" />
+  <link rel="stylesheet" href="/dashboard/todolist/css/styletodolist.css" />
+  <link rel="stylesheet" href="/dashboard/todolist/css/addTask.css" />
   <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11/dist/interact.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
@@ -145,7 +146,7 @@ session_start();
     <!-- Inclusion des scripts -->
     <script type="module" src="/dashboard/todolist/scripttodolist.js"></script>
     <script type="module" src="/dashboard/calendar/scriptcalendar.js"></script>
-    <script src="/dashboard/indicateur/scriptindicator.js"></script>
+    <script type="module" src="/dashboard/indicateur/scriptindicator.js"></script>
     <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
   </div>
 </body>

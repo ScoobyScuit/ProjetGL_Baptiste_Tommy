@@ -1,0 +1,64 @@
+/* Styles pour les jours */
+.calendar-day {
+  min-height: 100px;
+  background-color: #fff;
+  padding: 5px;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column; /* Aligne les éléments en colonne */
+  justify-content: flex-start; /* Aligne les tâches en haut */
+}
+
+.calendar-day.past-date {
+  background-color: #f0f0f0; /* Couleur pour les jours passés */
+  color: #bbb; /* Texte en gris */
+}
+
+.calendar-day.active {
+  background-color: #007bff; /* Jour actuel */
+  color: #fff;
+}
+
+/* Styles pour la grille */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 jours par ligne */
+  gap: 1px;
+  background-color: #ddd;
+}
+
+/* Styles pour la date dans chaque jour */
+.calendar-date {
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+
+/* Styles des tâches */
+.calendar-task {
+  font-size: 0.8rem;
+  margin: 2px 0; /* Espace vertical entre les tâches */
+  border-radius: 4px;
+  padding: 2px 5px;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #fff;
+}
+
+/* Tâches spécifiques */
+.calendar-task.ongoing-task {
+  background-color: #ffeb3b; /* Jaune pour les tâches en cours */
+  color: #333;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+.calendar-day.past-date .calendar-task {
+  opacity: 0.6; /* Opacité réduite pour tâches dans jours passés */
+  filter: grayscale(20%);
+}
+
+.multi-day-task {
+  width: fit-content;
+}

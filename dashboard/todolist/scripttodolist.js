@@ -6,6 +6,7 @@
 import { Task } from "/js_class/task.js";
 import { User } from "/js_class/user.js";
 import { Comments } from "/js_class/comments.js";
+import { sendProgress } from '/dashboard/indicateur/scriptindicator.js';
 
 let currentUser = null;
 let isEditing = false; // Variable pour suivre l'état du formulaire (ajout ou modification)
@@ -43,8 +44,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     tasks = await Task.fetchTasksByProjectId(parseInt(selectedProjectId));
   }
 
-  // Appel de la méthode pour afficher les tâches dans la console
-  Task.displayTasks(tasks);
+  calculateTaskProgress();
 
   let currentFilter = "all";
 
@@ -223,32 +223,36 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Attacher un gestionnaire pour afficher les infos de la tâche
     li.addEventListener("click", () => showTaskInfo(task, li));
 
-    // Attacher un gestionnaire de clic pour le bouton "delete"
-    const deleteBtn = li.querySelector(".delete-btn");
-    if (deleteBtn) {
-      deleteBtn.addEventListener("click", async (e) => {
-        e.stopPropagation(); // Empêcher le clic sur le <li>
+        // Attacher un gestionnaire de clic pour le bouton "delete"
+        const deleteBtn = li.querySelector(".delete-btn");
+        if (deleteBtn) {
+          deleteBtn.addEventListener("click", async (e) => {
+            e.stopPropagation(); // Empêcher le clic sur le <li>
+    
+            console.log("Bouton cliqué. Tâche en cours de suppression :", task);
+    
+            try {
+              const success = await task.deleteTask();
+              console.log("Résultat de task.deleteTask():", success);
+    
+              if (success) {
+                tasks.splice(index, 1);
+                renderTasks();
 
-        console.log("Bouton cliqué. Tâche en cours de suppression :", task);
+                // Calcul du pourcentage d'avancement des taches
+                calculateTaskProgress();
 
-        try {
-          const success = await task.deleteTask();
-          console.log("Résultat de task.deleteTask():", success);
-
-          if (success) {
-            tasks.splice(index, 1);
-            renderTasks();
-            console.log(
-              "Tâche supprimée avec succès. Liste des tâches mise à jour."
-            );
-          } else {
-            console.error("Échec de la suppression de la tâche.");
-          }
-        } catch (error) {
-          console.error("Erreur lors du clic sur le bouton supprimer :", error);
+                console.log(
+                  "Tâche supprimée avec succès. Liste des tâches mise à jour."
+                );
+              } else {
+                console.error("Échec de la suppression de la tâche.");
+              }
+            } catch (error) {
+              console.error("Erreur lors du clic sur le bouton supprimer :", error);
+            }
+          });
         }
-      });
-    }
 
     // Attacher un gestionnaire de clic pour le bouton "completed"
     const completedBtn = li.querySelector(".completed-btn");
@@ -266,6 +270,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           if (success) {
             task.statut = "Terminée"; // Mettre à jour localement l'état de la tâche
             renderTasks(); // Actualiser la liste des tâches
+            
+            // Calcul du pourcentage d'avancement des taches
+            calculateTaskProgress();
+
             console.log("Statut de la tâche mis à jour en 'Terminée'.");
           } else {
             console.error("Échec de la mise à jour du statut de la tâche.");
@@ -293,6 +301,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     return li;
+  }
+
+
+  function calculateTaskProgress() {
+    // Calcul du pourcentage d'avancement des taches
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(t => t.statut === "Terminée").length;
+    const progressPercentage = Math.round((completedTasks / totalTasks) * 100);
+    console.log(`Progression du projet : ${progressPercentage}`);
+    // envoyer au webSocket
+    sendProgress(progressPercentage);
   }
 
   /**

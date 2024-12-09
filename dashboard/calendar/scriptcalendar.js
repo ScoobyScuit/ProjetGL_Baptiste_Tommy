@@ -23,32 +23,26 @@ async function initializeUser() {
     console.log("Utilisateur connecté (calendar.js) :");
     currentUser.displayInfo();
   } else {
-    console.error("Aucun utilisateur connecté ou erreur lors de la récupération des données.");
+    console.error(
+      "Aucun utilisateur connecté ou erreur lors de la récupération des données."
+    );
   }
 
   const selectedProjectId = localStorage.getItem("selectedProjectId");
   console.log("selectedProjectId (calendar.js) : " + selectedProjectId);
 
-  if (currentUser.role === "Administrateur" || currentUser.role === "Chef de projet") {
-    tasks = await Task.fetchTasksByProjectIdWithoutUser(parseInt(selectedProjectId));
+  if (
+    currentUser.role === "Administrateur" ||
+    currentUser.role === "Chef de projet"
+  ) {
+    tasks = await Task.fetchTasksByProjectIdWithoutUser(
+      parseInt(selectedProjectId)
+    );
   } else {
     tasks = await Task.fetchTasksByProjectId(parseInt(selectedProjectId));
   }
-  console.log("========== Calendar.js");
-  Task.displayTasks(tasks);
-}
 
-  /**
-   * @brief Récupère le nom d'utilisateur à partir de son ID.
-   * @param userId L'ID de l'utilisateur.
-   * @return Le nom complet de l'utilisateur ou "Inconnu" s'il n'existe pas.
-   */
-  async function getUserNameById(userId) {
-    // Exemple d'une fonction pour récupérer le nom d'utilisateur
-    const user = await User.fetchUserById(userId); // Remplacez par votre propre méthode
-    console.log("User : " + Object.keys(user));
-    return user?.NomUser + " " + user?.PrenomUser || "Inconnu";
-  }
+}
 
 // ========================= ONGLET =========================
 function initializeTabs() {
@@ -104,62 +98,136 @@ function createCalendar() {
   const startOfMonth = moment(selectedDate).startOf("month");
   const daysInMonth = moment(selectedDate).daysInMonth();
   const currentDate = moment();
+  const colorBank = [
+    "#C0A0BD", "#94A7AE", "#64766A", "#FBE0C3", "#FFBB98", 
+    "#7D8E95", "#344648", "#748B6F", "#2A403D", "#D05663"
+  ];
 
+  const daysOfWeek = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]; // En-tête des jours de la semaine
+
+  // Construction du calendrier
   calendarElement.innerHTML = `
-  <div class="scrollable-content">
-    <div class="calendar-header">
-      <button onclick="changeMonth(-1)"><i class="fa-solid fa-angles-left"></i> Précédent</button>
-      <h2>${selectedDate.format("MMMM YYYY")}</h2>
-      <button onclick="changeMonth(1)">Suivant <i class="fa-solid fa-angles-right"></i></button>
-    </div>
-    <div class="calendar-grid">
-      ${Array.from({ length: daysInMonth }, (_, i) => {
-        const day = moment(startOfMonth).add(i, "days");
-        const isActive = day.isSame(currentDate, "day");
-        const tasksForDay = tasks.filter(task => moment(day).isBetween(task.startDate, task.endDate, null, "[]"));
+    <div class="scrollable-content">
+      <!-- Boutons de navigation -->
+      <div class="calendar-header">
+        <button onclick="changeMonth(-1)">
+          <i class="fa-solid fa-angles-left"></i> Précédent
+        </button>
+        <h2>${selectedDate.format("MMMM YYYY")}</h2>
+        <button onclick="changeMonth(1)">
+          Suivant <i class="fa-solid fa-angles-right"></i>
+        </button>
+      </div>
+      <!-- En-tête des jours de la semaine -->
+      <div class="calendar-week-header">
+        ${daysOfWeek.map(day => `<div class="calendar-week-day">${day}</div>`).join('')}
+      </div>
+      <!-- Grille des jours -->
+      <div class="calendar-grid">
+        ${Array.from({ length: daysInMonth }, (_, i) => {
+          const day = moment(startOfMonth).add(i, "days");
+          const isActive = day.isSame(currentDate, "day");
+          const isPast = day.isBefore(currentDate, "day");
 
-        return `
-          <div class="calendar-day${isActive ? " active" : ""}" data-date="${day.format("YYYY-MM-DD")}">
-            ${day.format("D")}
-            ${tasksForDay.map(task => `<div class="calendar-task">${task.name}</div>`).join("")}
-          </div>`;
-      }).join("")}
-    </div>
+          // Filtrer les tâches pour cette journée
+          const tasksForDay = tasks.filter((task) => 
+            day.isBetween(task.dateDebut, task.dateEcheance, null, "[]")
+          );
+
+          return `
+            <div class="calendar-day${isActive ? " active" : ""}${isPast ? " past-date" : ""}" 
+                 data-date="${day.format("YYYY-MM-DD")}">
+              <div class="calendar-date">${day.format("D")}</div>
+              ${tasksForDay
+                .map((task, index) => {
+                  const isSingleDay = moment(task.dateDebut).isSame(task.dateEcheance, "day");
+                  const taskClass = isSingleDay ? "single-day-task" : "multi-day-task";
+                  const color = colorBank[index % colorBank.length]; // Associer une couleur cycliquement
+                  return `
+                    <div class="calendar-task ${taskClass}" style="background-color: ${color};">
+                      ${task.titre}
+                    </div>`;
+                }).join('')}
+            </div>`;
+        }).join("")}
+      </div>
     </div>`;
 }
 
 // ========================= TIMELINE =========================
-let filterPriority = ""; // Variable pour stocker la priorité sélectionnée
+let filterPriority = ""; // Filtre de priorité
+let filterStatus = ""; // Filtre de statut (toutes, terminées, en cours, en attente)
+
+// Fonction pour définir la classe CSS de priorité
+const getPriorityClass = (priority) => {
+  if (priority == 1) return "priority-1"; // Haute priorité
+  if (priority == 2) return "priority-2"; // Moyenne priorité
+  if (priority == 3) return "priority-3"; // Basse priorité
+  return "";
+};
 
 async function createTimeline() {
   const timelineContent = document.getElementById("timeline-content");
   const today = selectedDate.format("YYYY-MM-DD");
 
-  // Filtrer les tâches pour la date sélectionnée ET la priorité sélectionnée
-  const filteredTasks = tasks.filter(task => {
-    const taskDate = moment(task.DateEchTask).format("YYYY-MM-DD");
-    return taskDate === today && (filterPriority === "" || task.priorite == filterPriority);
+  // Filtrer les tâches par plage de dates, priorité et statut
+  const filteredTasks = tasks.filter((task) => {
+    const taskStartDate = moment(task.dateDebut); // Date de début
+    const taskEndDate = moment(task.dateEcheance); // Date d'échéance
+    const selectedDay = moment(selectedDate.format("YYYY-MM-DD")); // Date sélectionnée
+
+    // Vérification si la date sélectionnée est entre dateDebut et dateEcheance
+    const isInRange = selectedDay.isBetween(
+      taskStartDate,
+      taskEndDate,
+      "days",
+      "[]"
+    );
+
+    // Assurez-vous que les propriétés sont des chaînes sans espaces
+    const taskPriority = task.priorite ? task.priorite.toString().trim() : "";
+    const taskStatus = task.statut ? task.statut.toLowerCase().trim() : "";
+
+    const matchesPriority =
+      filterPriority === "" || taskPriority === filterPriority;
+    const matchesStatus =
+      filterStatus === "" ||
+      (filterStatus === "terminées" && taskStatus === "terminée") ||
+      (filterStatus === "non-terminées" && taskStatus !== "terminée");
+
+    return isInRange && matchesPriority && matchesStatus;
   });
 
-  // Fonction pour définir la couleur de la pastille
-  const getPriorityClass = (priority) => {
-    if (priority == 1) return "priority-1";
-    if (priority == 2) return "priority-2";
-    if (priority == 3) return "priority-3";
-    return "";
-  };
-
-  // Ajouter le filtre de priorité et les tâches
+  // Générer le contenu de la timeline
   timelineContent.innerHTML = `
     <div class="day-header">
       <h3>${selectedDate.format("dddd, DD MMMM YYYY")}</h3>
       <div>
+        <!-- Filtre par priorité -->
         <label for="filter-priority">Filtrer par priorité :</label>
         <select id="filter-priority">
           <option value="">Toutes</option>
-          <option value="1" ${filterPriority === "1" ? "selected" : ""}>1 - Haute</option>
-          <option value="2" ${filterPriority === "2" ? "selected" : ""}>2 - Moyenne</option>
-          <option value="3" ${filterPriority === "3" ? "selected" : ""}>3 - Basse</option>
+          <option value="1" ${
+            filterPriority === "1" ? "selected" : ""
+          }>1 - Haute</option>
+          <option value="2" ${
+            filterPriority === "2" ? "selected" : ""
+          }>2 - Moyenne</option>
+          <option value="3" ${
+            filterPriority === "3" ? "selected" : ""
+          }>3 - Basse</option>
+        </select>
+
+        <!-- Filtre par statut -->
+        <label for="filter-status">Filtrer par statut :</label>
+        <select id="filter-status">
+          <option value="">Tous</option>
+          <option value="terminées" ${
+            filterStatus === "terminées" ? "selected" : ""
+          }>Terminées</option>
+          <option value="non-terminées" ${
+            filterStatus === "non-terminées" ? "selected" : ""
+          }>Non Terminées</option>
         </select>
       </div>
     </div>
@@ -168,36 +236,42 @@ async function createTimeline() {
         filteredTasks.length > 0
           ? filteredTasks
               .map(
-                task => `
+                (task) => `
                   <div class="task-item">
                     <div class="task-details">
                       <h4>
                         ${task.titre}
-                        <span class="priority-indicator ${getPriorityClass(task.priorite)}"></span>
+                        <span class="priority-indicator ${getPriorityClass(
+                          task.priorite
+                        )}"></span>
                       </h4>
                       <p>${task.description}</p>
                       <p><strong>Statut :</strong> ${task.statut}</p>
                       <p><strong>Priorité :</strong> ${task.priorite}</p>
-                      <p><strong>Date de création :</strong> ${task.dateDebut}</p>
-                      <p><strong>Date d'échéance :</strong> ${task.dateEcheance}</p>
+                      <p><strong>Date de début :</strong> ${task.dateDebut}</p>
+                      <p><strong>Date d'échéance :</strong> ${
+                        task.dateEcheance
+                      }</p>
                     </div>
                   </div>
                 `
               )
               .join("")
-          : "<p>Aucune tâche pour ce jour.</p>"
+          : "<p>Aucune tâche pour cette période.</p>"
       }
     </div>`;
 
-  // Ajouter l'écouteur d'événement pour le filtre
+  // Ajouter les écouteurs d'événements pour les filtres
   document.getElementById("filter-priority").addEventListener("change", (e) => {
     filterPriority = e.target.value;
     createTimeline(); // Rafraîchir la timeline
   });
+
+  document.getElementById("filter-status").addEventListener("change", (e) => {
+    filterStatus = e.target.value;
+    createTimeline(); // Rafraîchir la timeline
+  });
 }
-
-
-
 
 // ====================== CHANGER DE MOIS =====================
 function changeMonth(delta) {
@@ -222,19 +296,16 @@ function initializeTimeIndicator() {
         hoursContainer.appendChild(indicator);
       }
 
-      indicator.style.left = `${(currentHour * 60 + currentMinute) / (24 * 60) * 100}%`;
+      indicator.style.left = `${
+        ((currentHour * 60 + currentMinute) / (24 * 60)) * 100
+      }%`;
       setTimeout(updateIndicator, 60000);
     }
   }
   updateIndicator();
 }
 
-
-
-
-
-
-// Affiche et ferme la fenetre d'ajout de taches
+// ================= Affiche et ferme la fenetre d'ajout de taches
 function openAddTaskModal() {
   const addTaskModal = document.getElementById("addTaskModal");
   if (addTaskModal) {
@@ -255,9 +326,7 @@ function closeAddTaskModal() {
 
 // Rendre la fonction accessible globalement
 window.closeAddTaskModal = closeAddTaskModal;
-
 // Rendre la fonction accessible globalement
 window.openAddTaskModal = openAddTaskModal;
 // Rendre la fonction accessible globalement
 window.changeMonth = changeMonth;
-

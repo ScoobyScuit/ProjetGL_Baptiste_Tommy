@@ -425,3 +425,62 @@
   font-size: 12px;
   margin-top: 5px;
 }
+
+
+
+/* ------------------- */ 
+/* En-tête des jours de la semaine */
+.calendar-week-header {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-weight: bold;
+  background-color: #f8f9fa; /* Gris clair pour l'en-tête */
+  border-bottom: 1px solid #ddd;
+  padding: 5px 0;
+}
+
+.calendar-week-day {
+  padding: 5px;
+}
+
+/* Grille des jours du calendrier */
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr); /* 7 jours par ligne */
+  gap: 2px; /* Espace entre les cases */
+}
+
+.calendar-day {
+  text-align: center;
+  padding: 10px;
+  border: 1px solid #ddd;
+  min-height: 80px;
+  background-color: #fff;
+  position: relative;
+}
+
+.calendar-day.active {
+  background-color: #007bff; /* Couleur pour le jour actuel */
+  color: #fff;
+}
+
+.calendar-day.past-date {
+  background-color: #f0f0f0;
+  color: #aaa;
+  opacity: 0.6;
+}
+
+/* Tâches affichées dans le jour */
+.calendar-task {
+  background-color: #e3f2fd; /* Bleu clair */
+  color: #333;
+  padding: 3px;
+  margin-top: 5px;
+  font-size: 0.9em;
+  border-radius: 4px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
