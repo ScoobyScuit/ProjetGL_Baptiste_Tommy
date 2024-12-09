@@ -284,4 +284,9 @@ body{
   .scrollable-content button:hover {
     background-color: #0056b3; /* Couleur plus sombre au survol */
   }
+
+  .add-task-btn {
+    background-color: #F0F2F7;
+    border: none;
+  }
   

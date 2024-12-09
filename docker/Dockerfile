@@ -10,7 +10,6 @@ COPY ../fichiers_include_PHP /var/www/html/fichiers_include_PHP
 COPY ../js_class /var/www/html/js_class
 COPY ../login /var/www/html/login
 COPY ../logout /var/www/html/logout
-COPY ../test /var/www/html/test
 
 # Ajouter la configuration Apache
 COPY ../docker/apache.conf /etc/apache2/sites-available/000-default.conf

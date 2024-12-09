@@ -98,6 +98,7 @@ CREATE TABLE IF NOT EXISTS `task` (
   `StatutTask` enum('En cours','Terminée','En attente') NOT NULL,
   `PrioriteTask` int NOT NULL,
   `DateEchTask` date NOT NULL,
+  `DateDebTask` date ,
   `IdProject` int NOT NULL,
   `IdUser` int NOT NULL,
   PRIMARY KEY (`IdTask`,`IdProject`,`IdUser`)
@@ -107,11 +108,11 @@ CREATE TABLE IF NOT EXISTS `task` (
 -- Déchargement des données de la table `task`
 --
 
-INSERT INTO `task` (`IdTask`, `TitreTask`, `DescriptionTask`, `StatutTask`, `PrioriteTask`, `DateEchTask`, `IdProject`, `IdUser`) VALUES
-(11, 'Finir calendar', 'Lier le calendrier et le js', 'En cours', 1, '2024-11-15', 1, 30),
-(10, 'tache 2', 'sdsd', 'En attente', 2, '2024-09-29', 1, 31),
-(7, 'sd', 'sd', 'En attente', 3, '2024-09-29', 2, 30),
-(8, 'Tache 1', 'wlh ca marche', 'En cours', 1, '2024-09-30', 2, 30);
+INSERT INTO `task` (`IdTask`, `TitreTask`, `DescriptionTask`, `StatutTask`, `PrioriteTask`, `DateDebTask`, `DateEchTask`, `IdProject`, `IdUser`) VALUES
+(11, 'Finir calendar', 'Lier le calendrier et le js', 'En cours', 1, '2024-09-15', '2024-11-15', 1, 30),
+(10, 'tache 2', 'sdsd', 'En attente', 2, '2024-09-15', '2024-09-29', 1, 31),
+(7, 'sd', 'sd', 'En attente', 3, '2024-09-15', '2024-09-29', 2, 30),
+(8, 'Tache 1', 'wlh ca marche', 'En cours', 1, '2024-09-15', '2024-09-30', 2, 30);
 
 -- --------------------------------------------------------
 
