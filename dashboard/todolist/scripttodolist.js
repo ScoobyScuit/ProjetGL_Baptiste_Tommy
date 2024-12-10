@@ -16,14 +16,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const taskList = document.getElementById("task-list");
   const filterOptions = document.getElementById("filter-options");
   const closeModalBtn = document.getElementById("close-modal-btn");
-  const addTaskButton = document.querySelector(".add-task-btn"); // Sélectionne l'élément par sa classe
+  const addTaskButton = document.querySelector(".add-task-btn");
 
   // Récupérer les données utilisateur
   currentUser = await User.fetchUserData();
 
   if (currentUser) {
-    console.log("Utilisateur connecté :");
-    currentUser.displayInfo();
     createTaskFormModal(currentUser);
   } else {
     console.error(
@@ -38,8 +36,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Vérifier si l'utilisateur est un administrateur ou un chef de projet
   let tasks = [];
   if (currentUser.role === "Administrateur" || currentUser.role === "Chef de projet") {
-    addTaskButton.classList.remove("hidden"); // Afficher le bouton d'ajout de tache
-    // Si l'utilisateur est admin ou chef de projet, récupérer toutes les tâches du projet
+    addTaskButton.classList.remove("hidden");
     tasks = await Task.fetchTasksByProjectIdWithoutUser(parseInt(selectedProjectId));
   } else {
     // Sinon, récupérer uniquement les tâches assignées à l'utilisateur

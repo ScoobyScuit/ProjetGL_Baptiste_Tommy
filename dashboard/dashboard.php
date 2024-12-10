@@ -38,7 +38,7 @@ session_start();
 
       </div>
       <div class="settings">
-        <button class="settings-btn">
+        <button class="settings-btn" style="display: none;" onclick="location.href = '/fichiers_include_PHP/parametre/settings.html';">
           <i class="fa-solid fa-gear"></i>
         </button>
         <button class="profil-btn" onclick="location.href = '/fichiers_include_PHP/profil/profil.html';">
@@ -147,6 +147,7 @@ session_start();
     <script type="module" src="/dashboard/todolist/scripttodolist.js"></script>
     <script type="module" src="/dashboard/calendar/scriptcalendar.js"></script>
     <script type="module" src="/dashboard/indicateur/scriptindicator.js"></script>
+    <script type="module" src="/dashboard/permissions.js"></script>
     <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
   </div>
 </body>

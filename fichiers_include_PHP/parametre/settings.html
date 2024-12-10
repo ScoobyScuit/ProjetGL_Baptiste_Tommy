@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Paramètres</title>
+    <link rel="stylesheet" href="/fichiers_include_PHP/parametre/css/settings.css" />
+    <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
+  </head>
+
+  <body>
+    <div class="settings-container">
+      <h1>Paramètres</h1>
+
+      <!-- Section : Modification des rôles -->
+      <section class="role-management">
+        <h2>Modifier les rôles des utilisateurs</h2>
+        <div id="role-form">
+          <label for="user-select">Sélectionnez un utilisateur :</label>
+          <select id="user-select"></select>
+
+          <label for="role-select">Nouveau rôle :</label>
+          <select id="role-select">
+            <option value="Utilisateur">Utilisateur</option>
+            <option value="Chef de projet">Chef de projet</option>
+            <option value="Administrateur">Administrateur</option>
+          </select>
+
+          <button id="update-role-btn">Mettre à jour le rôle</button>
+        </div>
+      </section>
+
+      <!-- Section : Assignation des tâches -->
+      <section class="task-assignment">
+        <h2>Assigner un utilisateur à une tâche</h2>
+        <div id="task-form">
+          <label for="task-select">Sélectionnez une tâche :</label>
+          <select id="task-select"></select>
+
+          <label for="assign-user-select">Utilisateur assigné :</label>
+          <select id="assign-user-select"></select>
+
+          <button id="assign-task-btn">Assigner la tâche</button>
+        </div>
+      </section>
+    </div>
+
+    <script type="module" src="/js/settings.js"></script>
+  </body>
+</html>
