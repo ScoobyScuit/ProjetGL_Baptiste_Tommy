@@ -1,8 +1,8 @@
 DONE 1. Survole/click des taches : aficher les données + finir filtre
 DONE 2. .actif sur le menu du haut
 DONE 4. Ajouter comments sur une tache
-3. Afficher taches sur calendar
- -> Si ajout ou suppresion de tache alors refresh affichage timeline et calendar
+DONE 3. Afficher taches sur calendar
+DONE  -> Si ajout ou suppresion de tache alors refresh affichage timeline et calendar
 DONE -> Progress indicator
 5. Gérer != user (admin, chef, user) et leur droits :
     https://docs.google.com/document/d/10U4FR5gwEl3xWFpMN8p2YK6krQgFR5hUHII1ktSlZ20/edit?tab=t.0

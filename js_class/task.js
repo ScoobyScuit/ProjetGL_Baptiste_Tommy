@@ -1,4 +1,17 @@
 export class Task {
+    colorBank = [
+        "#C0A0BD",
+        "#94A7AE",
+        "#64766A",
+        "#FBE0C3",
+        "#FFBB98",
+        "#7D8E95",
+        "#344648",
+        "#748B6F",
+        "#2A403D",
+        "#D05663",
+      ]
+
     constructor(titre, description, statut, priorite, dateDebut, dateEcheance, idProjet, idUser, id = null) {
         if (!titre || !description || !statut || !priorite || !dateEcheance || !idProjet || !idUser) {
             throw new Error('Données de tâche incomplètes.');
@@ -12,6 +25,7 @@ export class Task {
         this.idProjet = idProjet;
         this.idUser = idUser;
         this.id = id; // L'ID peut être null lors de l'ajout
+        this.color = this.colorBank[Math.floor(Math.random() * this.colorBank.length)];
     }
 
     /**

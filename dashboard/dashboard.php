@@ -71,7 +71,7 @@ session_start();
         <!-- Start Todolist -->
         <div class="todolist">
           <div class="container-todolist">
-            <h1>Ma Liste de Tâches avec Validation</h1>
+            <h1>Liste de tâches :</h1>
 
             <!-- Formulaire d'ajout de tâche -->
             <div id="addTaskModal" class="modal" style="display:none;"></div>
@@ -122,7 +122,7 @@ session_start();
             </div>
           </button>
           <!-- Bouton d'ajout de tâche -->
-          <button class="add-task-btn" id="openAddTaskModal" onclick="openAddTaskModal()">
+          <button class="add-task-btn hidden" id="openAddTaskModal" onclick="openAddTaskModal()">
             <div class="buttondesign">
               <i class="fa-solid fa-plus"></i>Ajouter une tâche
             </div>

@@ -290,3 +290,7 @@ body{
     border: none;
   }
   
+  .hidden {
+    display: none;
+  }
+  

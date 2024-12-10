@@ -16,6 +16,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   const taskList = document.getElementById("task-list");
   const filterOptions = document.getElementById("filter-options");
   const closeModalBtn = document.getElementById("close-modal-btn");
+  const addTaskButton = document.querySelector(".add-task-btn"); // Sélectionne l'élément par sa classe
 
   // Récupérer les données utilisateur
   currentUser = await User.fetchUserData();
@@ -37,6 +38,7 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Vérifier si l'utilisateur est un administrateur ou un chef de projet
   let tasks = [];
   if (currentUser.role === "Administrateur" || currentUser.role === "Chef de projet") {
+    addTaskButton.classList.remove("hidden"); // Afficher le bouton d'ajout de tache
     // Si l'utilisateur est admin ou chef de projet, récupérer toutes les tâches du projet
     tasks = await Task.fetchTasksByProjectIdWithoutUser(parseInt(selectedProjectId));
   } else {
@@ -44,6 +46,7 @@ document.addEventListener("DOMContentLoaded", async () => {
     tasks = await Task.fetchTasksByProjectId(parseInt(selectedProjectId));
   }
 
+  // Calculer le progrès du projet au chargement de la page
   calculateTaskProgress();
 
   let currentFilter = "all";
@@ -241,6 +244,8 @@ document.addEventListener("DOMContentLoaded", async () => {
 
                 // Calcul du pourcentage d'avancement des taches
                 calculateTaskProgress();
+                // Envoyer modif au server
+                sendProgress("TaskDeleted");
 
                 console.log(
                   "Tâche supprimée avec succès. Liste des tâches mise à jour."
@@ -359,7 +364,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <label for="IdUser">Id de l'utilisateur assigné</label>
                 <input type="number" id="IdUser" name="IdUser" value="${
                   currentUser.id
-                }" readonly>
+                }" required>
 
                 <button type="submit">Ajouter la tâche</button>
             </form>
@@ -502,6 +507,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Ajouter la tâche à la liste
         tasks.push(newTask);
         console.log("Tâche ajoutée avec succès :", newTask);
+        // Envoyer modif au server
+        sendProgress("TaskAdded");
 
         // Actualiser la liste des tâches
         renderTasks();

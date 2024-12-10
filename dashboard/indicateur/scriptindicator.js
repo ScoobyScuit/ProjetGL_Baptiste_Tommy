@@ -4,6 +4,8 @@ const progressText = document.getElementById('progressText');
 const startPoint = document.getElementById('startPoint');
 let ws;
 
+import { updateCalendarAndTimeline } from "/dashboard/calendar/scriptcalendar.js";
+
 // Fonction pour établir la connexion WebSocket
 function connectWebSocket() {
     // Initialisation de la barre de progression
@@ -18,12 +20,23 @@ function connectWebSocket() {
 
     ws.onmessage = (event) => {
         console.log('Message reçu du serveur :', event.data);
-
+    
         try {
             const data = JSON.parse(event.data); // Convertir le message en JSON
+            
+            // Vérifie si "progress" existe
             if (data.progress !== undefined) {
-                console.log("data progress : " + data.progress);
-                updateProgressIndicator(data.progress); // Mettre à jour l'indicateur
+                if (typeof data.progress === 'number') {
+                    console.log("Progress numérique : " + data.progress);
+                    updateProgressIndicator(data.progress); // Mettre à jour l'indicateur
+                } else if (typeof data.progress === 'string') {
+                    console.log("Progress commande : " + data.progress);
+                    handleCommand(data.progress); // Fonction pour gérer les commandes
+                } else {
+                    console.warn("Type de progress non pris en charge :", typeof data.progress);
+                }
+            } else {
+                console.warn("Aucun champ progress trouvé dans le message.");
             }
         } catch (error) {
             console.error('Erreur lors de la réception des données :', error);
@@ -38,6 +51,22 @@ function connectWebSocket() {
         console.warn('WebSocket fermé. Tentative de reconnexion...');
         setTimeout(connectWebSocket, 3000); // Reconnexion après 3 secondes
     };
+}
+
+// Fonction pour traiter les commandes spécifiques
+async function handleCommand(command) {
+    switch (command) {
+        case "TaskAdded":
+            console.log("Commande reçue : TaskAdded. Rafraîchissement du calendrier...");
+            await updateCalendarAndTimeline(); // Mettre à jour calendrier et timeline
+            break;
+        case "TaskDeleted":
+            console.log("Commande reçue : TaskDeleted. Mise à jour du calendrier...");
+            await updateCalendarAndTimeline(); // Mettre à jour calendrier et timeline
+            break;
+        default:
+            console.warn("Commande non reconnue :", command);
+    }
 }
 
 // Fonction pour mettre à jour l'indicateur de progression
@@ -59,10 +88,6 @@ function updateProgressIndicator(value) {
         console.error("Éléments de l'indicateur introuvables.");
     }
 }
-
-
-
-
 
 // Fonction pour envoyer les progrès au serveur
 function sendProgress(value) {

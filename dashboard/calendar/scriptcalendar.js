@@ -41,7 +41,6 @@ async function initializeUser() {
   } else {
     tasks = await Task.fetchTasksByProjectId(parseInt(selectedProjectId));
   }
-
 }
 
 // ========================= ONGLET =========================
@@ -99,8 +98,16 @@ function createCalendar() {
   const daysInMonth = moment(selectedDate).daysInMonth();
   const currentDate = moment();
   const colorBank = [
-    "#C0A0BD", "#94A7AE", "#64766A", "#FBE0C3", "#FFBB98", 
-    "#7D8E95", "#344648", "#748B6F", "#2A403D", "#D05663"
+    "#C0A0BD",
+    "#94A7AE",
+    "#64766A",
+    "#FBE0C3",
+    "#FFBB98",
+    "#7D8E95",
+    "#344648",
+    "#748B6F",
+    "#2A403D",
+    "#D05663",
   ];
 
   const daysOfWeek = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"]; // En-tête des jours de la semaine
@@ -120,7 +127,9 @@ function createCalendar() {
       </div>
       <!-- En-tête des jours de la semaine -->
       <div class="calendar-week-header">
-        ${daysOfWeek.map(day => `<div class="calendar-week-day">${day}</div>`).join('')}
+        ${daysOfWeek
+          .map((day) => `<div class="calendar-week-day">${day}</div>`)
+          .join("")}
       </div>
       <!-- Grille des jours -->
       <div class="calendar-grid">
@@ -130,24 +139,30 @@ function createCalendar() {
           const isPast = day.isBefore(currentDate, "day");
 
           // Filtrer les tâches pour cette journée
-          const tasksForDay = tasks.filter((task) => 
+          const tasksForDay = tasks.filter((task) =>
             day.isBetween(task.dateDebut, task.dateEcheance, null, "[]")
           );
 
           return `
-            <div class="calendar-day${isActive ? " active" : ""}${isPast ? " past-date" : ""}" 
-                 data-date="${day.format("YYYY-MM-DD")}">
+            <div class="calendar-day${isActive ? " active" : ""}${
+                      isPast ? " past-date" : ""
+                    }" 
+                data-date="${day.format("YYYY-MM-DD")}">
               <div class="calendar-date">${day.format("D")}</div>
               ${tasksForDay
-                .map((task, index) => {
-                  const isSingleDay = moment(task.dateDebut).isSame(task.dateEcheance, "day");
+                .map((task) => {
+                  const isSingleDay = moment(task.dateDebut).isSame(
+                    task.dateEcheance,
+                    "day"
+                  );
                   const taskClass = isSingleDay ? "single-day-task" : "multi-day-task";
-                  const color = colorBank[index % colorBank.length]; // Associer une couleur cycliquement
+                  const color = task.couleur || colorBank[task.id % colorBank.length]; // Prioriser la couleur de la tâche
                   return `
                     <div class="calendar-task ${taskClass}" style="background-color: ${color};">
                       ${task.titre}
                     </div>`;
-                }).join('')}
+                })
+                .join("")}
             </div>`;
         }).join("")}
       </div>
@@ -271,6 +286,31 @@ async function createTimeline() {
     filterStatus = e.target.value;
     createTimeline(); // Rafraîchir la timeline
   });
+}
+
+// ================== METTRE À JOUR CALENDRIER ET TIMELINE ==================
+export async function updateCalendarAndTimeline() {
+  try {
+    const selectedProjectId = localStorage.getItem("selectedProjectId");
+
+    // Recharger les tâches depuis le serveur
+    if (
+      currentUser.role === "Administrateur" ||
+      currentUser.role === "Chef de projet"
+    ) {
+      tasks = await Task.fetchTasksByProjectIdWithoutUser(parseInt(selectedProjectId));
+    } else {
+      tasks = await Task.fetchTasksByProjectId(parseInt(selectedProjectId));
+    }
+
+    // Rafraîchir l'affichage du calendrier et de la timeline
+    createCalendar();
+    createTimeline();
+
+    console.log("Calendrier et timeline mis à jour avec succès !");
+  } catch (error) {
+    console.error("Erreur lors de la mise à jour du calendrier et de la timeline :", error);
+  }
 }
 
 // ====================== CHANGER DE MOIS =====================
