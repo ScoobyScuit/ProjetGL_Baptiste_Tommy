@@ -61,15 +61,45 @@ export class User {
             return null; // En cas d'erreur, retournez null
         }
     }
+
+    static async fetchAllUsers() {
+        try {
+            const response = await fetch('/fichiers_include_PHP/getAllUser.php'); // Appel à l'API
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP : ${response.status} - ${response.statusText}`);
+            }
+            const data = await response.json();
     
-    /**
-     * @brief Gère les informations du profil utilisateur.
-     * 
-     * Méthode à implémenter pour traiter et gérer les informations du profil utilisateur.
-     */
-    handleProfil() {
-        // TODO
+            if (Array.isArray(data)) {
+                return data; // Retourner les utilisateurs si les données sont un tableau
+            } else if (data.error) {
+                console.error("Erreur du serveur :", data.error);
+                return null; // Gestion des erreurs renvoyées par le serveur
+            } else {
+                throw new Error("Données inattendues reçues du serveur.");
+            }
+        } catch (error) {
+            console.error("Erreur lors de la récupération des utilisateurs :", error);
+            return null; // En cas d'erreur, retournez null
+        }
     }
+
+    static async updateUserRole(userId, newRole) {
+        try {
+          const response = await fetch("/fichiers_include_PHP/profil/updateRole.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ id: userId, role: newRole }),
+          });
+
+          const result = await response.json();
+          return result.success;
+        } catch (error) {
+          console.error("Erreur lors de la mise à jour du rôle :", error);
+          return false;
+        }
+      }
+      
 
     /**
      * @brief Affiche les informations de l'utilisateur dans la console.

@@ -57,7 +57,7 @@ export class Task {
                 taskData.DescriptionTask,
                 taskData.StatutTask,
                 taskData.PrioriteTask,
-                taskData.DateDebutTask, // Ajout de dateDebut
+                taskData.DateDebutTask,
                 taskData.DateEchTask,
                 taskData.IdProject,
                 taskData.IdUser,
@@ -113,29 +113,33 @@ export class Task {
     async deleteTask() {
         try {
             console.log("Envoi de la requête DELETE pour la tâche :", this.id);
+    
+            // Appel API pour supprimer la tâche
             const response = await fetch(`/fichiers_include_PHP/task/deleteTask.php?id=${this.id}`, {
                 method: 'DELETE',
-            });            
+            });
     
+            // Vérification de la réponse HTTP
             if (!response.ok) {
-                throw new Error(`Erreur HTTP : ${response.status}`);
+                throw new Error(`Erreur HTTP : ${response.status} ${response.statusText}`);
             }
     
-            // Lire une seule fois le corps de la réponse
-            const rawData = await response.text(); // Lire la réponse brute
-            console.log("Données reçues (brutes) :", rawData);
+            // Récupération de la réponse JSON
+            const result = await response.json(); // Utiliser response.json() pour récupérer le JSON
     
-            const result = JSON.parse(rawData); // Analyser le JSON
+            // Vérifier si une erreur est retournée par le serveur
             if (result.error) {
                 throw new Error(result.error);
             }
     
-            return true;  // Suppression réussie
+            console.log("Tâche supprimée avec succès :", this.id);
+            return true; // Suppression réussie
         } catch (error) {
-            console.error("Erreur lors de la suppression de la tâche :", error);
-            return false;
+            console.error("Erreur lors de la suppression de la tâche :", error.message);
+            return false; // Échec de la suppression
         }
     }
+    
     
     async updateTask(updatedTaskData) {
         try {
@@ -267,6 +271,22 @@ export class Task {
             return [];
         }
     }
+
+    static async assignUserToTask(taskId, userId) {
+        try {
+          const response = await fetch("/fichiers_include_PHP/task/assignUser.php", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ taskId, userId }),
+          });
+          const result = await response.json();
+          return result.success;
+        } catch (error) {
+          console.error("Erreur lors de l'assignation de la tâche :", error);
+          return false;
+        }
+      }
+      
 
     /**
      * @brief Affiche toutes les tâches stockées dans la console.
