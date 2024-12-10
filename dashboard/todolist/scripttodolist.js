@@ -6,6 +6,7 @@
 import { Task } from "/js_class/task.js";
 import { User } from "/js_class/user.js";
 import { Comments } from "/js_class/comments.js";
+import { sendProgress } from '/dashboard/indicateur/scriptindicator.js';
 
 let currentUser = null;
 let isEditing = false; // Variable pour suivre l'état du formulaire (ajout ou modification)
@@ -15,13 +16,12 @@ document.addEventListener("DOMContentLoaded", async () => {
   const taskList = document.getElementById("task-list");
   const filterOptions = document.getElementById("filter-options");
   const closeModalBtn = document.getElementById("close-modal-btn");
+  const addTaskButton = document.querySelector(".add-task-btn");
 
   // Récupérer les données utilisateur
   currentUser = await User.fetchUserData();
 
   if (currentUser) {
-    console.log("Utilisateur connecté :");
-    currentUser.displayInfo();
     createTaskFormModal(currentUser);
   } else {
     console.error(
@@ -36,15 +36,15 @@ document.addEventListener("DOMContentLoaded", async () => {
   // Vérifier si l'utilisateur est un administrateur ou un chef de projet
   let tasks = [];
   if (currentUser.role === "Administrateur" || currentUser.role === "Chef de projet") {
-    // Si l'utilisateur est admin ou chef de projet, récupérer toutes les tâches du projet
+    addTaskButton.classList.remove("hidden");
     tasks = await Task.fetchTasksByProjectIdWithoutUser(parseInt(selectedProjectId));
   } else {
     // Sinon, récupérer uniquement les tâches assignées à l'utilisateur
     tasks = await Task.fetchTasksByProjectId(parseInt(selectedProjectId));
   }
 
-  // Appel de la méthode pour afficher les tâches dans la console
-  Task.displayTasks(tasks);
+  // Calculer le progrès du projet au chargement de la page
+  calculateTaskProgress();
 
   let currentFilter = "all";
 
@@ -223,32 +223,38 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Attacher un gestionnaire pour afficher les infos de la tâche
     li.addEventListener("click", () => showTaskInfo(task, li));
 
-    // Attacher un gestionnaire de clic pour le bouton "delete"
-    const deleteBtn = li.querySelector(".delete-btn");
-    if (deleteBtn) {
-      deleteBtn.addEventListener("click", async (e) => {
-        e.stopPropagation(); // Empêcher le clic sur le <li>
+        // Attacher un gestionnaire de clic pour le bouton "delete"
+        const deleteBtn = li.querySelector(".delete-btn");
+        if (deleteBtn) {
+          deleteBtn.addEventListener("click", async (e) => {
+            e.stopPropagation(); // Empêcher le clic sur le <li>
+    
+            console.log("Bouton cliqué. Tâche en cours de suppression :", task);
+    
+            try {
+              const success = await task.deleteTask();
+              console.log("Résultat de task.deleteTask():", success);
+    
+              if (success) {
+                tasks.splice(index, 1);
+                renderTasks();
 
-        console.log("Bouton cliqué. Tâche en cours de suppression :", task);
+                // Calcul du pourcentage d'avancement des taches
+                calculateTaskProgress();
+                // Envoyer modif au server
+                sendProgress("TaskDeleted");
 
-        try {
-          const success = await task.deleteTask();
-          console.log("Résultat de task.deleteTask():", success);
-
-          if (success) {
-            tasks.splice(index, 1);
-            renderTasks();
-            console.log(
-              "Tâche supprimée avec succès. Liste des tâches mise à jour."
-            );
-          } else {
-            console.error("Échec de la suppression de la tâche.");
-          }
-        } catch (error) {
-          console.error("Erreur lors du clic sur le bouton supprimer :", error);
+                console.log(
+                  "Tâche supprimée avec succès. Liste des tâches mise à jour."
+                );
+              } else {
+                console.error("Échec de la suppression de la tâche.");
+              }
+            } catch (error) {
+              console.error("Erreur lors du clic sur le bouton supprimer :", error);
+            }
+          });
         }
-      });
-    }
 
     // Attacher un gestionnaire de clic pour le bouton "completed"
     const completedBtn = li.querySelector(".completed-btn");
@@ -266,6 +272,10 @@ document.addEventListener("DOMContentLoaded", async () => {
           if (success) {
             task.statut = "Terminée"; // Mettre à jour localement l'état de la tâche
             renderTasks(); // Actualiser la liste des tâches
+            
+            // Calcul du pourcentage d'avancement des taches
+            calculateTaskProgress();
+
             console.log("Statut de la tâche mis à jour en 'Terminée'.");
           } else {
             console.error("Échec de la mise à jour du statut de la tâche.");
@@ -293,6 +303,17 @@ document.addEventListener("DOMContentLoaded", async () => {
     }
 
     return li;
+  }
+
+
+  function calculateTaskProgress() {
+    // Calcul du pourcentage d'avancement des taches
+    const totalTasks = tasks.length;
+    const completedTasks = tasks.filter(t => t.statut === "Terminée").length;
+    const progressPercentage = Math.round((completedTasks / totalTasks) * 100);
+    console.log(`Progression du projet : ${progressPercentage}`);
+    // envoyer au webSocket
+    sendProgress(progressPercentage);
   }
 
   /**
@@ -340,7 +361,7 @@ document.addEventListener("DOMContentLoaded", async () => {
                 <label for="IdUser">Id de l'utilisateur assigné</label>
                 <input type="number" id="IdUser" name="IdUser" value="${
                   currentUser.id
-                }" readonly>
+                }" required>
 
                 <button type="submit">Ajouter la tâche</button>
             </form>
@@ -483,6 +504,8 @@ document.addEventListener("DOMContentLoaded", async () => {
         // Ajouter la tâche à la liste
         tasks.push(newTask);
         console.log("Tâche ajoutée avec succès :", newTask);
+        // Envoyer modif au server
+        sendProgress("TaskAdded");
 
         // Actualiser la liste des tâches
         renderTasks();

@@ -1,4 +1,17 @@
 export class Task {
+    colorBank = [
+        "#C0A0BD",
+        "#94A7AE",
+        "#64766A",
+        "#FBE0C3",
+        "#FFBB98",
+        "#7D8E95",
+        "#344648",
+        "#748B6F",
+        "#2A403D",
+        "#D05663",
+      ]
+
     constructor(titre, description, statut, priorite, dateDebut, dateEcheance, idProjet, idUser, id = null) {
         if (!titre || !description || !statut || !priorite || !dateEcheance || !idProjet || !idUser) {
             throw new Error('Données de tâche incomplètes.');
@@ -12,8 +25,15 @@ export class Task {
         this.idProjet = idProjet;
         this.idUser = idUser;
         this.id = id; // L'ID peut être null lors de l'ajout
+        this.color = this.colorBank[Math.floor(Math.random() * this.colorBank.length)];
     }
 
+    /**
+     * @brief Récupère les données des tâches depuis le serveur.
+     * 
+     * Cette méthode envoie une requête pour obtenir la liste des tâches via une API PHP et retourne un tableau d'instances de la classe Task.
+     * @return {Promise<Task[]} Renvoie un tableau d'objets Task avec les données récupérées, ou un tableau vide en cas d'erreur.
+     */
     static async fetchTaskData() {
         try {
             const response = await fetch('/fichiers_include_PHP/task/getTaskData.php');
@@ -84,6 +104,39 @@ export class Task {
         }
     }
 
+    /**
+     * @brief Supprime une tâche du serveur.
+     * 
+     * Cette méthode envoie une requête pour supprimer la tâche en fonction de son ID.
+     * @return {Promise<boolean>} Renvoie true si la tâche a été supprimée avec succès, sinon false.
+     */
+    async deleteTask() {
+        try {
+            console.log("Envoi de la requête DELETE pour la tâche :", this.id);
+            const response = await fetch(`/fichiers_include_PHP/task/deleteTask.php?id=${this.id}`, {
+                method: 'DELETE',
+            });            
+    
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP : ${response.status}`);
+            }
+    
+            // Lire une seule fois le corps de la réponse
+            const rawData = await response.text(); // Lire la réponse brute
+            console.log("Données reçues (brutes) :", rawData);
+    
+            const result = JSON.parse(rawData); // Analyser le JSON
+            if (result.error) {
+                throw new Error(result.error);
+            }
+    
+            return true;  // Suppression réussie
+        } catch (error) {
+            console.error("Erreur lors de la suppression de la tâche :", error);
+            return false;
+        }
+    }
+    
     async updateTask(updatedTaskData) {
         try {
             const response = await fetch(`/fichiers_include_PHP/task/updateTask.php`, {
@@ -115,6 +168,44 @@ export class Task {
         }
     }
 
+    async updateStatus(newStatus) {
+        try {
+            const response = await fetch(`/fichiers_include_PHP/task/updateTaskStatus.php`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    id: this.id,       // ID de la tâche
+                    statut: newStatus // Nouveau statut avec la clé correcte
+                }),
+            });
+    
+            if (!response.ok) {
+                throw new Error(`Erreur HTTP : ${response.status}`);
+            }
+    
+            const result = await response.json();
+            if (result.success) {
+                this.statut = newStatus; // Mettre à jour localement
+                console.log(`Statut mis à jour en "${newStatus}"`);
+                return true;
+            } else {
+                throw new Error(result.error || "Erreur inconnue lors de la mise à jour du statut.");
+            }
+        } catch (error) {
+            console.error("Erreur lors de la mise à jour du statut de la tâche :", error);
+            return false;
+        }
+    }
+    
+    /**
+     * @brief Récupère les tâches liées à un projet spécifique.
+     * 
+     * Cette méthode envoie une requête au serveur pour obtenir les tâches associées à un projet via une API PHP et retourne un tableau d'instances de la classe Task.
+     * @param {number} projectId L'ID du projet pour lequel les tâches doivent être récupérées.
+     * @return {Promise<Task[]>} Renvoie un tableau d'objets Task avec les données récupérées, ou un tableau vide en cas d'erreur.
+     */
     static async fetchTasksByProjectId(projectId) {
         try {
             const response = await fetch(`/fichiers_include_PHP/task/getTaskByProjectAndUser.php?projectId=${projectId}`);
@@ -177,6 +268,12 @@ export class Task {
         }
     }
 
+    /**
+     * @brief Affiche toutes les tâches stockées dans la console.
+     * 
+     * Cette méthode suppose qu'un tableau de tâches est passé en paramètre.
+     * @param {Task[]} tasks Tableau des tâches à afficher.
+     */
     static displayTasks(tasks) {
         if (!Array.isArray(tasks) || tasks.length === 0) {
             console.log("Aucune tâche à afficher.");

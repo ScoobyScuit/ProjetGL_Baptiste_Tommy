@@ -13,10 +13,11 @@ session_start();
   <link rel="stylesheet" href="/dashboard/css/board.css" />
   <link rel="stylesheet" href="/dashboard/indicateur/indicator.css" />
   <link rel="stylesheet" href="/dashboard/calendar/css/stylecalendar.css"/>
+  <link rel="stylesheet" href="/dashboard/calendar/css/styledaycalendar.css"/>
   <link rel="stylesheet" href="/dashboard/calendar/css/styletimeline.css"/>
-  <link rel="stylesheet" href="/dashboard/todolist/checkbox.css" />
-  <link rel="stylesheet" href="/dashboard/todolist/styletodolist.css" />
-  <link rel="stylesheet" href="/dashboard/todolist/addTask.css" />
+  <link rel="stylesheet" href="/dashboard/todolist/css/checkbox.css" />
+  <link rel="stylesheet" href="/dashboard/todolist/css/styletodolist.css" />
+  <link rel="stylesheet" href="/dashboard/todolist/css/addTask.css" />
   <script src="https://cdn.jsdelivr.net/npm/moment@2.29.1/moment.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/interactjs@1.10.11/dist/interact.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/Sortable/1.14.0/Sortable.min.js"></script>
@@ -37,7 +38,7 @@ session_start();
 
       </div>
       <div class="settings">
-        <button class="settings-btn">
+        <button class="settings-btn" style="display: none;" onclick="location.href = '/fichiers_include_PHP/parametre/settings.html';">
           <i class="fa-solid fa-gear"></i>
         </button>
         <button class="profil-btn" onclick="location.href = '/fichiers_include_PHP/profil/profil.html';">
@@ -70,7 +71,7 @@ session_start();
         <!-- Start Todolist -->
         <div class="todolist">
           <div class="container-todolist">
-            <h1>Ma Liste de Tâches avec Validation</h1>
+            <h1>Liste de tâches :</h1>
 
             <!-- Formulaire d'ajout de tâche -->
             <div id="addTaskModal" class="modal" style="display:none;"></div>
@@ -121,7 +122,7 @@ session_start();
             </div>
           </button>
           <!-- Bouton d'ajout de tâche -->
-          <button class="add-task-btn" id="openAddTaskModal" onclick="openAddTaskModal()">
+          <button class="add-task-btn hidden" id="openAddTaskModal" onclick="openAddTaskModal()">
             <div class="buttondesign">
               <i class="fa-solid fa-plus"></i>Ajouter une tâche
             </div>
@@ -145,7 +146,8 @@ session_start();
     <!-- Inclusion des scripts -->
     <script type="module" src="/dashboard/todolist/scripttodolist.js"></script>
     <script type="module" src="/dashboard/calendar/scriptcalendar.js"></script>
-    <script src="/dashboard/indicateur/scriptindicator.js"></script>
+    <script type="module" src="/dashboard/indicateur/scriptindicator.js"></script>
+    <script type="module" src="/dashboard/permissions.js"></script>
     <script src="https://kit.fontawesome.com/cd0d448035.js" crossorigin="anonymous"></script>
   </div>
 </body>
