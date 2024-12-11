@@ -117,21 +117,6 @@ INSERT INTO `task` (`IdTask`, `TitreTask`, `DescriptionTask`, `StatutTask`, `Pri
 -- --------------------------------------------------------
 
 --
--- Structure de la table `timetracker`
---
-
-DROP TABLE IF EXISTS `timetracker`;
-CREATE TABLE IF NOT EXISTS `timetracker` (
-  `IdTT` int NOT NULL AUTO_INCREMENT,
-  `IdTask` int NOT NULL,
-  `IdUser` int NOT NULL,
-  `Time` time DEFAULT NULL,
-  PRIMARY KEY (`IdTT`,`IdTask`,`IdUser`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `user`
 --
 
@@ -155,51 +140,6 @@ INSERT INTO `user` (`IdUser`, `NomUser`, `PrenomUser`, `EmailUser`, `RoleUser`) 
 (31, 'MINET', 'Baptiste', 'bminet08@gmail.com', 'Membre');
 
 -- --------------------------------------------------------
-
---
--- Structure de la table `permissions `
---
-
-CREATE TABLE IF NOT EXISTS permissions (
-    IdPermission INT NOT NULL AUTO_INCREMENT,
-    NamePermission VARCHAR(100) NOT NULL,
-    PRIMARY KEY (IdPermission)
-);
-
---
--- Déchargement des données de la table `permissions`
---
-
-INSERT INTO permissions (NamePermission) VALUES
-('Gérer utilisateurs'),
-('Créer projets'),
-('Voir indicateurs'),
-('Assigner tâches'),
-('Commenter tâches');
-
-
--- --------------------------------------------------------
-
---
--- Structure de la table `role_permissions `
---
-
-CREATE TABLE IF NOT EXISTS role_permissions (
-    Role ENUM('Administrateur', 'Chef de projet', 'Membre') NOT NULL,
-    PermissionId INT NOT NULL,
-    FOREIGN KEY (PermissionId) REFERENCES permissions(IdPermission),
-    PRIMARY KEY (Role, PermissionId)
-);
-
---
--- Déchargement des données de la table `role_permissions`
---
-
-INSERT INTO role_permissions (Role, PermissionId) VALUES
-('Administrateur', 1), -- Gérer utilisateurs
-('Chef de projet', 2), -- Créer projets
-('Membre', 5);         -- Commenter tâches
-
 
 COMMIT;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
