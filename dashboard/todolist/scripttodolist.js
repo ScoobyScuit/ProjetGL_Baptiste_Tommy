@@ -318,6 +318,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     sendProgress(progressPercentage);
   }
 
+    // Fonction pour obtenir la date actuelle au format YYYY-MM-DD
+    function getCurrentDate() {
+      const today = new Date();
+      const year = today.getFullYear();
+      const month = String(today.getMonth() + 1).padStart(2, "0"); // Ajoute un zéro pour les mois < 10
+      const day = String(today.getDate()).padStart(2, "0"); // Ajoute un zéro pour les jours < 10
+      return `${year}-${month}-${day}`;
+  }
+
   /**
    * @brief Ouvre le formulaire pour ajouter une nouvelle tâche.
    * @param currentUser L'utilisateur actuellement connecté.
@@ -350,10 +359,12 @@ document.addEventListener("DOMContentLoaded", async () => {
                 </select>
 
                 <label for="DateDebTask">Date de création</label>
-                <input type="date" id="DateDebTask" name="DateDebTask" required>
+                <input type="date" id="DateDebTask" name="DateDebTask"
+                value="${getCurrentDate()}" required>
 
                 <label for="DateEchTask">Date d'échéance</label>
-                <input type="date" id="DateEchTask" name="DateEchTask" required>
+                <input type="date" id="DateEchTask" name="DateEchTask"
+                value="${getCurrentDate()}" required>
 
                 <label for="IdProjet">Id du projet associé</label>
                 <input type="number" id="IdProjet" name="IdProjet" value="${
