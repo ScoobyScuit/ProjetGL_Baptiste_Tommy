@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "indicateur": "file:",
     "ws": "^8.18.0"
   },
   "scripts": {
