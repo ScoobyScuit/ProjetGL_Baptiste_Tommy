@@ -57,11 +57,10 @@ function connectWebSocket() {
 async function handleCommand(command) {
     switch (command) {
         case "TaskAdded":
-            console.log("Commande reçue : TaskAdded. Rafraîchissement du calendrier...");
-            await updateCalendarAndTimeline(); // Mettre à jour calendrier et timeline
-            break;
         case "TaskDeleted":
-            console.log("Commande reçue : TaskDeleted. Mise à jour du calendrier...");
+        case "TaskCompleted":
+        case "TaskEdited":
+            console.log("Commande reçue. Rafraîchissement du calendrier...");
             await updateCalendarAndTimeline(); // Mettre à jour calendrier et timeline
             break;
         default:
