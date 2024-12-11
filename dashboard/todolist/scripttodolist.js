@@ -307,7 +307,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     return li;
   }
 
-
+  /**
+   * @brief Calcule le pourcentage de progrès du projet selectionné
+   */
   function calculateTaskProgress() {
     // Calcul du pourcentage d'avancement des taches
     const totalTasks = tasks.length;
