@@ -232,3 +232,9 @@ Valider cette conception avec les parties prenantes ou les autres membres de l�
 **Tâches :**
 * Rédiger la documentation technique sur l’architecture, l’API, la base de données, les tests, etc.
 * Préparer une présentation en expliquant les principales fonctionnalités, l’architecture et les défis rencontrés.
+
+*** Tests ***
+* Se positionner dans /projet
+* npm install
+* npm install --save-dev babel-jest @babel/core @babel/preset-env
+* npm test

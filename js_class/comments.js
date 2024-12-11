@@ -25,20 +25,11 @@ export class Comments {
    */
   static async fetchCommentsByTaskId(taskId) {
     try {
-      console.log(
-        "Demande de récupération des commentaires pour la tâche :",
-        taskId
-      );
-
       const response = await fetch(
         `/fichiers_include_PHP/comments/getCommentsByTask.php?taskId=${taskId}`
       );
 
-      console.log("Réponse brute reçue (fetch) :", response);
-
       const data = await response.json();
-
-      console.log("Données JSON parsées :", data);
 
       if (response.ok) {
         return data.map(

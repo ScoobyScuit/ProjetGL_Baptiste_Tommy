@@ -53,7 +53,8 @@ export class User {
         userData.RoleUser
       );
     } catch (error) {
-      console.error(error);
+      console.error("Erreur dans fetchUserData :", error);
+      return null;
     }
   }
 

@@ -43,7 +43,7 @@ export class Project {
   static async fetchProjectData() {
     try {
       const response = await fetch(
-        "../../fichiers_include_PHP/getProjectData.php"
+        "/fichiers_include_PHP/getProjectData.php"
       );
 
       if (!response.ok) {

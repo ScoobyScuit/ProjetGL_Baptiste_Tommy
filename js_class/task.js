@@ -1,3 +1,9 @@
+/**
+ * @class Task
+ * @brief Classe représentant une tache dans le système.
+ *
+ * Cette classe gère les données des taches et toutes les opérations liées aux taches
+ */
 export class Task {
   colorBank = [
     "#C0A0BD",
