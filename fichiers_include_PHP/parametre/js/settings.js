@@ -1,6 +1,8 @@
 import { User } from "/js_class/user.js";
 import { Task } from "/js_class/task.js";
 
+let currentUser = null;
+
 (async function () {
   const userSelect = document.getElementById("user-select");
   const roleSelect = document.getElementById("role-select");
@@ -9,8 +11,16 @@ import { Task } from "/js_class/task.js";
   const taskSelect = document.getElementById("task-select");
   const assignUserSelect = document.getElementById("assign-user-select");
   const assignTaskBtn = document.getElementById("assign-task-btn");
+  const roleManagement = document.querySelector(".role-management");
 
-  // Charger les utilisateurs
+  // Récupérer les données utilisateur connecté
+  currentUser = await User.fetchUserData();
+  // Permissions de modifcation
+  if (currentUser.role === "Administrateur") {
+    roleManagement.style.display = "block";
+  }
+
+  // Charger tous les utilisateurs
   const users = await User.fetchAllUsers();
 
   users.forEach((user) => {

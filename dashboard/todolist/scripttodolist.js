@@ -275,7 +275,8 @@ document.addEventListener("DOMContentLoaded", async () => {
             
             // Calcul du pourcentage d'avancement des taches
             calculateTaskProgress();
-
+            // Envoyer modif au server
+            sendProgress("TaskCompleted");
             console.log("Statut de la tâche mis à jour en 'Terminée'.");
           } else {
             console.error("Échec de la mise à jour du statut de la tâche.");
@@ -292,13 +293,14 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Attacher un gestionnaire de clic pour le bouton "edit"
     const editBtn = li.querySelector(".edit-btn");
     if (editBtn) {
-      editBtn.addEventListener("click", (e) => {
+      editBtn.addEventListener("click", async (e) => {
         e.stopPropagation(); // Empêcher le clic sur le <li>
 
         console.log("Bouton cliqué. Tâche en cours d'édition :", task);
 
         // Ouvrir le formulaire de modification et pré-remplir les champs avec les données existantes
-        openEditTaskModal(task);
+        await openEditTaskModal(task); // Attendre la résolution de la Promise
+        sendProgress("TaskEdited"); // Envoyer la progression une fois la tâche modifiée
       });
     }
 
@@ -374,29 +376,37 @@ document.addEventListener("DOMContentLoaded", async () => {
    * @param {Task} task La tâche à modifier.
    */
   function openEditTaskModal(task) {
-    const modal = document.getElementById("addTaskModal");
-    modal.style.display = "block";
+    return new Promise((resolve) => {
+        const modal = document.getElementById("addTaskModal");
+        modal.style.display = "block";
 
-    // Pré-remplir le formulaire avec les données existantes
-    document.getElementById("TitreTask").value = task.titre;
-    document.getElementById("DescriptionTask").value = task.description;
-    document.getElementById("StatutTask").value = task.statut;
-    document.getElementById("PrioriteTask").value = task.priorite;
-    document.getElementById("DateDebTask").value = task.dateDebut;
-    document.getElementById("DateEchTask").value = task.dateEcheance;
-    document.getElementById("IdProjet").value = task.idProjet;
-    document.getElementById("IdUser").value = task.idUser;
+        // Pré-remplir le formulaire avec les données existantes
+        document.getElementById("TitreTask").value = task.titre;
+        document.getElementById("DescriptionTask").value = task.description;
+        document.getElementById("StatutTask").value = task.statut;
+        document.getElementById("PrioriteTask").value = task.priorite;
+        document.getElementById("DateDebTask").value = task.dateDebut;
+        document.getElementById("DateEchTask").value = task.dateEcheance;
+        document.getElementById("IdProjet").value = task.idProjet;
+        document.getElementById("IdUser").value = task.idUser;
 
-    // Modifier le texte du bouton pour refléter une modification
-    const submitButton = document.querySelector(
-      "#task-form button[type='submit']"
-    );
-    submitButton.textContent = "Modifier la tâche";
+        // Modifier le texte du bouton pour refléter une modification
+        const submitButton = document.querySelector("#task-form button[type='submit']");
+        submitButton.textContent = "Modifier la tâche";
 
-    // Activer le mode édition
-    isEditing = true;
-    editingTask = task; // Associe la tâche modifiée
-  }
+        // Activer le mode édition
+        isEditing = true;
+        editingTask = task;
+
+        // Attendre la soumission du formulaire pour résoudre la Promise
+        const form = document.getElementById("task-form");
+        form.onsubmit = (event) => {
+            event.preventDefault(); // Empêcher le comportement par défaut
+            modal.style.display = "none"; // Fermer le modal
+            resolve(); // Résoudre la Promise une fois le formulaire soumis
+        };
+    });
+}
 
   /*
    * Ferme le modal de formulaire d'ajout/modification de tâche.
