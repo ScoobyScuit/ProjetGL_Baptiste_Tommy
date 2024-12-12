@@ -11,69 +11,99 @@ document.addEventListener("DOMContentLoaded", async () => {
   deleteProjectModal.id = "deleteProjectModalContent";
   document.body.appendChild(deleteProjectModal);
 
-  const projectsListDiv = document.getElementById("projects-list"); // Conteneur des projets
+  const projectsListDiv = document.getElementById("projects-list");
 
   // Récupérer les données utilisateur
-  currentUser = await User.fetchUserData();
+  try {
+    currentUser = await User.fetchUserData();
+    console.log("Utilisateur courant récupéré :", currentUser);
 
-  // Afficher les boutons si l'utilisateur est Administrateur ou Chef de projet
-  if (
-    currentUser.role === "Administrateur" ||
-    currentUser.role === "Chef de projet"
-  ) {
-    addProjectButton.classList.remove("hidden");
-    deleteProjectButton.classList.remove("hidden");
+    // Afficher les boutons si l'utilisateur est Administrateur ou Chef de projet
+    if (
+      currentUser.role === "Administrateur" ||
+      currentUser.role === "Chef de projet"
+    ) {
+      addProjectButton.classList.remove("hidden");
+      if (deleteProjectButton) deleteProjectButton.classList.remove("hidden");
+    }
+  } catch (error) {
+    console.error(
+      "Erreur lors de la récupération des données utilisateur :",
+      error
+    );
+    return;
   }
 
   /**
-   * @brief Fonction pour afficher les projets en fonction du rôle utilisateur.
+   * @brief Fonction pour afficher les projets.
    */
   async function displayProjects() {
-    let projects = [];
+    const projects =
+      currentUser.role === "Administrateur"
+        ? await Project.fetchAllProjectData()
+        : await Project.fetchProjectData();
 
-    // Vérifier le rôle pour choisir la méthode de récupération
-    if (currentUser.role === "Administrateur") {
-      projects = await Project.fetchAllProjectData();
-    } else {
-      projects = await Project.fetchProjectData();
-    }
+    // Récupérer l'ID du projet sélectionné depuis localStorage
+    const selectedProjectId = localStorage.getItem("selectedProjectId");
 
-    // Afficher les projets dans le DOM
-    if (projects.length > 0) {
-      projectsListDiv.innerHTML = ""; // Nettoyer le conteneur
+    projectsListDiv.innerHTML = projects.length
+      ? projects
+          .map(
+            (p) => `
+        <div class="project-item ${
+          selectedProjectId == p.id ? "selected" : ""
+        }" data-project-id="${p.id}">
+          <div class="project-icon">
+            <i class="fa-solid fa-folder"></i>
+          </div>
+          <h3>${p.nom}</h3>
+          <p>${p.description}</p>
+          <strong>ID Chef:</strong> ${p.idChef}
+          <button class="delete-project-btn" data-project-id="${p.id}">
+            <i class="fa-solid fa-trash"></i> Supprimer
+          </button>
+        </div>
+`
+          )
+          .join("")
+      : "<p>Aucun projet trouvé.</p>";
 
-      projects.forEach((project) => {
-        const projectDiv = document.createElement("div");
-        projectDiv.className = "project-item";
+    // Gestion de la sélection des projets
+    document.querySelectorAll(".project-item").forEach((projectDiv) => {
+      projectDiv.addEventListener("click", () => {
+        const projectId = projectDiv.getAttribute("data-project-id");
 
-        projectDiv.innerHTML = `
-          <strong>ID du projet:</strong> ${project.id} <br>
-          <strong>Nom du projet:</strong> ${project.nom} <br>
-          <strong>Description:</strong> ${project.description} <br>
-          <strong>Date de début:</strong> ${project.dateDebut} <br>
-          <strong>Date de fin:</strong> ${project.dateFin} <br>
-          <strong>ID du chef:</strong> ${project.idChef} <br>
-        `;
+        // Désélectionner tous les projets
+        document
+          .querySelectorAll(".project-item")
+          .forEach((item) => item.classList.remove("selected"));
 
-        projectsListDiv.appendChild(projectDiv);
+        // Ajouter la classe "selected" au projet sélectionné
+        projectDiv.classList.add("selected");
+
+        // Sauvegarder l'ID du projet dans localStorage
+        localStorage.setItem("selectedProjectId", projectId);
+        console.log(`Projet sélectionné : ${projectId}`);
       });
-    } else {
-      projectsListDiv.innerHTML = "<p>Aucun projet trouvé.</p>";
-    }
-  }
+    });
 
-  // Appeler l'affichage des projets après récupération des données utilisateur
-  displayProjects();
-
-  /**
-   * @brief Fonction pour obtenir la date actuelle au format YYYY-MM-DD.
-   */
-  function getCurrentDate() {
-    const today = new Date();
-    const year = today.getFullYear();
-    const month = String(today.getMonth() + 1).padStart(2, "0");
-    const day = String(today.getDate()).padStart(2, "0");
-    return `${year}-${month}-${day}`;
+    // Gestion des boutons de suppression
+    document.querySelectorAll(".delete-project-btn").forEach((button) => {
+      button.addEventListener("click", async (e) => {
+        e.stopPropagation(); // Empêcher le clic de sélectionner le projet
+        const projectId = button.getAttribute("data-project-id");
+        if (confirm("Voulez-vous vraiment supprimer ce projet ?")) {
+          const projectToDelete = new Project(projectId);
+          const success = await projectToDelete.deleteProject();
+          if (success) {
+            alert("Projet supprimé avec succès !");
+            displayProjects();
+          } else {
+            alert("Erreur lors de la suppression du projet.");
+          }
+        }
+      });
+    });
   }
 
   /**
@@ -81,85 +111,66 @@ document.addEventListener("DOMContentLoaded", async () => {
    */
   addProjectButton.addEventListener("click", () => {
     addProjectModal.innerHTML = `
-    <div class="modal-content">
-      <span class="close" id="closeProjectModal">&times;</span>
-      <h2>Ajouter un projet</h2>
-      <form id="project-form">
-        <label for="project-name">Nom du projet</label>
-        <input type="text" id="project-name" required>
+        <div class="modal-content flat-card">
+          <span class="close" id="closeProjectModal">&times;</span>
+          <h2 class="modal-title">Ajouter un projet</h2>
+          <form id="project-form" class="flat-form">
+            <label>Nom</label>
+            <input type="text" id="project-name" required>
+            
+            <label>Description</label>
+            <textarea id="project-description" required></textarea>
+            
+            <label>Date de début</label>
+            <input type="date" id="project-start-date" required>
+            
+            <label>Date de fin</label>
+            <input type="date" id="project-end-date" required>
+            
+            <label>ID Chef</label>
+            <input type="number" id="project-id-chief" value="1" required>
+            
+            <button type="submit" class="flat-button">Ajouter</button>
+          </form>
+        </div>
+         `;
 
-        <label for="project-description">Description</label>
-        <textarea id="project-description" required></textarea>
-
-        <label for="project-start-date">Date de début</label>
-        <input type="date" id="project-start-date" value="${getCurrentDate()}" required>
-
-        <label for="project-end-date">Date de fin</label>
-        <input type="date" id="project-end-date" value="${getCurrentDate()}" required>
-
-        <label for="project-id-chief">ID du chef du projet</label>
-        <input type="number" id="project-id-chief" value="${
-          currentUser.id
-        }" required>
-
-        <button type="submit">Ajouter le projet</button>
-      </form>
-    </div>
-  `;
     addProjectModal.style.display = "block";
+    document.body.classList.add("modal-open");
 
-    // Fermer le modal
     document
       .getElementById("closeProjectModal")
       .addEventListener("click", () => {
         addProjectModal.style.display = "none";
+        document.body.classList.remove("modal-open");
       });
 
-    // Variable pour stocker l'ID du chef
-    let selectedProjectChiefId = currentUser.id;
-
-    // Écouteur pour détecter les changements dans le champ ID du chef de projet
-    const projectIdChiefInput = document.getElementById("project-id-chief");
-    projectIdChiefInput.addEventListener("input", (event) => {
-      selectedProjectChiefId = event.target.value;
-      console.log(
-        `Nouvelle valeur de l'ID du chef : ${selectedProjectChiefId}`
-      );
-    });
-
-    // Soumission du formulaire
     document
       .getElementById("project-form")
       .addEventListener("submit", async (e) => {
         e.preventDefault();
 
-        const projectName = document.getElementById("project-name").value;
-        const projectDescription = document.getElementById(
-          "project-description"
-        ).value;
-        const projectStartDate =
-          document.getElementById("project-start-date").value;
-        const projectEndDate =
-          document.getElementById("project-end-date").value;
-
-        // Utiliser la valeur mise à jour pour l'ID du chef
         const newProject = new Project(
           null,
-          projectName,
-          projectDescription,
-          projectStartDate,
-          projectEndDate,
-          selectedProjectChiefId // Valeur dynamique
+          document.getElementById("project-name").value,
+          document.getElementById("project-description").value,
+          document.getElementById("project-start-date").value,
+          document.getElementById("project-end-date").value,
+          document.getElementById("project-id-chief").value
         );
 
         const success = await newProject.addProject();
-
         if (success) {
+          alert("Projet ajouté avec succès !");
           addProjectModal.style.display = "none";
-          location.reload();
+          document.body.classList.remove("modal-open");
+          displayProjects();
         } else {
           alert("Erreur lors de l'ajout du projet.");
         }
       });
   });
+
+  // Initialisation des projets
+  await displayProjects();
 });

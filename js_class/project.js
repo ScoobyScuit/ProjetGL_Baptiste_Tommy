@@ -88,7 +88,7 @@ export class Project {
    */
 
   static async fetchAllProjectData() {
-    const apiUrl = "/fichiers_include_PHP/getAllProjectData.php"; // URL de l'API
+    const apiUrl = "/fichiers_include_PHP/getAllProjectData.php";
     try {
       const response = await fetch(apiUrl);
 
