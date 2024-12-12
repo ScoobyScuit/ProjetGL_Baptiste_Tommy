@@ -4,9 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Profil Utilisateur</title>
-    <!-- projet style -->
+    <!-- Styles CSS -->
     <link rel="stylesheet" href="/fichiers_include_PHP/projet/css/projet.css" />
-    <!-- navbar style -->
     <link rel="stylesheet" href="/dashboard/css/board.css" />
     <link rel="stylesheet" href="/dashboard/indicateur/indicator.css" />
     <link
@@ -49,110 +48,38 @@
         </div>
       </nav>
       <!-- End Navbar -->
+
       <h1>Projets utilisateur</h1>
 
-      <div>
-        <!-- Bouton pour Supprimer un projet -->
-        <button class="delete-project-btn hidden" id="deleteProjectModal">
-          <div class="buttondesign">
-            <i class="fa-solid fa-plus"></i>Supprimer un projet
-          </div>
-        </button>
+      <!-- Bouton pour Ajouter un projet -->
+      <button class="add-project-btn hidden" id="openAddProjectModal">
+        <div class="buttondesign">
+          <i class="fa-solid fa-plus"></i> Ajouter un projet
+        </div>
+      </button>
 
-        <!-- Bouton pour ajouter un projet -->
-        <button class="add-project-btn hidden" id="openAddProjectModal">
-          <div class="buttondesign">
-            <i class="fa-solid fa-plus"></i>Ajouter un projet
-          </div>
-        </button>
+      <!-- Bouton pour Supprimer un projet -->
+      <button class="delete-project-btn hidden" id="deleteProjectModal">
+        <div class="buttondesign">
+          <i class="fa-solid fa-trash"></i> Supprimer un projet
+        </div>
+      </button>
 
-        <!-- Conteneur pour le formulaire modal -->
-        <div id="addProjectModal" class="modal" style="display: none"></div>
-      </div>
+      <!-- Conteneur pour afficher les projets -->
       <div id="projects-list" class="projects-list">
-        <!-- Les projets seront insérés ici -->
+        <!-- Les projets seront insérés ici par JS -->
       </div>
+
+      <!-- Modale dynamique pour ajouter des projets -->
+      <div id="addProjectModal" class="modal" style="display: none"></div>
     </div>
 
-    <!-- Import des modules avant les scripts inline -->
+    <!-- Import des scripts externes -->
     <script type="module" src="/js_class/project.js"></script>
     <script type="module" src="/dashboard/permissions.js"></script>
+    <script type="module" src="/fichiers_include_PHP/projet/scriptproject.js"></script>
 
-    <!-- Script inline -->
-    <script type="module">
-      import { Project } from "/js_class/project.js";
-
-      (async () => {
-        const projectsListDiv = document.getElementById("projects-list");
-
-        // Fetch project data
-        const projects = await Project.fetchProjectData();
-
-        // Récupérer l'ID du projet sélectionné depuis localStorage
-        const selectedProjectId = localStorage.getItem("selectedProjectId");
-
-        if (projects && projects.length > 0) {
-          projects.forEach((project) => {
-            // Créer une div pour chaque projet
-            const projectDiv = document.createElement("div");
-            projectDiv.className = "project-item";
-
-            // Ajouter le contenu HTML du projet
-            projectDiv.innerHTML = `
-                <strong>Id du projet:</strong> ${project.id}
-                <br>
-                <strong>Nom du projet:</strong> ${project.nom}
-                <br>
-                <strong>Description:</strong> ${project.description}
-                <br>
-                <strong>Date de début:</strong> ${project.dateDebut}
-                <br>
-                <strong>Date de fin:</strong> ${project.dateFin}
-                <br>
-                <strong>Chef de projet (ID):</strong> ${project.idChef}
-                <br>
-                <!-- Bouton de sélection de projet -->
-                <button class="select-project-btn" data-project-id="${project.id}">Sélectionner ce projet</button>
-            `;
-
-            // Ajouter le projet à la liste
-            projectsListDiv.appendChild(projectDiv);
-
-            // Ajouter la classe 'selected' si ce projet est celui sélectionné (comparé avec localStorage)
-            if (project.id === parseInt(selectedProjectId)) {
-              projectDiv.classList.add("selected");
-              project.isSelected = 1; // Marquer l'objet comme sélectionné
-              console.log(`Projet restauré: ID ${project.id}`);
-            }
-
-            // Ajouter un écouteur d'événement pour sélectionner un projet
-            projectDiv.addEventListener("click", () => {
-              const allProjectItems =
-                document.querySelectorAll(".project-item");
-              allProjectItems.forEach((item) =>
-                item.classList.remove("selected")
-              );
-
-              projectDiv.classList.add("selected");
-              projects.forEach((p) => (p.isSelected = null));
-              project.isSelected = 1;
-
-              localStorage.setItem("selectedProjectId", project.id);
-              console.log(
-                `Projet sélectionné ID: ${project.id} | isSelected: ${project.isSelected}`
-              );
-            });
-          });
-        } else {
-          projectsListDiv.innerHTML = "Aucun projet trouvé.";
-        }
-      })();
-    </script>
-
-    <script
-      type="module"
-      src="/fichiers_include_PHP/projet/scriptproject.js"
-    ></script>
+    <!-- FontAwesome pour les icônes -->
     <script
       src="https://kit.fontawesome.com/cd0d448035.js"
       crossorigin="anonymous"
