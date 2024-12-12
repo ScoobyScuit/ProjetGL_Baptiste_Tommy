@@ -106,6 +106,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     });
   }
 
+
+  /**
+   * @brief Fonction pour obtenir la date actuelle au format YYYY-MM-DD 
+   */
+  function getCurrentDate() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, "0"); // Ajoute un zéro pour les mois < 10
+    const day = String(today.getDate()).padStart(2, "0"); // Ajoute un zéro pour les jours < 10
+    return `${year}-${month}-${day}`;
+  }
+
   /**
    * @brief Gestionnaire d'événement pour ouvrir le formulaire d'ajout de projet.
    */
@@ -122,13 +134,17 @@ document.addEventListener("DOMContentLoaded", async () => {
             <textarea id="project-description" required></textarea>
             
             <label>Date de début</label>
-            <input type="date" id="project-start-date" required>
+            <input type="date" id="project-start-date" 
+            value="${getCurrentDate()}" required>
             
             <label>Date de fin</label>
-            <input type="date" id="project-end-date" required>
+            <input type="date" id="project-end-date" 
+            value="${getCurrentDate()}" required>
             
             <label>ID Chef</label>
-            <input type="number" id="project-id-chief" value="1" required>
+            <input type="number" id="project-id-chief" value="${
+              currentUser.id
+            }" required>
             
             <button type="submit" class="flat-button">Ajouter</button>
           </form>

@@ -1,11 +1,33 @@
+/**
+ * @file calendar.js
+ * @brief Gère les fonctionnalités du calendrier et de la timeline dans l'application.
+ * @author Votre Nom
+ * @date 2024-12-11
+ */
+
 import { Task } from "/js_class/task.js";
 import { User } from "/js_class/user.js";
 
+/**
+ * @brief Change le mois affiché dans le calendrier.
+ * @param {number} delta - Nombre de mois à ajouter (positif ou négatif).
+ */
 let currentUser = null;
+/**
+ * @var {Array} tasks
+ * @brief Liste des tâches liées au projet sélectionné.
+ */
 let tasks = [];
+/**
+ * @var {Object} selectedDate
+ * @brief Date actuellement sélectionnée pour le calendrier.
+ */
 let selectedDate = moment();
 
 // ====================== INITIALISATION ======================
+/**
+ * @brief Initialise les éléments du DOM et charge les données utilisateur.
+ */
 document.addEventListener("DOMContentLoaded", async () => {
   await initializeUser();
   initializeTabs();
@@ -17,6 +39,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 });
 
 // ==================== INITIALISER UTILISATEUR ====================
+/**
+ * @brief Initialise les données de l'utilisateur connecté.
+ */
 async function initializeUser() {
   currentUser = await User.fetchUserData();
   if (currentUser) {
@@ -44,6 +69,9 @@ async function initializeUser() {
 }
 
 // ========================= ONGLET =========================
+/**
+ * @brief Initialise les onglets et gère leurs interactions.
+ */
 function initializeTabs() {
   const tabButtons = document.querySelectorAll(".tab-button");
   const tabContents = document.querySelectorAll(".tab-content");
@@ -79,6 +107,9 @@ function initializeTabs() {
 }
 
 // ========================= MODAL =========================
+/**
+ * @brief Initialise les fenêtres modales pour ajouter ou modifier des tâches.
+ */
 function initializeModals() {
   const addTaskModal = document.getElementById("addTaskModal");
   const editTaskModal = document.getElementById("editTaskModal");
@@ -102,6 +133,9 @@ function initializeModals() {
 }
 
 // ======================= CALENDRIER ========================
+/**
+ * @brief Crée et affiche le calendrier.
+ */
 function createCalendar() {
   const calendarElement = document.getElementById("calendar");
   const startOfMonth = moment(selectedDate).startOf("month");
@@ -194,6 +228,9 @@ const getPriorityClass = (priority) => {
   return "";
 };
 
+/**
+ * @brief Crée et affiche la timeline pour une date sélectionnée.
+ */
 async function createTimeline() {
   const timelineContent = document.getElementById("timeline-content");
   const today = selectedDate.format("YYYY-MM-DD");
@@ -302,6 +339,14 @@ async function createTimeline() {
 }
 
 // ================== METTRE À JOUR CALENDRIER ET TIMELINE ==================
+/**
+ * @brief Met à jour le calendrier et la timeline pour un projet sélectionné.
+ * @details Cette fonction recharge les tâches du projet sélectionné depuis le serveur, 
+ *          en fonction du rôle de l'utilisateur connecté, puis rafraîchit l'affichage 
+ *          du calendrier et de la timeline.
+ * @async
+ * @throws Génère une erreur en cas de problème lors de la récupération des tâches ou de l'actualisation de l'affichage.
+ */
 export async function updateCalendarAndTimeline() {
   try {
     const selectedProjectId = localStorage.getItem("selectedProjectId");
@@ -331,7 +376,12 @@ export async function updateCalendarAndTimeline() {
   }
 }
 
+
 // ====================== CHANGER DE MOIS =====================
+/**
+ * @brief Change le mois affiché dans le calendrier.
+ * @param {number} delta - Nombre de mois à ajouter (positif ou négatif).
+ */
 function changeMonth(delta) {
   selectedDate.add(delta, "month");
   createCalendar();
@@ -339,6 +389,10 @@ function changeMonth(delta) {
 }
 
 // ================= INDICATEUR DE TEMPS ====================
+/**
+ * @brief Initialise l'indicateur de temps actuel sur la timeline.
+ * @details Met à jour l'indicateur toutes les minutes pour refléter l'heure courante.
+ */
 function initializeTimeIndicator() {
   function updateIndicator() {
     const now = new Date();
@@ -363,7 +417,11 @@ function initializeTimeIndicator() {
   updateIndicator();
 }
 
-// ================= Affiche et ferme la fenetre d'ajout de taches
+// ================= Affiche et ferme la fenetre d'ajout de taches =================
+/**
+ * @brief Ouvre la fenêtre modale pour ajouter une tâche.
+ * @details Affiche la modale en modifiant son style CSS.
+ */
 function openAddTaskModal() {
   const addTaskModal = document.getElementById("addTaskModal");
   if (addTaskModal) {
@@ -373,6 +431,10 @@ function openAddTaskModal() {
   }
 }
 
+/**
+ * @brief Ferme la fenêtre modale pour ajouter une tâche.
+ * @details Cache la modale en modifiant son style CSS.
+ */
 function closeAddTaskModal() {
   const modal = document.getElementById("addTaskModal");
   if (modal) {
@@ -382,9 +444,9 @@ function closeAddTaskModal() {
   }
 }
 
-// Rendre la fonction accessible globalement
+/**
+ * @brief Rend les fonctions globales pour être accessibles via le DOM.
+ */
 window.closeAddTaskModal = closeAddTaskModal;
-// Rendre la fonction accessible globalement
 window.openAddTaskModal = openAddTaskModal;
-// Rendre la fonction accessible globalement
 window.changeMonth = changeMonth;

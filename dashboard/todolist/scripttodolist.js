@@ -317,7 +317,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     sendProgress(progressPercentage);
   }
 
-    // Fonction pour obtenir la date actuelle au format YYYY-MM-DD
+  /**
+   * @brief Fonction pour obtenir la date actuelle au format YYYY-MM-DD 
+   */
     function getCurrentDate() {
       const today = new Date();
       const year = today.getFullYear();
