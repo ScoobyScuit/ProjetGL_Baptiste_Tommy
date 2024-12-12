@@ -1,10 +1,10 @@
+
 :root {
   /* Variables Globales */
   --primary: #4a90e2;
   --background: #f5f7fa;
   --tab-height: 3rem;
   --border-radius: 30px;
-  --shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
 /* --------------------------- Tab container and buttons --------------------------- */
@@ -67,7 +67,7 @@
   padding: 10px;
 }
 
-.precedent, .suivant {
+.calendar-header button{
   font-family: "Geologica", sans-serif;
   width: 10rem;
   padding: 15px;
@@ -80,8 +80,8 @@
   border: none;
   gap: 12px;
   background-color: #e0e0e0;
-  color: #0171DF;
-  transition: 0.5s ease-in;
+  color: white;
+  transition: 0.1s ease-in;
   cursor: pointer;
 }
 
@@ -93,7 +93,7 @@
   color: #0171DF;
   border-radius: 60%;
   padding: 15px;
-  transition: 0.5s ease-in;
+  transition: 0.1s ease-in;
 }
 
 .tab-button:hover .fa-timeline,
@@ -101,22 +101,33 @@
 .tab-button:hover .fa-plus {
   background-color: white;
   color: #0171DF;
-  transition: 0.5s ease-in;
+  transition: 0.1s ease-in;
+}
+.scrollable-content{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  height: 100%;
+  padding-right: 10px;
+  border-radius: 10px;
+  width: 100%;
+  overflow-y: auto;
+  background-color: #ffffff;
 }
 
 /* --------------------------- Tab content --------------------------- */
 .tab-content {
-  display: none;
+  display: none; /* Par défaut, les onglets sont masqués */
   width: 100%;
   height: 100%;
   position: relative;
-  transform: translateY(10px);
+  transform: translateY(10px); /* Déplacement initial pour un effet fluide */
   transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .tab-content.active {
-  display: block;
-  transform: translateY(0);
+  display: block; /* Affiche le contenu actif */
+  transform: translateY(0); /* Réinitialise le déplacement */
 }
 
 /* --------------------------- Scrollbar and Timeline --------------------------- */
@@ -130,7 +141,6 @@
   border-radius: 20px;
   height: 100%;
   background: white;
-  box-shadow: var(--shadow);
   overflow: hidden;
 }
 
@@ -139,27 +149,39 @@
   overflow-x: auto;
   overflow-y: hidden;
   background-color: white;
+  justify-content: center;
+  align-items: center;
   border-radius: 20px;
   height: 100%;
   width: 100%;
-  position: relative;
 }
 
 .timeline-tab {
+  width: 100%;
   background-color: #fefefe;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: hidden;
+
 }
 
 .timeline-content {
   display: flex;
   flex-direction: column;
   border-radius: 20px;
+  justify-content: flex-start; /* Aligne les tâches en haut */
+  align-items: center;
   width: 100%;
-  flex-grow: 1;
+  height: 100%;
+  padding: 15px; /* Définit une hauteur maximale pour limiter la croissance */
 }
+
 
 /* --------------------------- Calendar Styles --------------------------- */
 .calendar-progress {
   width: 70%;
+  height: 700px;
   overflow: hidden;
   transition: height 0.3s ease-in-out;
 }
@@ -190,8 +212,9 @@
 }
 
 .day-header {
-  width: fit-content;
+  width: 100%;
   text-align: center;
+  border-radius: 30px;
   font-weight: bold;
   padding: 10px;
   background-color: #0171DF;
@@ -203,7 +226,6 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
 }
 
 .hours {
@@ -244,6 +266,130 @@
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+.task-list {
+  padding: 10px;
+  display: grid; /* Utilisation d'une grille */
+  grid-template-columns: repeat(3, 1fr); /* Maximum 3 colonnes */
+  gap: 10px; /* Espacement entre les tâches */
+  justify-content: center; /* Centrer les tâches dans la grille */
+  width: 100%;
+  align-items: center;
+  overflow-y: auto; /* Affiche une barre de défilement si nécessaire */
+  max-height: 500px; /* Limite la hauteur */
+}
+
+.task-item {
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  margin: 15px 0;
+  padding: 20px;
+  transition: all 0.3s ease-in-out;
+}
+
+/* Hover effect */
+.task-item:hover {
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  transform: translateY(-5px);
+}
+
+/* Détails de la tâche */
+.task-details h4 {
+  font-size: 1.5rem;
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.task-details h4 .priority-indicator {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: #e67e22; /* Couleur par défaut (peut être changée dynamiquement) */
+}
+
+.task-details p {
+  font-size: 1rem;
+  color: #7f8c8d;
+  margin-bottom: 10px;
+}
+
+.task-details p strong {
+  color: #2c3e50;
+}
+
+/* Classes pour la priorité */
+.priority-indicator.low {
+  background-color: #27ae60; /* Vert */
+}
+
+.priority-indicator.medium {
+  background-color: #f39c12; /* Jaune */
+}
+
+.priority-indicator.high {
+  background-color: #e74c3c; /* Rouge */
+}
+/* Container des filtres */
+.filters {
+  margin: 20px 0;
+  padding: 10px;
+  background-color: #ffffff;
+  border-radius: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Styles des labels */
+.filters label {
+  font-size: 1rem;
+  color: #34495e;
+  font-weight: 600;
+  margin-bottom: 5px;
+  text-transform: uppercase;
+}
+
+/* Styles des menus déroulants */
+select {
+  padding: 7px;
+  border-radius: 20px;
+  background-color: #f9f9f9;
+  color: #34495e;
+  transition: border-color 0.3s ease, background-color 0.3s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: #3498db;
+  background-color: #ecf6ff;
+}
+
+select option {
+  background-color: #ffffff;
+  color: #34495e;
+}
+
+/* Ajout d'un effet de survol pour les menus */
+select:hover {
+  border-color: #3498db;
+  background-color: #ecf6ff;
+}
+
+/* Styles pour l'option sélectionnée */
+select option:checked {
+  background-color: #3498db;
+  color: white;
+}
+
+/* Espacement entre les éléments de la tâche */
+.task-details p:last-child {
+  margin-bottom: 0;
 }
 
 .task-title {
@@ -334,13 +480,7 @@
 }
 
 /* --------------------------- Calendar Grid --------------------------- */
-.calendar-grid {
-  display: grid;
-  grid-template-columns: repeat(6, 1fr);
-  gap: 7px;
-  height: 100%;
-  width: 100%;
-}
+
 
 .calendar-day {
   text-align: center;
@@ -383,7 +523,6 @@
   width: 80%;
   max-width: 500px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
 }
 
 .close {
@@ -435,8 +574,8 @@
   grid-template-columns: repeat(7, 1fr);
   text-align: center;
   font-weight: bold;
+  border-radius: 10px ;
   background-color: #f8f9fa; /* Gris clair pour l'en-tête */
-  border-bottom: 1px solid #ddd;
   padding: 5px 0;
 }
 
@@ -448,7 +587,10 @@
 .calendar-grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr); /* 7 jours par ligne */
-  gap: 2px; /* Espace entre les cases */
+  gap: 5px;
+  background-color: #ddd;
+  border-radius: 10px;
+  padding: 5px;
 }
 
 .calendar-day {

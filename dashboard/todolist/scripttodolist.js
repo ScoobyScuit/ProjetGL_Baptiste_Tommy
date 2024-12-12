@@ -1,5 +1,5 @@
 /**
- * @file script.js
+ * @file scripttodolist.js
  * @brief Script principal pour la gestion des tâches et des commentaires dans un projet.
  */
 
@@ -307,9 +307,6 @@ document.addEventListener("DOMContentLoaded", async () => {
     return li;
   }
 
-  /**
-   * @brief Calcule le pourcentage de progrès du projet selectionné
-   */
   function calculateTaskProgress() {
     // Calcul du pourcentage d'avancement des taches
     const totalTasks = tasks.length;

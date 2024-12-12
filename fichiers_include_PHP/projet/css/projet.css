@@ -1,112 +1,290 @@
+@import url('https://fonts.googleapis.com/css2?family=Geologica:wght@100..900&display=swap');
+
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    margin: 0;
+  font-family: "Geologica", sans-serif;
+  font-weight: 300;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  margin: 0;
 }
 
 .profile-container {
-    background-color: white;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    width: 600px;
-    text-align: left;
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 97%;
+  height: fit-content;
+  text-align: left;
 }
 
 h1 {
-    text-align: center;
-    margin-bottom: 20px;
+  text-align: center;
+  margin-bottom: 20px;
 }
 
 .projects-list {
-    margin-top: 20px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* Trois colonnes */
+  gap: 20px; /* Espacement entre les projets */
+  margin-top: 20px;
+  padding: 10px;
 }
 
+/* Container global des cartes */
+.projects-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  padding: 20px;
+}
+
+/* Carte de projet */
 .project-item {
-    background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    padding: 15px;
-    border-radius: 5px;
-    margin-bottom: 15px;
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  padding: 20px;
+  position: relative;
+  overflow: hidden;
+  font-family: "Roboto", sans-serif;
 }
 
-.project-item.selected {
-    border: 2px solid #007bff; /* Contour bleu pour l'élément sélectionné */
-    background-color: #e7f3ff; /* Légère coloration de fond pour le projet sélectionné */
+.project-item:hover {
+  transform: translateY(-5px);
+  box-shadow: 0px 10px 20px rgba(0, 0, 0, 0.2);
 }
 
+/* Icône */
+.project-icon {
+  font-size: 2rem;
+  color: #4CAF50;
+  margin-bottom: 10px;
+}
+
+/* Titre du projet */
+.project-item h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+/* Description */
+.project-item p {
+  font-size: 1rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* Détails */
 .project-item strong {
-    color: #333;
+  display: block;
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 5px;
 }
 
-/* ============================= AJOUT DE PROJET ============================= */
-/* Style général pour le modal */
-#addProjectModal {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 60%;
-    height: 50%;
-    display: none;
-    
+/* Bouton de suppression */
+.delete-project-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FF5252;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 8px 12px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+}
+
+.delete-project-btn i {
+  margin-right: 5px;
+}
+
+.delete-project-btn:hover {
+  background-color: #E64A4A;
+}
+
+
+.cta button {
+  background-color: #007bff;
+  color: #fff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 14px;
+}
+
+.cta button:hover {
+  background-color: #0056b3;
+}
+
+
+
+
+.btn-project{
+  font-family: "Geologica", sans-serif;
+  font-weight: 300;
+  display: flex;
+  align-items: center;
+  padding: 10px 15px;
+  border-radius: 20px;
+  gap: 10px;
+  transition: 0.5s ease-in;
+  border: none;
+  margin-bottom: 10px;
+}
+.delete-project-btn, .add-project-btn{
+  font-family: "Geologica", sans-serif;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  border-radius: 30px;
+  gap: 10px;
+  justify-content: center;
+  background-color: #ddd;
+  transition: 0.5s ease-in;
+  border: none;
+  cursor: pointer;
+  color: white;
+}
+
+.add-project-btn{
+  background-color: #007bff;
+}
+.delete-project-btn i,.add-project-btn i{
+ 
+  color: #007bff;
+  border-radius: 50%;
+  padding: 7px;
+  background-color: white;
+  cursor: pointer;
+}
+/* Styles pour le modal */
+/* Conteneur global */
+/* Overlay pour le modal */
+.modal-overlay {
+  display: none; /* Caché par défaut */
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.5); /* Fond sombre transparent */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+/* Carte dans le modal */
+.modal-content {
+  background-color: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0px 5px 15px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  width: 400px;
+  font-family: "Roboto", sans-serif;
+  position: relative;
+  color: #333;
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+/* Animation pour l'apparition de la carte */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
   }
-  
-  .modal-content {
-    background-color: #fff;
-    margin: 10% auto;
-    padding: 20px;
-    border-radius: 10px;
-    width: 50%;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
-  
-  .modal-content h2 {
-    margin-bottom: 20px;
-    text-align: center;
+}
+
+/* Bouton Fermer */
+.close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  font-size: 1.5rem;
+  cursor: pointer;
+  color: #aaa;
+  transition: color 0.3s ease;
+}
+
+.close:hover {
+  color: #333;
+}
+
+/* Style des champs de formulaire */
+.flat-form label {
+  display: block;
+  font-size: 0.9rem;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: #555;
+}
+
+.flat-form input,
+.flat-form textarea {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 15px;
+  border: none;
+  border-radius: 5px;
+  background-color: #f5f5f5;
+  box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
+  font-size: 1rem;
+  outline: none;
+}
+
+.flat-form input:focus,
+.flat-form textarea:focus {
+  background-color: #e9e9e9;
+}
+
+/* Bouton */
+.flat-button {
+  display: inline-block;
+  background-color: #4CAF50;
+  color: #ffffff;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.flat-button:hover {
+  background-color: #45a049;
+}
+
+
+
+@media (max-width: 768px) {
+  .projects-list {
+    grid-template-columns: repeat(2, 1fr); /* Deux colonnes sur tablette */
   }
-  
-  .modal-content label {
-    display: block;
-    margin: 10px 0 5px;
+}
+
+@media (max-width: 480px) {
+  .projects-list {
+    grid-template-columns: 1fr; /* Une seule colonne sur mobile */
   }
-  
-  .modal-content input,
-  .modal-content textarea {
-    width: 100%;
-    padding: 10px;
-    margin-bottom: 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-  }
-  
-  .modal-content button {
-    display: block;
-    width: 100%;
-    padding: 10px;
-    background-color: #5cb85c;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-  }
-  
-  .modal-content button:hover {
-    background-color: #4cae4c;
-  }
-  
-  .close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-  
-  .close:hover {
-    color: #000;
-  }
-  
+}
