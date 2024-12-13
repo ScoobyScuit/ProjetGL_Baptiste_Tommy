@@ -376,6 +376,59 @@ export async function updateCalendarAndTimeline() {
   }
 }
 
+/**
+ * @brief Met à jour la progression du projet en fonction des tâches terminées.
+ *
+ * Cette fonction récupère les tâches associées à un projet spécifique, 
+ * calcule le pourcentage de progression en fonction des tâches terminées 
+ * et met à jour dynamiquement la barre de progression ainsi que le texte affiché.
+ *
+ * @param {string} projectId - L'identifiant unique du projet pour lequel la progression est calculée.
+ *
+ * La fonction gère à la fois les barres de progression au format SVG (via strokeDashoffset)
+ * et les barres en HTML/CSS (via la propriété width).
+ *
+ * @returns {Promise<void>} - Ne renvoie rien, mais met à jour le DOM en fonction du taux de progression.
+ *
+ * @note La fonction suppose que les éléments HTML suivants existent :
+ * - `progressBar` : Élément de la barre de progression (SVG ou HTML).
+ * - `progressText` : Élément où le pourcentage de progression est affiché.
+ */
+export async function updateProjectProgress(projectId) {
+  // Simuler un calcul de progression basé sur les tâches du projet
+  const tasks = await Task.fetchTasksByProjectId(projectId);
+  const completedTasks = tasks.filter(task => task.statut === "Terminée").length;
+
+  const progressRate = tasks.length > 0
+      ? Math.round((completedTasks / tasks.length) * 100)
+      : 0;
+
+  console.log(`Taux de progression pour le projet ${projectId} : ${progressRate}%`);
+
+  const progressBar = document.getElementById("progressBar");
+  const progressText = document.getElementById("progressText");
+
+  if (progressBar && progressText) {
+      // Mise à jour du pourcentage de progression dans le texte
+      progressText.textContent = `${progressRate}%`;
+
+      // Ajustement de la barre de progression
+      if (progressBar.tagName === "svg" || progressBar.tagName === "path") {
+          // Si barre SVG (strokeDashoffset pour animer)
+          const totalLength = progressBar.getTotalLength();
+          const dashoffset = totalLength * (1 - progressRate / 100);
+          progressBar.style.strokeDashoffset = dashoffset;
+      } else {
+          // Si barre en HTML/CSS (width pour animer)
+          progressBar.style.width = `${progressRate}%`;
+      }
+
+      console.log(`Barre de progression mise à jour : ${progressRate}%`);
+  } else {
+      console.error("Éléments de progression introuvables.");
+  }
+}
+
 // ====================== CHANGER DE MOIS =====================
 /**
  * @brief Change le mois affiché dans le calendrier.

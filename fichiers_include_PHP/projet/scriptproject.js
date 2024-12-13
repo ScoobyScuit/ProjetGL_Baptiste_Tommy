@@ -35,6 +35,30 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   /**
+   * @brief Gère la sélection d'un projet.
+   *
+   * Cette fonction retire la classe "selected" des autres projets,
+   * ajoute la classe au projet sélectionné et met à jour le localStorage.
+   *
+   * @param {HTMLElement} selectedProject - L'élément HTML du projet sélectionné.
+   */
+  function handleProjectSelection(selectedProject) {
+    // Retirer la classe "selected" de tous les projets
+    document.querySelectorAll(".project-item").forEach((item) => {
+      item.classList.remove("selected");
+    });
+
+    // Ajouter la classe "selected" au projet sélectionné
+    selectedProject.classList.add("selected");
+
+    // Sauvegarder l'ID du projet dans le localStorage
+    const projectId = selectedProject.getAttribute("data-project-id");
+    localStorage.setItem("selectedProjectId", projectId);
+
+    console.log(`Projet sélectionné : ${projectId}`);
+  }
+
+  /**
    * @brief Fonction pour afficher les projets.
    */
   async function displayProjects() {
@@ -42,51 +66,47 @@ document.addEventListener("DOMContentLoaded", async () => {
       currentUser.role === "Administrateur"
         ? await Project.fetchAllProjectData()
         : await Project.fetchProjectData();
-
-    // Récupérer l'ID du projet sélectionné depuis localStorage
-    const selectedProjectId = localStorage.getItem("selectedProjectId");
-
+  
     projectsListDiv.innerHTML = projects.length
       ? projects
           .map(
             (p) => `
-        <div class="project-item ${
-          selectedProjectId == p.id ? "selected" : ""
-        }" data-project-id="${p.id}">
-          <div class="project-icon">
-            <i class="fa-solid fa-folder"></i>
+          <div class="project-item ${
+            localStorage.getItem("selectedProjectId") == p.id ? "selected" : ""
+          }" data-project-id="${p.id}">
+            <div class="project-icon">
+              <i class="fa-solid fa-folder"></i>
+            </div>
+            <h3>${p.nom}</h3>
+            <p>${p.description}</p>
+            <strong>ID Chef:</strong> ${p.idChef}
+            <button class="delete-project-btn" data-project-id="${p.id}">
+              <i class="fa-solid fa-trash"></i> Supprimer
+            </button>
           </div>
-          <h3>${p.nom}</h3>
-          <p>${p.description}</p>
-          <strong>ID Chef:</strong> ${p.idChef}
-          <button class="delete-project-btn" data-project-id="${p.id}">
-            <i class="fa-solid fa-trash"></i> Supprimer
-          </button>
-        </div>
-`
+          `
           )
           .join("")
       : "<p>Aucun projet trouvé.</p>";
-
+  
     // Gestion de la sélection des projets
     document.querySelectorAll(".project-item").forEach((projectDiv) => {
       projectDiv.addEventListener("click", () => {
-        const projectId = projectDiv.getAttribute("data-project-id");
-
-        // Désélectionner tous les projets
-        document
-          .querySelectorAll(".project-item")
-          .forEach((item) => item.classList.remove("selected"));
-
-        // Ajouter la classe "selected" au projet sélectionné
-        projectDiv.classList.add("selected");
-
-        // Sauvegarder l'ID du projet dans localStorage
-        localStorage.setItem("selectedProjectId", projectId);
-        console.log(`Projet sélectionné : ${projectId}`);
+        handleProjectSelection(projectDiv);
       });
     });
-
+  
+    // Restaurer le projet sélectionné
+    const selectedProjectId = localStorage.getItem("selectedProjectId");
+    if (selectedProjectId) {
+      const previouslySelectedProject = document.querySelector(
+        `.project-item[data-project-id='${selectedProjectId}']`
+      );
+      if (previouslySelectedProject) {
+        previouslySelectedProject.classList.add("selected");
+      }
+    }
+  
     // Gestion des boutons de suppression
     document.querySelectorAll(".delete-project-btn").forEach((button) => {
       button.addEventListener("click", async (e) => {
@@ -105,10 +125,10 @@ document.addEventListener("DOMContentLoaded", async () => {
       });
     });
   }
-
+  
 
   /**
-   * @brief Fonction pour obtenir la date actuelle au format YYYY-MM-DD 
+   * @brief Fonction pour obtenir la date actuelle au format YYYY-MM-DD
    */
   function getCurrentDate() {
     const today = new Date();
