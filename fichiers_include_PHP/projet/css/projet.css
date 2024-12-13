@@ -62,7 +62,7 @@ h1 {
 /* Icône */
 .project-icon {
   font-size: 2rem;
-  color: #4CAF50;
+  color: #007bff;
   margin-bottom: 10px;
 }
 
@@ -113,7 +113,7 @@ h1 {
 }
 
 .delete-project-btn:hover {
-  background-color: #E64A4A;
+  background-color: #810a0a;
 }
 
 
@@ -156,7 +156,7 @@ h1 {
   border-radius: 30px;
   gap: 10px;
   justify-content: center;
-  background-color: #ddd;
+  background-color: #E64A4A;
   transition: 0.5s ease-in;
   border: none;
   cursor: pointer;
@@ -287,4 +287,11 @@ h1 {
   .projects-list {
     grid-template-columns: 1fr; /* Une seule colonne sur mobile */
   }
+}
+
+/* Style pour le projet sélectionné */
+.project-item.selected {
+  border: 2px solid #007bff; /* Contour bleu */
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.5); /* Lueur bleue autour */
+  transition: all 0.3s ease;
 }

@@ -24,48 +24,31 @@ const wss = new WebSocket.Server({ server }); /**< @brief Instance du serveur We
  * @param {WebSocket} ws - Instance WebSocket représentant le client connecté.
  */
 wss.on('connection', (ws) => {
-    console.log('Client connecté.');
+    console.log("Client connecté.");
 
-    /**
-     * @brief Gère les messages reçus depuis un client.
-     *
-     * Cette fonction reçoit un message, le valide, puis le renvoie tel quel
-     * à tous les clients connectés.
-     *
-     * @param {string} message - Message reçu du client (attendu en format JSON).
-     */
     ws.on('message', (message) => {
-        console.log(`Message reçu : ${message}`);
-
         try {
-            // S'assurer que le message est un JSON valide
             const parsedMessage = JSON.parse(message);
+            console.log("Message reçu :", parsedMessage);
 
-            // Renvoie le message tel quel (sans modification)
-            const broadcastMessage = JSON.stringify(parsedMessage);
-
-            // Diffuser le message à tous les clients connectés
+            // Diffuser à tous les clients en ajoutant l'ID du projet
             wss.clients.forEach((client) => {
                 if (client.readyState === WebSocket.OPEN) {
-                    console.log("Diffusion aux clients :", broadcastMessage);
-                    client.send(broadcastMessage);
+                    client.send(JSON.stringify({
+                        type: parsedMessage.type,
+                        projectId: parsedMessage.projectId
+                    }));
                 }
             });
         } catch (error) {
-            console.error("Erreur lors du traitement du message :", error);
+            console.error("Erreur traitement message :", error);
         }
     });
 
-    /**
-     * @brief Gère la déconnexion d'un client.
-     *
-     * Cette fonction est appelée lorsque le client ferme la connexion.
-     */
     ws.on('close', () => {
-        console.log('Client déconnecté.');
+        console.log("Client déconnecté.");
     });
 });
-
 /**
  * @brief Démarre le serveur WebSocket sur le port spécifié.
  *
