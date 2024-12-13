@@ -13,6 +13,7 @@ body {
     padding: 20px;
     max-width: 600px;
     text-align: center;
+    transition: transform 0.3s, box-shadow 0.3s;
   }
   
   h1, h2 {
@@ -33,14 +34,12 @@ body {
     border-radius: 4px;
   }
   
-  button {
-    background-color: #4caf50;
+  #update-role-btn, #assign-task-btn {
+    background-color: #007bff;
     color: white;
-    cursor: pointer;
-    font-weight: bold;
   }
-  
-  button:hover {
-    background-color: #45a049;
-  }
-  
+
+  .settings-container:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+}
