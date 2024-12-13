@@ -18,8 +18,7 @@ import { updateCalendarAndTimeline } from "/dashboard/calendar/scriptcalendar.js
 /**
  * @brief Établit une connexion WebSocket avec le serveur.
  *
- * Initialise la barre de progression et gère les événements `onopen`, `onmessage`, `onerror` et `onclose`.
- * En cas de fermeture, la connexion est rétablie automatiquement après un délai.
+ * Gère la connexion et met à jour le projet correspondant à l'ID reçu dans les messages.
  */
 function connectWebSocket() {
     const totalLength = progressBar.getTotalLength();
@@ -33,24 +32,28 @@ function connectWebSocket() {
     };
 
     ws.onmessage = (event) => {
-        console.log('Message reçu du serveur :', event.data);
-
         try {
             const data = JSON.parse(event.data);
-            
-            // Vérifie si le champ "progress" existe dans le message
-            if (data.progress !== undefined) {
-                if (typeof data.progress === 'number') {
-                    console.log("Progress numérique : " + data.progress);
-                    updateProgressIndicator(data.progress);
-                } else if (typeof data.progress === 'string') {
-                    console.log("Progress commande : " + data.progress);
-                    handleCommand(data.progress);
+            console.log('Message reçu du serveur :', data);
+
+            // Récupérer l'ID du projet actuellement sélectionné
+            const currentProjectId = localStorage.getItem("selectedProjectId");
+            console.log("ID du projet sélectionné : " + currentProjectId);
+
+            // Vérifier si le message concerne le projet actuel
+            if (data.projectId === currentProjectId) {
+                console.log("Message accepté pour le projet :", currentProjectId);
+
+                // Traiter la commande en fonction du type
+                if (data.type) {
+                    handleCommand(data.type); // Gérer les commandes spécifiques
                 } else {
-                    console.warn("Type de progress non pris en charge :", typeof data.progress);
+                    console.warn("Type de commande manquant dans le message.");
                 }
             } else {
-                console.warn("Aucun champ 'progress' trouvé dans le message.");
+                console.log(
+                    `Message ignoré : ID projet reçu (${data.projectId}) différent de l'ID actuel (${currentProjectId}).`
+                );
             }
         } catch (error) {
             console.error('Erreur lors de la réception des données :', error);
@@ -72,7 +75,7 @@ function connectWebSocket() {
  *
  * @param {string} command - Commande envoyée par le serveur.
  *
- * Les commandes reconnues sont :
+ * Commandes reconnues :
  * - "TaskAdded" : Tâche ajoutée.
  * - "TaskDeleted" : Tâche supprimée.
  * - "TaskCompleted" : Tâche terminée.
@@ -84,7 +87,7 @@ async function handleCommand(command) {
         case "TaskDeleted":
         case "TaskCompleted":
         case "TaskEdited":
-            console.log("Commande reçue. Rafraîchissement du calendrier...");
+            console.log(`Commande reçue : ${command}. Mise à jour requise.`);
             await updateCalendarAndTimeline();
             break;
         default:
@@ -118,7 +121,7 @@ function updateProgressIndicator(value) {
  *
  * @param {number} value - Valeur numérique représentant le pourcentage de progression.
  */
-function sendProgress(value) {
+export function sendProgress(value) {
     if (ws && ws.readyState === WebSocket.OPEN) {
         ws.send(JSON.stringify({ progress: value }));
         console.log(`Progrès envoyé : ${value}%`);
@@ -128,8 +131,29 @@ function sendProgress(value) {
     }
 }
 
+export function sendProgress2(actionType, projectId) {
+    if (!projectId) {
+        console.error("ID du projet manquant lors de l'envoi de la progression.");
+        return;
+    }
+
+    const message = {
+        type: actionType,
+        projectId: projectId, // Passe l'ID du projet reçu en argument
+        timestamp: new Date().toISOString(),
+    };
+
+    console.log("Envoi de la progression WebSocket :", message);
+
+    if (ws && ws.readyState === WebSocket.OPEN) {
+        ws.send(JSON.stringify(message));
+    } else {
+        console.warn("WebSocket non connecté. Tentative de reconnexion...");
+        connectWebSocket();
+    }
+}
+
+
 // Démarrer la connexion WebSocket dès le chargement du script
 connectWebSocket();
 
-/** @brief Exporte la fonction sendProgress pour une utilisation externe. */
-export { sendProgress };

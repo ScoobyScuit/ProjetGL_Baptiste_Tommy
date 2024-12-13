@@ -341,8 +341,8 @@ async function createTimeline() {
 // ================== METTRE À JOUR CALENDRIER ET TIMELINE ==================
 /**
  * @brief Met à jour le calendrier et la timeline pour un projet sélectionné.
- * @details Cette fonction recharge les tâches du projet sélectionné depuis le serveur, 
- *          en fonction du rôle de l'utilisateur connecté, puis rafraîchit l'affichage 
+ * @details Cette fonction recharge les tâches du projet sélectionné depuis le serveur,
+ *          en fonction du rôle de l'utilisateur connecté, puis rafraîchit l'affichage
  *          du calendrier et de la timeline.
  * @async
  * @throws Génère une erreur en cas de problème lors de la récupération des tâches ou de l'actualisation de l'affichage.
@@ -375,7 +375,6 @@ export async function updateCalendarAndTimeline() {
     );
   }
 }
-
 
 // ====================== CHANGER DE MOIS =====================
 /**

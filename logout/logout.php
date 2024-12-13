@@ -1,8 +1,21 @@
 <?php
-// Page de déconnexion : permet de fermer et effacer la session en cours
-
+if (isset($_COOKIE['session_user'])) {
+    // Charger la session spécifique
+    session_id($_COOKIE['session_user']);
     session_start();
-    session_destroy(); // Détruit la session actuelle
-    header("Location: /login/index.html"); // Redirige vers la page de connexion
+
+    // Réinitialiser et détruire la session
+    $_SESSION = [];
+    session_destroy();
+
+    // Supprimer le cookie associé
+    setcookie('session_user', '', time() - 3600, '/', '', true, true);
+
+    // Redirection après déconnexion
+    header("Location: /login/index.html");
     exit();
+} else {
+    header("Location: /login/index.html");
+    exit();
+}
 ?>

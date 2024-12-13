@@ -29,7 +29,8 @@ wss.on('connection', (ws) => {
     /**
      * @brief Gère les messages reçus depuis un client.
      *
-     * Cette fonction reçoit un message, le valide, puis le diffuse à tous les clients connectés.
+     * Cette fonction reçoit un message, le valide, puis le renvoie tel quel
+     * à tous les clients connectés.
      *
      * @param {string} message - Message reçu du client (attendu en format JSON).
      */
@@ -39,7 +40,9 @@ wss.on('connection', (ws) => {
         try {
             // S'assurer que le message est un JSON valide
             const parsedMessage = JSON.parse(message);
-            const broadcastMessage = JSON.stringify({ progress: parsedMessage.progress });
+
+            // Renvoie le message tel quel (sans modification)
+            const broadcastMessage = JSON.stringify(parsedMessage);
 
             // Diffuser le message à tous les clients connectés
             wss.clients.forEach((client) => {

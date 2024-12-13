@@ -7,6 +7,7 @@ import { Task } from "/js_class/task.js";
 import { User } from "/js_class/user.js";
 import { Comments } from "/js_class/comments.js";
 import { sendProgress } from '/dashboard/indicateur/scriptindicator.js';
+import { sendProgress2 } from '/dashboard/indicateur/scriptindicator.js';
 
 let currentUser = null;
 let isEditing = false; // Variable pour suivre l'état du formulaire (ajout ou modification)
@@ -240,9 +241,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 renderTasks();
 
                 // Calcul du pourcentage d'avancement des taches
-                calculateTaskProgress();
+                // calculateTaskProgress();
                 // Envoyer modif au server
-                sendProgress("TaskDeleted");
+                console.log("============selectedproject (send) : " + selectedProjectId);
+                sendProgress2("TaskDeleted", selectedProjectId);
+                // sendProgress("TaskDeleted");
 
                 console.log(
                   "Tâche supprimée avec succès. Liste des tâches mise à jour."
@@ -274,10 +277,13 @@ document.addEventListener("DOMContentLoaded", async () => {
             renderTasks(); // Actualiser la liste des tâches
             
             // Calcul du pourcentage d'avancement des taches
-            calculateTaskProgress();
+            // calculateTaskProgress();
             // Envoyer modif au server
-            sendProgress("TaskCompleted");
-            console.log("Statut de la tâche mis à jour en 'Terminée'.");
+            // sendProgress("TaskCompleted");
+            // console.log("Statut de la tâche mis à jour en 'Terminée'.");
+            console.log("============selectedproject (send) : " + selectedProjectId);
+
+            sendProgress2("TaskDeleted", selectedProjectId);
           } else {
             console.error("Échec de la mise à jour du statut de la tâche.");
           }

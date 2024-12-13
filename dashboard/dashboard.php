@@ -1,6 +1,23 @@
 <?php
-session_start();
+// Vérifie si le cookie contenant l'ID de session existe
+if (isset($_COOKIE['session_user'])) {
+    session_id($_COOKIE['session_user']);
+    session_start();
+
+    // Vérifie si les informations de l'utilisateur sont présentes dans la session
+    if (isset($_SESSION['user_id'], $_SESSION['name'])) {
+    } else {
+        // Session invalide, redirection vers la connexion
+        header("Location: /login/index.php");
+        exit();
+    }
+} else {
+    // Aucun cookie de session, redirection vers la connexion
+    header("Location: /login/index.php");
+    exit();
+}
 ?>
+
 
 
 <!DOCTYPE html>
@@ -32,16 +49,16 @@ session_start();
         <button class="nav-btn dashboard-btn">
           <i class="fa-solid fa-house"></i>Dashboard
         </button>
-        <button class="nav-btn project-btn" onclick="location.href = '/fichiers_include_PHP/projet/projet.html';">
+        <button class="nav-btn project-btn" onclick="location.href = '/fichiers_include_PHP/projet/projet.php';">
           <i class="fa-regular fa-folder-closed"></i>Projet
         </button>
 
       </div>
       <div class="settings">
-        <button class="settings-btn" style="display: none;" onclick="location.href = '/fichiers_include_PHP/parametre/settings.html';">
+        <button class="settings-btn" style="display: none;" onclick="location.href = '/fichiers_include_PHP/parametre/settings.php';">
           <i class="fa-solid fa-gear"></i>
         </button>
-        <button class="profil-btn" onclick="location.href = '/fichiers_include_PHP/profil/profil.html';">
+        <button class="profil-btn" onclick="location.href = '/fichiers_include_PHP/profil/profil.php';">
           <i class="fa-solid fa-user"></i>
         </button>
       </div>

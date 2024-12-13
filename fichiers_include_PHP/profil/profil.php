@@ -1,3 +1,19 @@
+<?php
+if (isset($_COOKIE['session_user'])) {
+    session_id($_COOKIE['session_user']);
+    session_start();
+
+    if (isset($_SESSION['user_id'], $_SESSION['name'])) {
+    } else {
+        header("Location: /login/index.php");
+        exit();
+    }
+} else {
+    header("Location: /login/index.php");
+    exit();
+}
+?>
+
 <!DOCTYPE html>
 <html lang="fr">
   <head>
@@ -28,21 +44,21 @@
           </button>
           <button
             class="nav-btn project-btn"
-            onclick="location.href = '/fichiers_include_PHP/projet/projet.html';"
+            onclick="location.href = '/fichiers_include_PHP/projet/projet.php';"
           >
             <i class="fa-regular fa-folder-closed"></i>Projet
           </button>
         </div>
         <div class="settings">
           <button class="settings-btn"
-           onclick="location.href = '/fichiers_include_PHP/parametre/settings.html';"
+           onclick="location.href = '/fichiers_include_PHP/parametre/settings.php';"
            style="display: none;">
             <i class="fa-solid fa-gear"></i>
           </button>
           <button
             id="profile-btn"
             class="nav-btn profile-btn"
-            onclick="location.href = '/fichiers_include_PHP/profil/profil.html';"
+            onclick="location.href = '/fichiers_include_PHP/profil/profil.php';"
           >
             <i class="fa-solid fa-user"></i>
           </button>

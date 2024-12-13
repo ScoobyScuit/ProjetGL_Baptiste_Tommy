@@ -47,25 +47,43 @@ if ($loginData && $hashed_mdp === $loginData['mdpLogin']) {
     $stmt->execute();
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    if ($user) {
-        // Démarrer la session AVANT d'envoyer du HTML
-        session_start();
 
-        // Stocker les informations de l'utilisateur dans la session
+   
+    session_start();
+    
+    // Après authentification réussie
+    if ($user) {
+        // Regénérer un ID de session sécurisé
+        session_regenerate_id(true);
+    
+        // Stocker les informations utilisateur dans la session
         $_SESSION['user_id'] = $user['IdUser'];
         $_SESSION['name'] = $user['NomUser'];
         $_SESSION['surname'] = $user['PrenomUser'];
         $_SESSION['email'] = $user['EmailUser'];
         $_SESSION['role'] = $user['RoleUser'];
-
-        // Redirection vers le tableau de bord
+    
+        // Crée un cookie pour rappeler l'ID de session (facultatif, mais sécurisé)
+        setcookie(
+            'session_user',
+            session_id(),  // L'ID actuel de la session
+            [
+                'expires' => time() + 3600,
+                'path' => '/',
+                'secure' => true,   // Utiliser HTTPS
+                'httponly' => true, // Empêcher l'accès via JavaScript
+                'samesite' => 'Strict' // Protéger contre les attaques CSRF
+            ]
+        );
+    
+        // Rediriger vers le tableau de bord
         header("Location: /dashboard/dashboard.php");
-        exit;
+        exit();
     } else {
-        $error = "Erreur lors de la récupération des informations utilisateur.";
+        $error = "Email ou mot de passe incorrect.";
     }
-} else {
-    $error = "Email ou mot de passe incorrect.";
+    
+ 
 }
 ?>
 <!DOCTYPE html>
