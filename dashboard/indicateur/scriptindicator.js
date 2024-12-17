@@ -41,6 +41,7 @@ function connectWebSocket() {
                     case "TaskDeleted":
                     case "TaskCompleted":
                     case "TaskEdited":
+                    case "TaskAdded" :
                         updateCalendarAndTimeline();
                         updateProjectProgress(currentProjectId); // Met à jour le taux de progression
                         break;

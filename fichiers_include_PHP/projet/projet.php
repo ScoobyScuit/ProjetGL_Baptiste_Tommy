@@ -65,7 +65,6 @@ if (isset($_COOKIE['session_user'])) {
       <!-- Bouton pour ajouter un projet -->
       <button class="add-project-btn" id="openAddProjectModal">
         <i class="fa-solid fa-plus"></i> Ajouter un projet
-
       </button>
 
       <!-- Conteneur pour le formulaire modal -->

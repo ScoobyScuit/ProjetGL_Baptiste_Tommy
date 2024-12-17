@@ -98,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `task` (
   `StatutTask` enum('En cours','Terminée','En attente') NOT NULL,
   `PrioriteTask` int NOT NULL,
   `DateEchTask` date NOT NULL,
-  `DateDebTask` date ,
+  `DateDebTask` date NOT NULL,
   `IdProject` int NOT NULL,
   `IdUser` int NOT NULL,
   PRIMARY KEY (`IdTask`,`IdProject`,`IdUser`)

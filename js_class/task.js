@@ -34,6 +34,7 @@ export class Task {
       !description ||
       !statut ||
       !priorite ||
+      !dateDebut ||
       !dateEcheance ||
       !idProjet ||
       !idUser
@@ -44,7 +45,7 @@ export class Task {
     this.description = description;
     this.statut = statut;
     this.priorite = priorite;
-    this.dateDebut = dateDebut || new Date().toISOString().split("T")[0]; // Date actuelle par défaut
+    this.dateDebut = dateDebut;
     this.dateEcheance = dateEcheance;
     this.idProjet = idProjet;
     this.idUser = idUser;
@@ -89,7 +90,7 @@ export class Task {
             taskData.DescriptionTask,
             taskData.StatutTask,
             taskData.PrioriteTask,
-            taskData.DateDebutTask,
+            taskData.DateDebTask, // Ajout du champ DateDebTask
             taskData.DateEchTask,
             taskData.IdProject,
             taskData.IdUser,
@@ -124,7 +125,7 @@ export class Task {
           DescriptionTask: this.description,
           StatutTask: this.statut,
           PrioriteTask: this.priorite,
-          DateDebutTask: this.dateDebut, // Ajout de dateDebut
+          DateDebTask: this.dateDebut, // Mise à jour pour inclure DateDebTask
           DateEchTask: this.dateEcheance,
           IdProjet: this.idProjet,
           IdUser: this.idUser,
@@ -203,7 +204,7 @@ export class Task {
   async updateTask(updatedTaskData) {
     try {
       const response = await fetch(
-        `/fichiers_include_PHP/task/updateTask.php`,
+        "/fichiers_include_PHP/task/updateTask.php",
         {
           method: "POST",
           headers: {
@@ -211,8 +212,14 @@ export class Task {
           },
           body: JSON.stringify({
             id: this.id,
-            DateDebutTask: this.dateDebut, // Assurer la mise à jour de dateDebut
-            ...updatedTaskData,
+            TitreTask: updatedTaskData.titre || this.titre,
+            DescriptionTask: updatedTaskData.description || this.description,
+            StatutTask: updatedTaskData.statut || this.statut,
+            PrioriteTask: updatedTaskData.priorite || this.priorite,
+            DateDebTask: updatedTaskData.dateDebut || this.dateDebut, // Inclut DateDebTask
+            DateEchTask: updatedTaskData.dateEcheance || this.dateEcheance,
+            IdProjet: updatedTaskData.idProjet || this.idProjet,
+            IdUser: updatedTaskData.idUser || this.idUser,
           }),
         }
       );
@@ -313,7 +320,7 @@ export class Task {
             taskData.DescriptionTask,
             taskData.StatutTask,
             taskData.PrioriteTask,
-            taskData.DateDebutTask,
+            taskData.DateDebTask, // Ajout du champ DateDebTask
             taskData.DateEchTask,
             taskData.IdProject,
             taskData.IdUser,
@@ -358,7 +365,7 @@ export class Task {
             taskData.DescriptionTask,
             taskData.StatutTask,
             taskData.PrioriteTask,
-            taskData.DateDebutTask,
+            taskData.DateDebTask,
             taskData.DateEchTask,
             taskData.IdProject,
             taskData.IdUser,

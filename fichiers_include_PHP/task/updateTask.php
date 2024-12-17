@@ -21,26 +21,34 @@ try {
 
     $data = json_decode(file_get_contents("php://input"), true);
 
-    if (isset($data['id'], $data['titre'], $data['description'], $data['statut'], $data['priorite'], $data['dateEcheance'], $data['idProjet'], $data['idUser'])) {
+    // Vérifier que toutes les données nécessaires sont présentes
+    if (isset($data['id'], $data['titre'], $data['description'], $data['statut'], 
+              $data['priorite'], $data['dateDebut'], $data['dateEcheance'], 
+              $data['idProjet'], $data['idUser'])) {
+        
         // Mettre à jour la tâche existante
         $stmt = $connexion->prepare("UPDATE task SET 
             TitreTask = :titre, 
             DescriptionTask = :description, 
             StatutTask = :statut, 
             PrioriteTask = :priorite, 
+            DateDebTask = :dateDebut,     
             DateEchTask = :dateEcheance, 
             IdProject = :idProjet, 
             IdUser = :idUser 
             WHERE IdTask = :id");
 
+        // Liaison des paramètres
         $stmt->bindParam(':titre', $data['titre']);
         $stmt->bindParam(':description', $data['description']);
         $stmt->bindParam(':statut', $data['statut']);
         $stmt->bindParam(':priorite', $data['priorite']);
+        $stmt->bindParam(':dateDebut', $data['dateDebut']);
         $stmt->bindParam(':dateEcheance', $data['dateEcheance']);
         $stmt->bindParam(':idProjet', $data['idProjet']);
         $stmt->bindParam(':idUser', $data['idUser']);
         $stmt->bindParam(':id', $data['id']);
+        
         $stmt->execute();
 
         echo json_encode(['success' => true]);

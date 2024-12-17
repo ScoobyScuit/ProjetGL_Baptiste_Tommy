@@ -7,7 +7,7 @@
     height: 100%;
     display: none;
     background-color: rgba(0, 0, 0, 0.5); /* Fond semi-transparent */
-    overflow: hidden; /* Désactive le défilement sur le modal */
+    overflow-y: hidden;
   }
   
   /* Style pour le contenu du modal */
