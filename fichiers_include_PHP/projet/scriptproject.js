@@ -5,7 +5,7 @@ let currentUser = null;
 
 document.addEventListener("DOMContentLoaded", async () => {
   const addProjectButton = document.getElementById("openAddProjectModal");
-  const deleteProjectButton = document.getElementById("deleteProjectModal");
+  const deleteProjectButton = document.querySelector(".delete-project-btn");
   const addProjectModal = document.getElementById("addProjectModal");
   const deleteProjectModal = document.createElement("div");
   deleteProjectModal.id = "deleteProjectModalContent";
@@ -20,11 +20,10 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     // Afficher les boutons si l'utilisateur est Administrateur ou Chef de projet
     if (
-      currentUser.role === "Administrateur" ||
-      currentUser.role === "Chef de projet"
+      currentUser.role !== "Administrateur" &&
+      currentUser.role !== "Chef de projet"
     ) {
-      addProjectButton.classList.remove("hidden");
-      if (deleteProjectButton) deleteProjectButton.classList.remove("hidden");
+      addProjectButton.style.display = "none"; // Cacher le bouton d'ajout
     }
   } catch (error) {
     console.error(
@@ -66,7 +65,7 @@ document.addEventListener("DOMContentLoaded", async () => {
       currentUser.role === "Administrateur"
         ? await Project.fetchAllProjectData()
         : await Project.fetchProjectData();
-  
+
     projectsListDiv.innerHTML = projects.length
       ? projects
           .map(
@@ -80,34 +79,28 @@ document.addEventListener("DOMContentLoaded", async () => {
             <h3>${p.nom}</h3>
             <p>${p.description}</p>
             <strong>ID Chef:</strong> ${p.idChef}
-            <button class="delete-project-btn" data-project-id="${p.id}">
-              <i class="fa-solid fa-trash"></i> Supprimer
-            </button>
+            ${
+              currentUser.role === "Administrateur" ||
+              currentUser.role === "Chef de projet"
+                ? `<button class="delete-project-btn" data-project-id="${p.id}">
+                  <i class="fa-solid fa-trash"></i> Supprimer
+                </button>`
+                : ""
+            }
           </div>
           `
           )
           .join("")
       : "<p>Aucun projet trouvé.</p>";
-  
+
     // Gestion de la sélection des projets
     document.querySelectorAll(".project-item").forEach((projectDiv) => {
       projectDiv.addEventListener("click", () => {
         handleProjectSelection(projectDiv);
       });
     });
-  
-    // Restaurer le projet sélectionné
-    const selectedProjectId = localStorage.getItem("selectedProjectId");
-    if (selectedProjectId) {
-      const previouslySelectedProject = document.querySelector(
-        `.project-item[data-project-id='${selectedProjectId}']`
-      );
-      if (previouslySelectedProject) {
-        previouslySelectedProject.classList.add("selected");
-      }
-    }
-  
-    // Gestion des boutons de suppression
+
+    // Gestion des boutons de suppression pour les rôles autorisés
     document.querySelectorAll(".delete-project-btn").forEach((button) => {
       button.addEventListener("click", async (e) => {
         e.stopPropagation(); // Empêcher le clic de sélectionner le projet

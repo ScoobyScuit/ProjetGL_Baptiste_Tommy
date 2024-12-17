@@ -18,23 +18,24 @@ try {
 
     // Vérifier si toutes les données nécessaires sont présentes
     if (isset($taskData['TitreTask'], $taskData['DescriptionTask'], $taskData['StatutTask'], 
-              $taskData['PrioriteTask'], $taskData['DateEchTask'], $taskData['IdProjet'], 
-              $taskData['IdUser'])) {
+              $taskData['PrioriteTask'], $taskData['DateDebTask'], $taskData['DateEchTask'], 
+              $taskData['IdProjet'], $taskData['IdUser'])) {
 
-    // Préparer la requête SQL d'insertion
-    $stmt = $connexion->prepare("
-        INSERT INTO task (TitreTask, DescriptionTask, StatutTask, PrioriteTask, DateEchTask, IdProject, IdUser) 
-        VALUES (:TitreTask, :DescriptionTask, :StatutTask, :PrioriteTask, :DateEchTask, :IdProject, :IdUser)
-    ");
+        // Préparer la requête SQL d'insertion
+        $stmt = $connexion->prepare("
+            INSERT INTO task (TitreTask, DescriptionTask, StatutTask, PrioriteTask, DateDebTask, DateEchTask, IdProject, IdUser) 
+            VALUES (:TitreTask, :DescriptionTask, :StatutTask, :PrioriteTask, :DateDebTask, :DateEchTask, :IdProject, :IdUser)
+        ");
 
-    // Liaison des paramètres
-    $stmt->bindParam(':TitreTask', $taskData['TitreTask']);
-    $stmt->bindParam(':DescriptionTask', $taskData['DescriptionTask']);
-    $stmt->bindParam(':StatutTask', $taskData['StatutTask']);
-    $stmt->bindParam(':PrioriteTask', $taskData['PrioriteTask']);
-    $stmt->bindParam(':DateEchTask', $taskData['DateEchTask']);
-    $stmt->bindParam(':IdProject', $taskData['IdProjet']); // Assurez-vous que le nom ici correspond
-    $stmt->bindParam(':IdUser', $taskData['IdUser']);
+        // Liaison des paramètres
+        $stmt->bindParam(':TitreTask', $taskData['TitreTask']);
+        $stmt->bindParam(':DescriptionTask', $taskData['DescriptionTask']);
+        $stmt->bindParam(':StatutTask', $taskData['StatutTask']);
+        $stmt->bindParam(':PrioriteTask', $taskData['PrioriteTask']);
+        $stmt->bindParam(':DateDebTask', $taskData['DateDebTask']); // Liaison de la date de début
+        $stmt->bindParam(':DateEchTask', $taskData['DateEchTask']);
+        $stmt->bindParam(':IdProject', $taskData['IdProjet']);
+        $stmt->bindParam(':IdUser', $taskData['IdUser']);
 
         // Exécuter la requête
         $stmt->execute();

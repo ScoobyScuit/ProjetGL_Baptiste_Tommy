@@ -150,3 +150,30 @@ li:hover {
     background-color: #4CAF50;
     transition: width 0.3s ease;
 }
+
+
+.scrollable-content {
+    max-height: 400px; /* Hauteur maximale pour le contenu défilable */
+    overflow-y: auto; /* Ajoute une scrollbar verticale si le contenu dépasse */
+    padding-right: 10px; /* Pour éviter que le contenu touche la scrollbar */
+  }
+  
+  /* Style de la scrollbar pour les navigateurs Webkit (Chrome, Safari, Edge) */
+  .scrollable-content::-webkit-scrollbar {
+    width: 8px; /* Largeur de la scrollbar */
+  }
+  
+  .scrollable-content::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Couleur de fond de la piste */
+    border-radius: 10px; /* Arrondi */
+  }
+  
+  .scrollable-content::-webkit-scrollbar-thumb {
+    background: #0171DF; /* Couleur de la barre */
+    border-radius: 10px; /* Arrondi de la barre */
+  }
+  
+  .scrollable-content::-webkit-scrollbar-thumb:hover {
+    background: #015bb2; /* Couleur lors du survol */
+  }
+  

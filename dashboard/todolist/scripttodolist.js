@@ -526,7 +526,7 @@ document.addEventListener("DOMContentLoaded", async () => {
         tasks.push(newTask);
         console.log("Tâche ajoutée avec succès :", newTask);
         // Envoyer modif au server
-        sendProgress("TaskAdded");
+        sendProgress("TaskAdded", selectedProjectId);
 
         // Actualiser la liste des tâches
         renderTasks();
